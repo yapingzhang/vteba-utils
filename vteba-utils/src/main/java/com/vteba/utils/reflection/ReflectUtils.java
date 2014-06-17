@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 
 import com.vteba.lang.bytecode.MethodAccess;
 import com.vteba.utils.common.TypeConverter;
+import com.vteba.utils.consts.Consts;
 import com.vteba.utils.web.RequestContextHolder;
 import com.vteba.utils.web.ServletUtils;
 
@@ -28,7 +29,6 @@ public class ReflectUtils {
 	private static final Logger logger = LoggerFactory.getLogger(ReflectUtils.class);
 	private static final String GET = "get";
 	private static final String SET = "set";
-	private static final String HQL = "hqlQuery_";
 	
 	/**
 	 * 调用对象obj的某一属性的Getter方法
@@ -269,7 +269,7 @@ public class ReflectUtils {
 			}
 			i++;
 		}
-		params.put(HQL, hql.toString());
+		params.put(Consts.HQL, hql.toString());
 		return params;
 	}
 	
@@ -303,7 +303,7 @@ public class ReflectUtils {
 			}
 			i++;
 		}
-		params.put(HQL, hql.toString());
+		params.put(Consts.HQL, hql.toString());
 		return params;
 	}
 	
@@ -334,7 +334,7 @@ public class ReflectUtils {
 			}
 			i++;
 		}
-		params.put(HQL, hql.toString());
+		params.put(Consts.HQL, hql.toString());
 		return params;
 	}
 	
@@ -356,7 +356,7 @@ public class ReflectUtils {
 				}
 			}
 		}
-		params.put(HQL, hql.toString());
+		params.put(Consts.HQL, hql.toString());
 		return params;
 	}
 	
@@ -382,7 +382,7 @@ public class ReflectUtils {
 				params.put(fieldName, value);
 			}
 		}
-		params.put(HQL, hql.toString());
+		params.put(Consts.HQL, hql.toString());
 		return params;
 	}
 	
@@ -409,7 +409,7 @@ public class ReflectUtils {
 				params.put(fieldName, typedValue);
 			}
 		}
-		params.put(HQL, hql.toString());
+		params.put(Consts.HQL, hql.toString());
 		return params;
 	}
 	
