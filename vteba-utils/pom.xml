@@ -1445,11 +1445,9 @@
     <plugins>
       <plugin>
 		  <groupId>org.apache.maven.plugins</groupId>
-		  <artifactId>maven-war-plugin</artifactId>
-		  <version>2.3</version>
-		  <configuration>
-		    <packagingExcludes>WEB-INF/web.xml</packagingExcludes>		  
-		  </configuration>
+		  <artifactId>maven-jar-plugin</artifactId>
+		  <version>2.4</version>
+		  
 	  </plugin>
       <plugin>
 	      <groupId>org.apache.maven.plugins</groupId>
@@ -1459,34 +1457,8 @@
 	        <source>1.7</source>
 	        <target>1.7</target>
 	      </configuration>
-	      <!-- 
-	      <dependencies>
-			<dependency>
-				<groupId>org.codehaus.plexus</groupId>
-				<artifactId>plexus-compiler-javac</artifactId>
-				<version>1.8.1</version>
-			</dependency>
-		  </dependencies> -->
 	   </plugin>
-	   <!-- The JBoss AS plugin deploys your war to a local JBoss AS container -->
-       <!-- To use, set the JBOSS_HOME environment variable and run: mvn package jboss-as:deploy -->
-       <plugin>
-          <groupId>org.jboss.as.plugins</groupId>
-          <artifactId>jboss-as-maven-plugin</artifactId>
-          <version>7.1.1.Final</version>
-       </plugin>
-       <!-- jetty server 
- 		<plugin>
-		  <groupId>org.mortbay.jetty</groupId>
-		  <artifactId>jetty-maven-plugin</artifactId>
-		  <version>9.0.2.v20130417</version>
-		  <configuration>
-		    <scanIntervalSeconds>5</scanIntervalSeconds>
-		    <webAppConfig>
-		      <contextPath>/bizili</contextPath>
-		    </webAppConfig>
-		  </configuration>
-	  	</plugin>-->
+	   
     </plugins>
     
   </build>
