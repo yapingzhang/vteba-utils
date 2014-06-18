@@ -92,7 +92,7 @@ public class DESUtils {
 
 	public static void main(String[] args) {
 		String str = "root";
-		String pass = "0558yinlei3416763";
+		String pass = "3416763";
 		String enstr = getEncryptString(str);
 		String enpass = getEncryptString(pass);
 		System.out.println(enstr);
