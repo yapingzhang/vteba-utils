@@ -9,7 +9,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class SystemUtil {
+public class SystemUtils {
 
 	public static final String MESSAGE_FILE = "message";
 	public static final String APPLICATION_FILE = "application";
