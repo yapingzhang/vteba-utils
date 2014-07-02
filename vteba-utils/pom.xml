@@ -48,25 +48,25 @@
     </dependency> -->
    
     <!-- struts2 start -->
-    <dependency>
-	  <groupId>org.apache.struts</groupId>
-	  <artifactId>struts2-core</artifactId>
-	  <version>${struts2-version}</version>
-	  <exclusions>
-	    <exclusion>
-	      <groupId>javassist</groupId>
-          <artifactId>javassist</artifactId>
-	    </exclusion>
-	    <exclusion>
-	    	<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
-	    </exclusion>
-	    <exclusion>
-	    	<groupId>asm</groupId>
-			<artifactId>asm-commons</artifactId>
-	    </exclusion>
-	  </exclusions>
-	</dependency>
+<!--     <dependency> -->
+<!-- 	  <groupId>org.apache.struts</groupId> -->
+<!-- 	  <artifactId>struts2-core</artifactId> -->
+<!-- 	  <version>${struts2-version}</version> -->
+<!-- 	  <exclusions> -->
+<!-- 	    <exclusion> -->
+<!-- 	      <groupId>javassist</groupId> -->
+<!--           <artifactId>javassist</artifactId> -->
+<!-- 	    </exclusion> -->
+<!-- 	    <exclusion> -->
+<!-- 	    	<groupId>asm</groupId> -->
+<!-- 			<artifactId>asm</artifactId> -->
+<!-- 	    </exclusion> -->
+<!-- 	    <exclusion> -->
+<!-- 	    	<groupId>asm</groupId> -->
+<!-- 			<artifactId>asm-commons</artifactId> -->
+<!-- 	    </exclusion> -->
+<!-- 	  </exclusions> -->
+<!-- 	</dependency> -->
 
 <!-- 	<dependency> -->
 <!-- 	  <groupId>org.apache.ant</groupId> -->
@@ -87,38 +87,39 @@
 	</dependency>
 
 	<!-- asm等反射工具 -->
-    <dependency>
-		<groupId>org.ow2.asm</groupId>
-		<artifactId>asm-commons</artifactId>
-		<version>${asm-version}</version>
-	</dependency>
+<!--     <dependency> -->
+<!-- 		<groupId>org.ow2.asm</groupId> -->
+<!-- 		<artifactId>asm-commons</artifactId> -->
+<!-- 		<version>${asm-version}</version> -->
+<!-- 	</dependency> -->
 	<!-- 和cglib-3.0冲突，它使用的是asm-4.0,和4.1的有冲突 -->
 <!--     <dependency> -->
 <!-- 		<groupId>org.ow2.asm</groupId> -->
 <!-- 		<artifactId>asm</artifactId> -->
 <!-- 		<version>${asm-version}</version> -->
 <!-- 	</dependency> -->
-	<dependency>
-		<groupId>org.ow2.asm</groupId>
-		<artifactId>asm</artifactId>
-		<version>4.0</version>
-	</dependency>
-    <dependency>
-		<groupId>org.ow2.asm</groupId>
-		<artifactId>asm-tree</artifactId>
-		<version>${asm-version}</version>
-		<exclusions>
-			<exclusion>
-				<groupId>org.ow2.asm</groupId>
-				<artifactId>asm</artifactId>
-			</exclusion>
-		</exclusions>
-	</dependency>
-    <dependency>
-		<groupId>org.ow2.asm</groupId>
-		<artifactId>asm-util</artifactId>
-		<version>${asm-version}</version>
-	</dependency>
+
+<!-- 	<dependency> -->
+<!-- 		<groupId>org.ow2.asm</groupId> -->
+<!-- 		<artifactId>asm</artifactId> -->
+<!-- 		<version>4.0</version> -->
+<!-- 	</dependency> -->
+<!--     <dependency> -->
+<!-- 		<groupId>org.ow2.asm</groupId> -->
+<!-- 		<artifactId>asm-tree</artifactId> -->
+<!-- 		<version>${asm-version}</version> -->
+<!-- 		<exclusions> -->
+<!-- 			<exclusion> -->
+<!-- 				<groupId>org.ow2.asm</groupId> -->
+<!-- 				<artifactId>asm</artifactId> -->
+<!-- 			</exclusion> -->
+<!-- 		</exclusions> -->
+<!-- 	</dependency> -->
+<!--     <dependency> -->
+<!-- 		<groupId>org.ow2.asm</groupId> -->
+<!-- 		<artifactId>asm-util</artifactId> -->
+<!-- 		<version>${asm-version}</version> -->
+<!-- 	</dependency> -->
     <dependency>
 		<groupId>com.esotericsoftware.kryo</groupId>
 		<artifactId>kryo</artifactId>
@@ -142,22 +143,22 @@
 		</exclusions>
 	</dependency>
 
-	<dependency>
-	  <groupId>org.javassist</groupId>
-      <artifactId>javassist</artifactId>
-      <version>3.17.1-GA</version>
-	</dependency>
-	<dependency>
-	  <groupId>ognl</groupId>
-	  <artifactId>ognl</artifactId>
-	  <version>3.0.6</version>
-	  <exclusions>
-	  	<exclusion>
-	  		<groupId>javassist</groupId>
-      		<artifactId>javassist</artifactId>
-	  	</exclusion>
-	  </exclusions>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.javassist</groupId> -->
+<!--       <artifactId>javassist</artifactId> -->
+<!--       <version>3.17.1-GA</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>ognl</groupId> -->
+<!-- 	  <artifactId>ognl</artifactId> -->
+<!-- 	  <version>3.0.6</version> -->
+<!-- 	  <exclusions> -->
+<!-- 	  	<exclusion> -->
+<!-- 	  		<groupId>javassist</groupId> -->
+<!--       		<artifactId>javassist</artifactId> -->
+<!-- 	  	</exclusion> -->
+<!-- 	  </exclusions> -->
+<!-- 	</dependency> -->
 	
 <!-- 	<dependency> -->
 <!-- 	  <groupId>org.apache.struts</groupId> -->
@@ -197,11 +198,11 @@
 <!-- 		<version>3.0.M1</version> -->
 <!-- 	</dependency> -->
 	
-	<dependency> 
-	  <groupId>dwr</groupId>
-	  <artifactId>dwr</artifactId>
-	  <version>3.0.rc2</version>
-	</dependency>
+<!-- 	<dependency>  -->
+<!-- 	  <groupId>dwr</groupId> -->
+<!-- 	  <artifactId>dwr</artifactId> -->
+<!-- 	  <version>3.0.rc2</version> -->
+<!-- 	</dependency> -->
 	
 <!-- 	<dependency> -->
 <!-- 		<groupId>org.directwebremoting</groupId> -->
@@ -240,11 +241,11 @@
 
     <!-- struts2 end -->
     <!-- 使用这一个就好了 -->
-    <dependency>
-	  <groupId>jstl</groupId>
-	  <artifactId>jstl</artifactId>
-	  <version>1.2</version>
-	</dependency>
+<!--     <dependency> -->
+<!-- 	  <groupId>jstl</groupId> -->
+<!-- 	  <artifactId>jstl</artifactId> -->
+<!-- 	  <version>1.2</version> -->
+<!-- 	</dependency> -->
 	
 <!--     <dependency> -->
 <!-- 	  <groupId>org.jboss.spec.javax.servlet.jstl</groupId> -->
@@ -310,76 +311,76 @@
 	<!-- tiles end -->
     
     <!-- spring start -->
-    <dependency>
-  	 <groupId>org.springframework</groupId>
-  	 <artifactId>spring-core</artifactId>
-   	 <version>${spring-version}</version>
-	</dependency>
-	<dependency> 
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-context</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-context-support</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-beans</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-orm</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-jdbc</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-aop</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
+<!--     <dependency> -->
+<!--   	 <groupId>org.springframework</groupId> -->
+<!--   	 <artifactId>spring-core</artifactId> -->
+<!--    	 <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency>  -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-context</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-context-support</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-beans</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-orm</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-jdbc</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-aop</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
 	<dependency>
 	  <groupId>org.springframework</groupId>
 	  <artifactId>spring-web</artifactId>
 	  <version>${spring-version}</version>
 	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-aspects</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-expression</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-aspects</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-expression</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
 <!-- 	<dependency> -->
 <!-- 	  <groupId>org.springframework</groupId> -->
 <!-- 	  <artifactId>spring-jms</artifactId> -->
 <!-- 	  <version>${spring-version}</version> -->
 <!-- 	</dependency> -->
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-oxm</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-tx</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-webmvc</artifactId>
-	  <version>${spring-version}</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-oxm</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-tx</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework</groupId> -->
+<!-- 	  <artifactId>spring-webmvc</artifactId> -->
+<!-- 	  <version>${spring-version}</version> -->
+<!-- 	</dependency> -->
 <!-- 	<dependency> -->
 <!-- 	  <groupId>org.springframework</groupId> -->
 <!-- 	  <artifactId>spring-test</artifactId> -->
@@ -399,31 +400,31 @@
 	<!-- spring end -->	
 	
 	<!-- spring security start -->
-	<dependency>
-	  <groupId>org.springframework.security</groupId>
-	  <artifactId>spring-security-acl</artifactId>
-	  <version>${spring-security-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework.security</groupId>
-	  <artifactId>spring-security-config</artifactId>
-	  <version>${spring-security-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework.security</groupId>
-	  <artifactId>spring-security-core</artifactId>
-	  <version>${spring-security-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework.security</groupId>
-	  <artifactId>spring-security-web</artifactId>
-	  <version>${spring-security-version}</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.springframework.security</groupId>
-	  <artifactId>spring-security-taglibs</artifactId>
-	  <version>${spring-security-version}</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework.security</groupId> -->
+<!-- 	  <artifactId>spring-security-acl</artifactId> -->
+<!-- 	  <version>${spring-security-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework.security</groupId> -->
+<!-- 	  <artifactId>spring-security-config</artifactId> -->
+<!-- 	  <version>${spring-security-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework.security</groupId> -->
+<!-- 	  <artifactId>spring-security-core</artifactId> -->
+<!-- 	  <version>${spring-security-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework.security</groupId> -->
+<!-- 	  <artifactId>spring-security-web</artifactId> -->
+<!-- 	  <version>${spring-security-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.springframework.security</groupId> -->
+<!-- 	  <artifactId>spring-security-taglibs</artifactId> -->
+<!-- 	  <version>${spring-security-version}</version> -->
+<!-- 	</dependency> -->
 	<!-- spring security end -->
 	
 	<!-- jms start -->
@@ -477,12 +478,11 @@
 <!--       <scope>provided</scope> -->
 <!--       <classifier>sources</classifier> -->
 <!--     </dependency> -->
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-      <version>1</version>
-<!--       <scope>provided</scope> -->
-    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>javax.inject</groupId> -->
+<!--       <artifactId>javax.inject</artifactId> -->
+<!--       <version>1</version> -->
+<!--     </dependency> -->
     
 <!-- 	<dependency> -->
 <!-- 	  <groupId>org.jboss.spec.javax.ws.rs</groupId> -->
@@ -517,35 +517,35 @@
       <version>3.0</version>
     </dependency>
 	
-	<dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>${hibernate-version}</version>
-    </dependency>
+<!-- 	<dependency> -->
+<!--       <groupId>org.hibernate</groupId> -->
+<!--       <artifactId>hibernate-core</artifactId> -->
+<!--       <version>${hibernate-version}</version> -->
+<!--     </dependency> -->
     
-    <dependency>
-	  <groupId>org.hibernate.javax.persistence</groupId>
-	  <artifactId>hibernate-jpa-2.1-api</artifactId>
-	  <version>1.0.0.Final</version>
-	</dependency>
+<!--     <dependency> -->
+<!-- 	  <groupId>org.hibernate.javax.persistence</groupId> -->
+<!-- 	  <artifactId>hibernate-jpa-2.1-api</artifactId> -->
+<!-- 	  <version>1.0.0.Final</version> -->
+<!-- 	</dependency> -->
 	
-	<dependency>
-	  <groupId>org.hibernate</groupId>
-	  <artifactId>hibernate-entitymanager</artifactId>
-	  <version>${hibernate-version}</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.hibernate</groupId> -->
+<!-- 	  <artifactId>hibernate-entitymanager</artifactId> -->
+<!-- 	  <version>${hibernate-version}</version> -->
+<!-- 	</dependency> -->
 	
-    <dependency>
-       <groupId>org.hibernate</groupId>
-       <artifactId>hibernate-validator</artifactId>
-       <version>5.0.2.Final</version>
-       <exclusions>
-          <exclusion>
-             <groupId>org.slf4j</groupId>
-             <artifactId>slf4j-api</artifactId>
-          </exclusion>
-       </exclusions>
-    </dependency>
+<!--     <dependency> -->
+<!--        <groupId>org.hibernate</groupId> -->
+<!--        <artifactId>hibernate-validator</artifactId> -->
+<!--        <version>5.0.2.Final</version> -->
+<!--        <exclusions> -->
+<!--           <exclusion> -->
+<!--              <groupId>org.slf4j</groupId> -->
+<!--              <artifactId>slf4j-api</artifactId> -->
+<!--           </exclusion> -->
+<!--        </exclusions> -->
+<!--     </dependency> -->
     <!-- 
     <dependency>
       <groupId>org.hibernate</groupId>
@@ -564,11 +564,11 @@
 	  <version>3.6.9.Final</version>
 	</dependency> -->
 	
-	<dependency>
-		<groupId>javax.validation</groupId>
-		<artifactId>validation-api</artifactId>
-		<version>1.1.0.Final</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 		<groupId>javax.validation</groupId> -->
+<!-- 		<artifactId>validation-api</artifactId> -->
+<!-- 		<version>1.1.0.Final</version> -->
+<!-- 	</dependency> -->
 	
 <!-- 	<dependency> -->
 <!-- 	  <groupId>javax.validation</groupId> -->
@@ -576,21 +576,21 @@
 <!--       <version>1.0.0.GA</version> -->
 <!-- 	</dependency> -->
 	
-	<dependency>
-	  <groupId>org.jboss.spec.javax.transaction</groupId>
-	  <artifactId>jboss-transaction-api_1.1_spec</artifactId>
-	  <version>1.0.1.Final</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.jboss.spec.javax.transaction</groupId>
-	  <artifactId>jboss-transaction-api_1.2_spec</artifactId>
-	  <version>1.0.0.Final</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.jboss.logging</groupId>
-	  <artifactId>jboss-logging</artifactId>
-	  <version>3.1.3.GA</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.jboss.spec.javax.transaction</groupId> -->
+<!-- 	  <artifactId>jboss-transaction-api_1.1_spec</artifactId> -->
+<!-- 	  <version>1.0.1.Final</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.jboss.spec.javax.transaction</groupId> -->
+<!-- 	  <artifactId>jboss-transaction-api_1.2_spec</artifactId> -->
+<!-- 	  <version>1.0.0.Final</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.jboss.logging</groupId> -->
+<!-- 	  <artifactId>jboss-logging</artifactId> -->
+<!-- 	  <version>3.1.3.GA</version> -->
+<!-- 	</dependency> -->
 	
 <!-- 	<dependency> -->
 <!-- 		<groupId>javax.transaction</groupId> -->
@@ -609,17 +609,17 @@
 <!-- 	</dependency> -->
 	
 	<!--  -->
-	<dependency>
-	  <groupId>net.sf.ehcache</groupId>
-	  <artifactId>ehcache-core</artifactId>
-	  <version>2.6.5</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>net.sf.ehcache</groupId> -->
+<!-- 	  <artifactId>ehcache-core</artifactId> -->
+<!-- 	  <version>2.6.5</version> -->
+<!-- 	</dependency> -->
 	
-	<dependency>
-	  <groupId>org.hibernate</groupId>
-	  <artifactId>hibernate-ehcache</artifactId>
-	  <version>${hibernate-version}</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.hibernate</groupId> -->
+<!-- 	  <artifactId>hibernate-ehcache</artifactId> -->
+<!-- 	  <version>${hibernate-version}</version> -->
+<!-- 	</dependency> -->
 	<!-- hibernate end -->
 	<!-- ejb3 annotation and resource inject
 	
@@ -740,16 +740,16 @@
       <version>4.8.1.1</version>
 	</dependency> -->
 	 
-	<dependency>
-	  <groupId>org.aspectj</groupId>
-	  <artifactId>aspectjrt</artifactId>
-	  <version>1.7.2</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.aspectj</groupId>
-	  <artifactId>aspectjweaver</artifactId>
-	  <version>1.7.2</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.aspectj</groupId> -->
+<!-- 	  <artifactId>aspectjrt</artifactId> -->
+<!-- 	  <version>1.7.2</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.aspectj</groupId> -->
+<!-- 	  <artifactId>aspectjweaver</artifactId> -->
+<!-- 	  <version>1.7.2</version> -->
+<!-- 	</dependency> -->
 	
 	<dependency>
 	  <groupId>org.apache.commons</groupId>
@@ -800,17 +800,17 @@
 	  <artifactId>quartz-jboss</artifactId>
 	  <version>2.1.6</version>
 	</dependency> -->
-	<dependency> 
-	  	<groupId>org.quartz-scheduler</groupId>
-	  	<artifactId>quartz</artifactId>
-	  	<version>2.1.7</version>
-		<exclusions>
-			<exclusion>
-				<groupId>c3p0</groupId>
-				<artifactId>c3p0</artifactId>
-			</exclusion>
-		</exclusions>
-	</dependency>
+<!-- 	<dependency>  -->
+<!-- 	  	<groupId>org.quartz-scheduler</groupId> -->
+<!-- 	  	<artifactId>quartz</artifactId> -->
+<!-- 	  	<version>2.1.7</version> -->
+<!-- 		<exclusions> -->
+<!-- 			<exclusion> -->
+<!-- 				<groupId>c3p0</groupId> -->
+<!-- 				<artifactId>c3p0</artifactId> -->
+<!-- 			</exclusion> -->
+<!-- 		</exclusions> -->
+<!-- 	</dependency> -->
 	
 	<!-- 
 	<dependency>
@@ -831,17 +831,17 @@
 	  <artifactId>jaxen</artifactId>
 	  <version>1.1.1</version>
 	</dependency> -->
-	<dependency>
-	  <groupId>dom4j</groupId>
-	  <artifactId>dom4j</artifactId>
-	  <version>1.6.1</version>
-	  <exclusions>
-	    <exclusion>
-	      <groupId>xml-apis</groupId>
-  		  <artifactId>xml-apis</artifactId>
-	    </exclusion>
-	  </exclusions>  
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>dom4j</groupId> -->
+<!-- 	  <artifactId>dom4j</artifactId> -->
+<!-- 	  <version>1.6.1</version> -->
+<!-- 	  <exclusions> -->
+<!-- 	    <exclusion> -->
+<!-- 	      <groupId>xml-apis</groupId> -->
+<!--   		  <artifactId>xml-apis</artifactId> -->
+<!-- 	    </exclusion> -->
+<!-- 	  </exclusions>   -->
+<!-- 	</dependency> -->
 	<!--<dependency>
 	  <groupId>xml-apis</groupId>
   	  <artifactId>xml-apis</artifactId>
@@ -862,11 +862,11 @@
       <scope>provided</scope>
 	</dependency> -->
 	
-	<dependency>
-	  <groupId>mysql</groupId>
-	  <artifactId>mysql-connector-java</artifactId>
-	  <version>5.1.25</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>mysql</groupId> -->
+<!-- 	  <artifactId>mysql-connector-java</artifactId> -->
+<!-- 	  <version>5.1.25</version> -->
+<!-- 	</dependency> -->
 	
     <dependency>
 	  <groupId>org.slf4j</groupId>
@@ -884,16 +884,16 @@
 	  <version>1.2.17</version>
 	</dependency>
 	<!-- mybatis 3 -->
-	<dependency>
-	  <groupId>org.mybatis</groupId>
-	  <artifactId>mybatis</artifactId>
-	  <version>3.2.2</version>
-	</dependency>
-	<dependency>
-	  <groupId>org.mybatis</groupId>
-	  <artifactId>mybatis-spring</artifactId>
-	  <version>1.2.0</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.mybatis</groupId> -->
+<!-- 	  <artifactId>mybatis</artifactId> -->
+<!-- 	  <version>3.2.2</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.mybatis</groupId> -->
+<!-- 	  <artifactId>mybatis-spring</artifactId> -->
+<!-- 	  <version>1.2.0</version> -->
+<!-- 	</dependency> -->
 <!-- 	<dependency> -->
 <!-- 	  <groupId>org.mybatis.caches</groupId> -->
 <!-- 	  <artifactId>mybatis-oscache</artifactId> -->
@@ -916,11 +916,11 @@
 <!-- 		</exclusions> -->
 <!-- 	</dependency> -->
 	
-	<dependency>
-	  <groupId>org.mybatis.caches</groupId>
-	  <artifactId>mybatis-ehcache</artifactId>
-	  <version>1.0.2</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.mybatis.caches</groupId> -->
+<!-- 	  <artifactId>mybatis-ehcache</artifactId> -->
+<!-- 	  <version>1.0.2</version> -->
+<!-- 	</dependency> -->
 	<!-- 
 	<dependency>
 	  <groupId>org.mybatis.caches</groupId>
@@ -932,23 +932,23 @@
 <!-- 	  <artifactId>mybatis-guice</artifactId> -->
 <!-- 	  <version>3.3</version> -->
 <!-- 	</dependency> -->
-	<dependency>
-	  <groupId>com.thimbleware.jmemcached</groupId>
-	  <artifactId>jmemcached-core</artifactId>
-	  <version>1.0.0</version>
-	  <exclusions>
-	  	<exclusion>
-	  		<groupId>org.jboss.netty</groupId>
-	  		<artifactId>netty</artifactId>
-	  	</exclusion>
-	  </exclusions>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>com.thimbleware.jmemcached</groupId> -->
+<!-- 	  <artifactId>jmemcached-core</artifactId> -->
+<!-- 	  <version>1.0.0</version> -->
+<!-- 	  <exclusions> -->
+<!-- 	  	<exclusion> -->
+<!-- 	  		<groupId>org.jboss.netty</groupId> -->
+<!-- 	  		<artifactId>netty</artifactId> -->
+<!-- 	  	</exclusion> -->
+<!-- 	  </exclusions> -->
+<!-- 	</dependency> -->
 	
-	<dependency>
-		<groupId>com.alibaba</groupId>
-		<artifactId>druid</artifactId>
-		<version>1.0.3</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 		<groupId>com.alibaba</groupId> -->
+<!-- 		<artifactId>druid</artifactId> -->
+<!-- 		<version>1.0.3</version> -->
+<!-- 	</dependency> -->
 	
 	<!-- json parse -->
 	<dependency>
@@ -958,11 +958,11 @@
 	</dependency>
 
 	<!-- -->
-	<dependency>
-		<groupId>com.google.code.gson</groupId>
-		<artifactId>gson</artifactId>
-		<version>2.2.2</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 		<groupId>com.google.code.gson</groupId> -->
+<!-- 		<artifactId>gson</artifactId> -->
+<!-- 		<version>2.2.2</version> -->
+<!-- 	</dependency> -->
 	<dependency>
 		<groupId>com.fasterxml.jackson.core</groupId>
 		<artifactId>jackson-annotations</artifactId>
@@ -1110,17 +1110,17 @@
 	<!-- Atomikos JTA end -->
 	
 	<!-- btm jta start -->
-	<dependency>
-	  <groupId>org.codehaus.btm</groupId>
-	  <artifactId>btm</artifactId>
-	  <version>2.1.3</version>
-	  <exclusions>
-	  	<exclusion>
-	  		<groupId>javax.transaction</groupId>
-	  		<artifactId>jta</artifactId>
-	  	</exclusion>
-	  </exclusions>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.codehaus.btm</groupId> -->
+<!-- 	  <artifactId>btm</artifactId> -->
+<!-- 	  <version>2.1.3</version> -->
+<!-- 	  <exclusions> -->
+<!-- 	  	<exclusion> -->
+<!-- 	  		<groupId>javax.transaction</groupId> -->
+<!-- 	  		<artifactId>jta</artifactId> -->
+<!-- 	  	</exclusion> -->
+<!-- 	  </exclusions> -->
+<!-- 	</dependency> -->
 	
 	<!-- btm jta end -->
 	<!-- 
@@ -1153,11 +1153,11 @@
 <!-- 	  <version>0.9.16</version> -->
 <!-- 	</dependency> -->
 	
-	<dependency>
-	  <groupId>com.googlecode.xmemcached</groupId>
-	  <artifactId>xmemcached</artifactId>
-	  <version>1.4.2</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>com.googlecode.xmemcached</groupId> -->
+<!-- 	  <artifactId>xmemcached</artifactId> -->
+<!-- 	  <version>1.4.2</version> -->
+<!-- 	</dependency> -->
 	
 <!-- 	<dependency> -->
 <!-- 	  <groupId>net.spy</groupId> -->
@@ -1182,16 +1182,16 @@
 <!-- 	   <artifactId>spymemcached-provider</artifactId> -->
 <!-- 	   <version>3.2.0</version> -->
 <!-- 	</dependency> -->
-	<dependency>
-	   <groupId>com.google.code.simple-spring-memcached</groupId>
-	   <artifactId>xmemcached-provider</artifactId>
-	   <version>3.2.0</version>
-	</dependency>
-	<dependency>
-	  <groupId>com.google.code.simple-spring-memcached</groupId>
-	  <artifactId>simple-spring-memcached</artifactId>
-	  <version>3.2.0</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	   <groupId>com.google.code.simple-spring-memcached</groupId> -->
+<!-- 	   <artifactId>xmemcached-provider</artifactId> -->
+<!-- 	   <version>3.2.0</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 	  <groupId>com.google.code.simple-spring-memcached</groupId> -->
+<!-- 	  <artifactId>simple-spring-memcached</artifactId> -->
+<!-- 	  <version>3.2.0</version> -->
+<!-- 	</dependency> -->
 	
 <!-- 	<dependency> -->
 <!-- 	  <groupId>com.google.code.simple-spring-memcached</groupId> -->
@@ -1210,43 +1210,43 @@
 <!-- 	  <artifactId>jdom</artifactId> -->
 <!-- 	  <version>1.1.3</version> -->
 <!-- 	</dependency> -->
-	<dependency>
-		<groupId>org.jibx</groupId>
-		<artifactId>jibx-run</artifactId>
-		<version>${jibx-version}</version>
-		<exclusions>
-			<exclusion>
-				<groupId>xpp3</groupId>
-				<artifactId>xpp3</artifactId>
-			</exclusion>
-		</exclusions>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 		<groupId>org.jibx</groupId> -->
+<!-- 		<artifactId>jibx-run</artifactId> -->
+<!-- 		<version>${jibx-version}</version> -->
+<!-- 		<exclusions> -->
+<!-- 			<exclusion> -->
+<!-- 				<groupId>xpp3</groupId> -->
+<!-- 				<artifactId>xpp3</artifactId> -->
+<!-- 			</exclusion> -->
+<!-- 		</exclusions> -->
+<!-- 	</dependency> -->
 <!-- 	<dependency> -->
 <!-- 		<groupId>org.jibx</groupId> -->
 <!-- 		<artifactId>jibx-bind</artifactId> -->
 <!-- 		<version>${jibx-version}</version> -->
 <!-- 	</dependency> -->
 
-	<dependency>
-		<groupId>com.thoughtworks.xstream</groupId>
-		<artifactId>xstream</artifactId>
-		<version>1.4.3</version>
-		<exclusions>
-			<exclusion>
-				<groupId>xpp3</groupId>
-				<artifactId>xpp3_min</artifactId>
-			</exclusion>
-			<exclusion>
-				<groupId>xmlpull</groupId>
-				<artifactId>xmlpull</artifactId>
-			</exclusion>
-		</exclusions>
-	</dependency>
-	<dependency>
-		<groupId>xpp3</groupId>
-		<artifactId>xpp3</artifactId>
-		<version>1.1.4c</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 		<groupId>com.thoughtworks.xstream</groupId> -->
+<!-- 		<artifactId>xstream</artifactId> -->
+<!-- 		<version>1.4.3</version> -->
+<!-- 		<exclusions> -->
+<!-- 			<exclusion> -->
+<!-- 				<groupId>xpp3</groupId> -->
+<!-- 				<artifactId>xpp3_min</artifactId> -->
+<!-- 			</exclusion> -->
+<!-- 			<exclusion> -->
+<!-- 				<groupId>xmlpull</groupId> -->
+<!-- 				<artifactId>xmlpull</artifactId> -->
+<!-- 			</exclusion> -->
+<!-- 		</exclusions> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 		<groupId>xpp3</groupId> -->
+<!-- 		<artifactId>xpp3</artifactId> -->
+<!-- 		<version>1.1.4c</version> -->
+<!-- 	</dependency> -->
             
 	
 	<!--
@@ -1263,11 +1263,11 @@
 	</dependency> -->
 	<!-- xml binging tools end -->
 	
-	<dependency>
-	  <groupId>io.netty</groupId>
-	  <artifactId>netty</artifactId>
-	  <version>3.6.6.Final</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>io.netty</groupId> -->
+<!-- 	  <artifactId>netty</artifactId> -->
+<!-- 	  <version>3.6.6.Final</version> -->
+<!-- 	</dependency> -->
 
 <!-- 	<dependency> -->
 <!-- 	  <groupId>org.apache.mina</groupId> -->
@@ -1275,16 +1275,16 @@
 <!-- 	  <version>2.0.7</version> -->
 <!-- 	</dependency> -->
 
-	<dependency>
-	  <groupId>org.infinispan</groupId>
-	  <artifactId>infinispan-core</artifactId>
-	  <version>${infinispan-version}</version>
-	</dependency>
-	<dependency>
-		<groupId>org.infinispan</groupId>
-		<artifactId>infinispan-spring</artifactId>
-		<version>${infinispan-version}</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.infinispan</groupId> -->
+<!-- 	  <artifactId>infinispan-core</artifactId> -->
+<!-- 	  <version>${infinispan-version}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 		<groupId>org.infinispan</groupId> -->
+<!-- 		<artifactId>infinispan-spring</artifactId> -->
+<!-- 		<version>${infinispan-version}</version> -->
+<!-- 	</dependency> -->
 <!-- 	<dependency> -->
 <!-- 		<groupId>org.infinispan</groupId> -->
 <!-- 		<artifactId>infinispan-cdi</artifactId> -->
@@ -1329,23 +1329,22 @@
 <!-- 		<version>${infinispan-version}</version> -->
 <!-- 	</dependency> -->
 	        
-	<dependency>
-	  <groupId>org.hibernate</groupId>
-	  <artifactId>hibernate-infinispan</artifactId>
-	  <version>${hibernate-version}</version>
-<!-- 	  <scope>provided</scope> -->
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.hibernate</groupId> -->
+<!-- 	  <artifactId>hibernate-infinispan</artifactId> -->
+<!-- 	  <version>${hibernate-version}</version> -->
+<!-- 	</dependency> -->
 	
 <!-- 	<dependency> -->
 <!-- 	  <groupId>org.infinispan</groupId> -->
 <!-- 	  <artifactId>infinispan-jcache</artifactId> -->
 <!-- 	  <version>5.3.0.Final</version> -->
 <!-- 	</dependency> -->
-	<dependency>
-	  <groupId>org.jboss.spec.javax.interceptor</groupId>
-      <artifactId>jboss-interceptors-api_1.1_spec</artifactId>
-      <version>1.0.1.Final</version>
-	</dependency>
+<!-- 	<dependency> -->
+<!-- 	  <groupId>org.jboss.spec.javax.interceptor</groupId> -->
+<!--       <artifactId>jboss-interceptors-api_1.1_spec</artifactId> -->
+<!--       <version>1.0.1.Final</version> -->
+<!-- 	</dependency> -->
 	
 <!-- 	<dependency> -->
 <!-- 	  <groupId>net.sf.ehcache</groupId> -->

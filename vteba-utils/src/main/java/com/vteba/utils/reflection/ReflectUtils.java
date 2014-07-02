@@ -11,7 +11,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 import com.vteba.lang.bytecode.MethodAccess;
 import com.vteba.utils.common.TypeConverter;
@@ -103,8 +102,8 @@ public class ReflectUtils {
 	 * @param fieldName 某一属性名
 	 */
 	public static Field getAccessibleField(final Object obj, final String fieldName) {
-		Assert.notNull(obj, "object不能为空");
-		Assert.hasText(fieldName, "fieldName");
+//		Assert.notNull(obj, "object不能为空");
+//		Assert.hasText(fieldName, "fieldName");
 		for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 			try {
 				Field field = superClass.getDeclaredField(fieldName);
@@ -158,7 +157,7 @@ public class ReflectUtils {
 	 * @return
 	 */
 	public static Method getAccessibleMethod(final Object obj, final String methodName,final Class<?>... parameterTypes){
-		Assert.notNull(obj, "object不能为空");
+		//Assert.notNull(obj, "object不能为空");
 		for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 			try {
 				Method method = superClass.getDeclaredMethod(methodName, parameterTypes);

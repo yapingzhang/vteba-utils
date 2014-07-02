@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
@@ -15,11 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vteba.utils.consts.Consts;
 import com.vteba.utils.cryption.CryptionUtils;
 import com.vteba.utils.reflection.ReflectUtils;
@@ -158,7 +157,7 @@ public class ServletUtils {
 	 * 返回的结果的Parameter名已去除前缀.
 	 */
 	public static Map<String, Object> getParametersStartingWith(ServletRequest request, String prefix) {
-		Assert.notNull(request, "Request must not be null");
+		//Assert.notNull(request, "Request must not be null");
 		
 		Enumeration<String> paramNames = request.getParameterNames();
 		Map<String, Object> params = new TreeMap<String, Object>();

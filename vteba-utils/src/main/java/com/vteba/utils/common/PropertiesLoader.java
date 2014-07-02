@@ -13,14 +13,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
- * Properties文件载入工具类. 可载入多个properties文件, 相同的属性在最后载入的文件中的值将会覆盖之前的值，但以System的Property优先.
+ * Properties文件载入工具类. 可载入多个properties文件, 相同的属性在最后载入的文件中的值将会覆盖<br>
+ * 之前的值，但以System的Property优先.
  * 
  * @author yinlei
  */
 public class PropertiesLoader {
 
 	private static Logger logger = LoggerFactory.getLogger(PropertiesLoader.class);
-
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
 	private final Properties properties;
@@ -127,9 +127,7 @@ public class PropertiesLoader {
 		Properties props = new Properties();
 
 		for (String location : resourcesPaths) {
-
 			logger.debug("Loading properties file from path:{}", location);
-
 			InputStream is = null;
 			try {
 				Resource resource = resourceLoader.getResource(location);
