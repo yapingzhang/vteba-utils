@@ -3,12 +3,15 @@ package com.vteba.utils.exception;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 关于异常的工具类.
  * @author yinlei
  */
 public class Exceptions {
-	//private static final Logger logger = LoggerFactory.getLogger(Exceptions.class);
+	private static final Logger logger = LoggerFactory.getLogger(Exceptions.class);
 	
 	/**
 	 * 将CheckedException转换为UncheckedException.
@@ -21,10 +24,10 @@ public class Exceptions {
 		}
 	}
 
-//	public static MemcachedException memcacheException(Exception e) {
-//		logger.warn(e.getMessage());
-//		return new MemcachedException(e.getMessage(), e);
-//	}
+	public static MemcacheException memcacheException(Exception e) {
+		logger.warn(e.getMessage());
+		return new MemcacheException(e.getMessage(), e);
+	}
 	
 	/**
 	 * 将ErrorStack转化为String.
