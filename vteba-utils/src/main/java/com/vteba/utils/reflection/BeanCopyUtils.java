@@ -85,6 +85,24 @@ public class BeanCopyUtils {
     }
     
     /**
+     * 将Bean转换为Map，Map key为getter方法名，使用MethodAccess实现。性能最好。
+     * @param fromBean 源JavaBean
+     * @param toMap 目标Map
+     */
+    public void beanToMapPrefix(Object fromBean, Map<String, Object> toMap) {
+        MethodAccess methodAccess = AsmUtils.get().createMethodAccess(fromBean.getClass());
+        String[] methodNames = methodAccess.getMethodNames(); 
+        for (String methodName : methodNames){ 
+            if (methodName.startsWith("get")){ 
+                Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
+                if (value != null) {
+                    toMap.put(StringUtils.uncapitalize(methodName.substring(3)), value); 
+                }
+            } 
+        }
+    }
+    
+    /**
      * 将Bean转换为Map，使用MethodAccess实现。性能最好。
      * @param fromBean 源JavaBean
      * @param toMap 目标Map
@@ -103,6 +121,26 @@ public class BeanCopyUtils {
         }
         return toMap;
     } 
+    
+    /**
+     * 将Bean转换为Map，map key使用getter方法名，使用MethodAccess实现。性能最好。
+     * @param fromBean 源JavaBean
+     * @param toMap 目标Map
+     */
+    public Map<String, Object> toMapPrefix(Object fromBean) {
+        MethodAccess methodAccess = AsmUtils.get().createMethodAccess(fromBean.getClass());
+        String[] methodNames = methodAccess.getMethodNames(); 
+        Map<String, Object> toMap = new HashMap<String, Object>();
+        for (String methodName : methodNames){ 
+            if (methodName.startsWith("get")){ 
+                Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
+                if (value != null) {
+                    toMap.put(methodName, value);
+                }
+            } 
+        }
+        return toMap;
+    }
     
     /**
      * 将Map转换为JavaBean，使用MethodAccess实现。
