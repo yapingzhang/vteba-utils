@@ -96,7 +96,7 @@ public class BeanCopyUtils {
             if (methodName.startsWith("get")){ 
                 Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
                 if (value != null) {
-                    toMap.put(StringUtils.uncapitalize(methodName.substring(3)), value); 
+                    toMap.put(methodName, value); 
                 }
             } 
         }
@@ -136,6 +136,28 @@ public class BeanCopyUtils {
                 Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
                 if (value != null) {
                     toMap.put(methodName, value);
+                }
+            } 
+        }
+        return toMap;
+    }
+    
+    /**
+     * 将Bean转换为Map，map key使用getter方法名，同时将值存到params中。性能最好。
+     * @param fromBean 源JavaBean
+     * @param params 目标Map，fromBean转换成的Map同时放到这个Map中
+     * @return fromBean转化成的Map
+     */
+    public Map<String, Object> toMapPrefix(Object fromBean, Map<String, Object> params) {
+        MethodAccess methodAccess = AsmUtils.get().createMethodAccess(fromBean.getClass());
+        String[] methodNames = methodAccess.getMethodNames(); 
+        Map<String, Object> toMap = new HashMap<String, Object>();
+        for (String methodName : methodNames){ 
+            if (methodName.startsWith("get")){ 
+                Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
+                if (value != null) {
+                    toMap.put(methodName, value);
+                    params.put(methodName, value);
                 }
             } 
         }
