@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
  * @author yinlei
  * date 2013-6-15 下午10:28:26
  */
-public class CamelCaseUtils {
+public class CaseUtils {
 
-    private static final char SEPARATOR = '_';
+    public static final char SEPARATOR = '_';
 
     /**
      * 将驼峰命名法转换为下划线风格
@@ -18,7 +18,7 @@ public class CamelCaseUtils {
      * @author yinlei
      * date 2013-6-15 下午11:24:59
      */
-    public static String toUnderScoreCase(String s) {
+    public static String underCase(String s) {
         if (s == null) {
             return null;
         }
@@ -48,34 +48,42 @@ public class CamelCaseUtils {
         return sb.toString();
     }
     
-    public static String toUnderScoreCase2(String s) {
+    /**
+     * 将驼峰命名法转换为下划线风格，以 _ 开头
+     * @param s 待转换字符串
+     * @return 转换后字符串
+     * @author yinlei
+     * date 2013-6-15 下午11:24:59
+     */
+    public static String toUnderCase(String s) {
         if (s == null) {
             return null;
         }
-
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(SEPARATOR);
+        boolean upperCase = false;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (i == 0) {
-            	sb.append(Character.toLowerCase(c));
-            	continue;
-            }
             
-            if (Character.isUpperCase(c)) {
-            	if (!Character.isLowerCase(s.charAt(i + 1))) {
-            		sb.append(SEPARATOR).append(c);
-            	} else {
-            		sb.append(c);
-            	}
+            boolean nextUpperCase = true;
+
+            if (i < (s.length() - 1)) {
+                nextUpperCase = Character.isUpperCase(s.charAt(i + 1));
+            }
+
+            if ((i > 0) && Character.isUpperCase(c)) {
+                if (!upperCase || !nextUpperCase) {
+                    sb.append(SEPARATOR);
+                }
+                upperCase = true;
             } else {
-            	sb.append(c);
+                upperCase = false;
             }
-            
+
+            sb.append(Character.toLowerCase(c));
         }
 
         return sb.toString();
-    }
-    
+    }    
     /**
      * 下划线风格转换为驼峰命名法
      * @param s 待转换字符串
@@ -111,7 +119,7 @@ public class CamelCaseUtils {
      * @author yinlei
      * date 2013-6-15 下午11:26:46
      */
-    public static String toCapitalizeCamelCase(String s) {
+    public static String toCapCamelCase(String s) {
         if (s == null) {
             return null;
         }
@@ -120,17 +128,11 @@ public class CamelCaseUtils {
     }
 
     public static void main(String[] aa) {
-    	long dd = System.currentTimeMillis();
-    	for (int i = 0; i < 1000000; i++) {
-    		toUnderScoreCase2("articleIDDesc");
-    	}
-    	System.out.println("自己：" + toUnderScoreCase2("articleIDdDesc") + (System.currentTimeMillis() - dd));
-    	
     	long dd2 = System.currentTimeMillis();
     	for (int i = 0; i < 1000000; i++) {
-    		toUnderScoreCase("articleIdDesc");
+    		underCase("articleIdDesc");
     	}
-    	System.out.println("别人：" + toUnderScoreCase("articleIDdDesc") + (System.currentTimeMillis() - dd2));
+    	System.out.println("别人：" + underCase("articleIDdDesc") + (System.currentTimeMillis() - dd2));
     }
     
 }

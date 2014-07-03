@@ -11,9 +11,8 @@ import net.sf.cglib.beans.BeanMap;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.vteba.lang.bytecode.MethodAccess;
+import com.vteba.utils.common.CaseUtils;
 
 /**
  * 字节码操作JavaBean，属性复制及Bean和Map转换。
@@ -103,7 +102,7 @@ public class BeanCopyUtils {
     }
     
     /**
-     * 将Bean转换为Map，使用MethodAccess实现。性能最好。
+     * 将Bean转换为Map，使用MethodAccess实现，key为属性名。性能最好。
      * @param fromBean 源JavaBean
      * @param toMap 目标Map
      */
@@ -111,11 +110,31 @@ public class BeanCopyUtils {
         MethodAccess methodAccess = AsmUtils.get().createMethodAccess(fromBean.getClass());
         String[] methodNames = methodAccess.getMethodNames(); 
         Map<String, Object> toMap = new HashMap<String, Object>();
-        for (String methodName : methodNames){ 
-            if (methodName.startsWith("get")){ 
+        for (String methodName : methodNames) {
+            if (methodName.startsWith("get")) {
                 Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
                 if (value != null) {
                 	toMap.put(StringUtils.uncapitalize(methodName.substring(3)), value); 
+                }
+            } 
+        }
+        return toMap;
+    } 
+    
+    /**
+     * 将Bean转换为Map，使用MethodAccess实现，key使用属性的下划线命名法，性能最好。
+     * @param fromBean 源JavaBean，要转换的对象
+     * @return fromBean转换成的Map
+     */
+    public Map<String, Object> toMap(Object fromBean) {
+        MethodAccess methodAccess = AsmUtils.get().createMethodAccess(fromBean.getClass());
+        String[] methodNames = methodAccess.getMethodNames(); 
+        Map<String, Object> toMap = new HashMap<String, Object>();
+        for (String methodName : methodNames) {
+            if (methodName.startsWith("get")) {
+                Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
+                if (value != null) {
+                    toMap.put(CaseUtils.underCase(methodName.substring(3)), value); 
                 }
             } 
         }
@@ -152,12 +171,34 @@ public class BeanCopyUtils {
         MethodAccess methodAccess = AsmUtils.get().createMethodAccess(fromBean.getClass());
         String[] methodNames = methodAccess.getMethodNames(); 
         Map<String, Object> toMap = new HashMap<String, Object>();
-        for (String methodName : methodNames){ 
-            if (methodName.startsWith("get")){ 
+        for (String methodName : methodNames) {
+            if (methodName.startsWith("get")) {
                 Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
                 if (value != null) {
                     toMap.put(methodName, value);
                     params.put(methodName, value);
+                }
+            } 
+        }
+        return toMap;
+    }
+    
+    /**
+     * 将Bean转换为Map，map key使用 _ 开头的下划线命名法，同时将值存到params中。性能最好。
+     * @param fromBean 源JavaBean
+     * @param params 目标Map，fromBean转换成的Map同时放到这个Map中
+     * @return fromBean转化成的Map
+     */
+    public Map<String, Object> toMaps(Object fromBean, Map<String, Object> params) {
+        MethodAccess methodAccess = AsmUtils.get().createMethodAccess(fromBean.getClass());
+        String[] methodNames = methodAccess.getMethodNames(); 
+        Map<String, Object> toMap = new HashMap<String, Object>();
+        for (String methodName : methodNames) {
+            if (methodName.startsWith("get")) { 
+                Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
+                if (value != null) {
+                    toMap.put(CaseUtils.toUnderCase(methodName.substring(3)), value);
+                    params.put(CaseUtils.toUnderCase(methodName.substring(3)), value);
                 }
             } 
         }
@@ -216,10 +257,10 @@ public class BeanCopyUtils {
      * @author yinlei
      * @date 2013年10月18日 下午11:19:50
      */
-	public Map<String, Object> toMap(Object object) {
-		JSONObject jsonObject = (JSONObject) JSON.toJSON(object);
-		return jsonObject;
-	} 
+//	public Map<String, Object> toMap(Object object) {
+//		JSONObject jsonObject = (JSONObject) JSON.toJSON(object);
+//		return jsonObject;
+//	} 
       
     /**
      * 将对象转化位Map，使用fastjson实现，去掉null值了。 性能稍差，建议使用{@link #beanToMap(Object, Map)}
@@ -228,18 +269,20 @@ public class BeanCopyUtils {
      * @author yinlei
      * @date 2013年10月18日 下午11:20:51
      */
-	public Map<String, Object> toMaps(Object object) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		JSONObject jsonObject = (JSONObject) JSON.toJSON(object);
-		for (Entry<String, Object> entry : jsonObject.entrySet()) {
-			if (entry.getValue() != null) {
-				map.put(entry.getKey(), entry.getValue());
-			}
-		}
-		return map;
-	}
+//	public Map<String, Object> toMaps(Object object) {
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		JSONObject jsonObject = (JSONObject) JSON.toJSON(object);
+//		for (Entry<String, Object> entry : jsonObject.entrySet()) {
+//			if (entry.getValue() != null) {
+//				map.put(entry.getKey(), entry.getValue());
+//			}
+//		}
+//		return map;
+//	}
       
-//    public static void main(String[] aa) {  
+    public static void main(String[] aa) {
+        String userName = "UserName";
+        System.out.println(CaseUtils.underCase(userName));
 //        User user = new User();
 //        user.setUserAccount("asdf");
 //        user.setRegisterDate(new Date());
@@ -281,7 +324,7 @@ public class BeanCopyUtils {
 //        System.out.println(userName);
 //        System.out.println(userName);
 //        
-//    }  
+    }
     
     /**
      * 获得对象object的CGLIB BeanMap
