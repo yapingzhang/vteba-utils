@@ -33,6 +33,18 @@
   <dependencies>
     
     <dependency>
+		<groupId>javolution</groupId>
+		<artifactId>javolution</artifactId>
+		<version>5.5.1</version>
+	</dependency>
+    
+<!--     <dependency> -->
+<!-- 		<groupId>org.javolution</groupId> -->
+<!-- 		<artifactId>javolution</artifactId> -->
+<!-- 		<version>6.0.0</version> -->
+<!-- 	</dependency> -->
+    
+    <dependency>
       <groupId>com.sun</groupId>
       <artifactId>tools</artifactId>
       <version>1.6.0</version>
