@@ -59,7 +59,8 @@ public class CaseUtils {
         if (s == null) {
             return null;
         }
-        StringBuilder sb = new StringBuilder(SEPARATOR);
+        StringBuilder sb = new StringBuilder();
+        sb.append(SEPARATOR);
         boolean upperCase = false;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
