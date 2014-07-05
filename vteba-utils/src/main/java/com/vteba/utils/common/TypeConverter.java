@@ -102,18 +102,17 @@ public class TypeConverter {
         return result;
     }
 
-	public static Object simpleConvertValue(String value, Class<?> toType) {
+    public static <T> T simpleConvertValue(String value, Class<T> toType) {
         Object result = null;
-
         if (value != null) {
         	if (toType == String.class) {
 				result = value;
 			} else if ((toType == Integer.class) || (toType == Integer.TYPE)) {
 				result = Integer.valueOf(value);
-			} else if ((toType == Double.class) || (toType == Double.TYPE)) {
-				result = Double.valueOf(value);
 			} else if ((toType == Long.class) || (toType == Long.TYPE)) {
-				result = Long.valueOf(value);
+                result = Long.valueOf(value);
+            } else if ((toType == Double.class) || (toType == Double.TYPE)) {
+				result = Double.valueOf(value);
 			} else if ((toType == Boolean.class) || (toType == Boolean.TYPE)) {
 				result = booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
 			} else if (toType == Date.class) {
@@ -140,9 +139,41 @@ public class TypeConverter {
                 result = primitiveDefaults.get(toType);
             }
         }
-        return result;
+        @SuppressWarnings("unchecked")
+        T t = (T) result;
+        return t;
     }
 	
+    /**
+     * 转换ID
+     * @param value key值
+     * @param toType String，Integer，Long
+     * @return 转换后的key
+     */
+    public static <T> T convertId(Object value, Class<T> toType) {
+        Object result = null;
+        if (value != null) {
+            if (toType == String.class) {
+                result = value.toString();
+            } else if ((toType == Integer.class)) {
+                result = Integer.valueOf(value.toString());
+            } else if ((toType == Long.class)) {
+                result = Long.valueOf(value.toString());
+            } else if (toType == BigInteger.class) {
+                result = bigIntValue(value);
+            } else if (toType == BigDecimal.class) {
+                result = bigDecValue(value);
+            } 
+        } else {
+            if (toType.isPrimitive()) {
+                result = primitiveDefaults.get(toType);
+            }
+        }
+        @SuppressWarnings("unchecked")
+        T t = (T) result;
+        return t;
+    }
+    
     /**
      * Evaluates the given object as a boolean: if it is a Boolean object, it's
      * easy; if it's a Number or a Character, returns true for non-zero objects;
