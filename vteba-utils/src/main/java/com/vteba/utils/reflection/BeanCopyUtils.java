@@ -194,7 +194,7 @@ public class BeanCopyUtils {
         String[] methodNames = methodAccess.getMethodNames(); 
         Map<String, Object> toMap = new HashMap<String, Object>();
         for (String methodName : methodNames) {
-            if (methodName.startsWith("get")) { 
+            if (methodName.startsWith("get")) {
                 Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
                 if (value != null) {
                     toMap.put(CaseUtils.toUnderCase(methodName.substring(3)), value);
