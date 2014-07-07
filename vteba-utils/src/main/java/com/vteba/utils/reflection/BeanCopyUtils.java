@@ -149,23 +149,56 @@ public class BeanCopyUtils {
      * @param prefix key是否加 _ 前缀
      * @return fromBean转化成的Map
      */
-    public Map<String, Object> toMap(Object fromBean, boolean prefix) {
+    public Map<String, Object> toMap(Object fromBean, boolean prefix, boolean buildSQL, String table) {
         MethodAccess methodAccess = AsmUtils.get().createMethodAccess(fromBean.getClass());
-        String[] methodNames = methodAccess.getMethodNames(); 
-        Map<String, Object> toMap = new HashMap<String, Object>();
-        for (String methodName : methodNames) {
-            if (methodName.startsWith("get")) {
-                Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
-                if (value != null) {
-                	if (prefix) {
-                		toMap.put(CaseUtils.toUnderCase(methodName.substring(3)), value);
-                	} else {
-                		toMap.put(CaseUtils.underCase(methodName.substring(3)), value);
-                	}
-                }
-            } 
+        String[] methodNames = methodAccess.getMethodNames();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (buildSQL) {
+            StringBuilder columns = new StringBuilder();
+            columns = columns.append("insert into ").append(table).append("(");
+            
+            StringBuilder holders = new StringBuilder(") values(");
+            String column = null;
+            boolean append = true;
+            
+            for (String methodName : methodNames) {
+                if (methodName.startsWith("get")) {
+                    Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
+                    if (value != null) {
+                        if (prefix) {
+                            column = CaseUtils.toUnderCase(methodName.substring(3));
+                            if (append) {
+                                columns.append(column);
+                                holders.append("?");
+                                append = false;
+                            } else {
+                                columns.append(",").append(column);
+                                holders.append(",").append("?");
+                            }
+                            resultMap.put(column, value);
+                        } else {
+                            resultMap.put(CaseUtils.underCase(methodName.substring(3)), value);
+                        }
+                    }
+                } 
+            }
+            columns.append(holders).append(")");
+            resultMap.put("_sql_", columns.toString());
+        } else {
+            for (String methodName : methodNames) {
+                if (methodName.startsWith("get")) {
+                    Object value = methodAccess.invoke(fromBean, methodName, (Object[])null);
+                    if (value != null) {
+                        if (prefix) {
+                            resultMap.put(CaseUtils.toUnderCase(methodName.substring(3)), value);
+                        } else {
+                            resultMap.put(CaseUtils.underCase(methodName.substring(3)), value);
+                        }
+                    }
+                } 
+            }
         }
-        return toMap;
+        return resultMap;
     }
     
     /**
