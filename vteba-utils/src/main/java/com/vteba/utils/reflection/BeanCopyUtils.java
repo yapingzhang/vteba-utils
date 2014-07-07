@@ -160,7 +160,7 @@ public class BeanCopyUtils {
                 	if (prefix) {
                 		toMap.put(CaseUtils.toUnderCase(methodName.substring(3)), value);
                 	} else {
-                		toMap.put(CaseUtils.underCase(methodName).substring(3), value);
+                		toMap.put(CaseUtils.underCase(methodName.substring(3)), value);
                 	}
                 }
             } 

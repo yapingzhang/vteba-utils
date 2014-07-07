@@ -23,11 +23,11 @@ import javolution.util.FastSet;
 /**
  * 快速集合的一些工具方法，从OFBIZ项目中借鉴的。
  */
-public class Lang {
+public class LangUtils {
 
     public static final BigDecimal ZERO_BD = BigDecimal.ZERO;
 
-    private Lang () {}
+    private LangUtils () {}
 
     public static final <T extends Throwable> T initCause(T throwable, Throwable cause) {
         throwable.initCause(cause);
@@ -76,7 +76,7 @@ public class Lang {
      * @return The resulting Map
      */
     public static <V, V1 extends V> Map<String, V> toMap(String name1, V1 value1) {
-        return new Lang.SimpleMap<V>(name1, value1);
+        return new LangUtils.SimpleMap<V>(name1, value1);
 
         /* Map fields = FastMap.newInstance();
          fields.put(name1, value1);
@@ -88,7 +88,7 @@ public class Lang {
      * @return The resulting Map
      */
     public static <V, V1 extends V, V2 extends V> Map<String, V> toMap(String name1, V1 value1, String name2, V2 value2) {
-        return new Lang.SimpleMap<V>(name1, value1, name2, value2);
+        return new LangUtils.SimpleMap<V>(name1, value1, name2, value2);
 
         /* Map fields = FastMap.newInstance();
          fields.put(name1, value1);
@@ -101,7 +101,7 @@ public class Lang {
      * @return The resulting Map
      */
     public static <V, V1 extends V, V2 extends V, V3 extends V> Map<String, V> toMap(String name1, V1 value1, String name2, V2 value2, String name3, V3 value3) {
-        return new Lang.SimpleMap<V>(name1, value1, name2, value2, name3, value3);
+        return new LangUtils.SimpleMap<V>(name1, value1, name2, value2, name3, value3);
 
         /* Map fields = FastMap.newInstance();
          fields.put(name1, value1);
@@ -115,7 +115,7 @@ public class Lang {
      * @return The resulting Map
      */
     public static <V, V1 extends V, V2 extends V, V3 extends V, V4 extends V> Map<String, V> toMap(String name1, V1 value1, String name2, V2 value2, String name3, V3 value3, String name4, V4 value4) {
-        return new Lang.SimpleMap<V>(name1, value1, name2, value2, name3, value3, name4, value4);
+        return new LangUtils.SimpleMap<V>(name1, value1, name2, value2, name3, value3, name4, value4);
 
         /* Map fields = FastMap.newInstance();
          fields.put(name1, value1);
