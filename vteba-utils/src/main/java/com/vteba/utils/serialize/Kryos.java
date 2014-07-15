@@ -117,15 +117,18 @@ public class Kryos {
 
 	/**
 	 * 将对象序列化为byte[]，对象要注册
-	 * @param t 要转换的对象
+	 * @param object 要转换的对象
 	 * @return 字节数组
 	 * @author yinlei
 	 * date 2013-4-6 下午2:51:28
 	 */
-	public byte[] toBytes(Object t) {
+	public byte[] toBytes(Object object) {
+	    if (object == null) {
+            return null;
+        }
 		Kryo converter = getKryo();
 		Output output = new Output(1024, 4 * 1024);
-		converter.writeObject(output, t);
+		converter.writeObject(output, object);
 
 		return output.toBytes();
 	}
@@ -139,6 +142,9 @@ public class Kryos {
 	 * date 2013-4-6 下午2:52:11
 	 */
 	public <T> T fromBytes(byte[] bytes, Class<T> clazz) {
+	    if (bytes == null) {
+	        return null;
+	    }
 		Kryo converter = getKryo();
 		Input input = new Input(bytes);
 		return converter.readObject(input, clazz);
@@ -186,6 +192,9 @@ public class Kryos {
 	 * @author yinlei date 2013-4-7 下午9:52:43
 	 */
 	public byte[] serialize(Object object) {
+	    if (object == null) {
+	        return null;
+	    }
 		Kryo kryo = new Kryo();
 		kryo.setReferences(false);
 		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
@@ -201,6 +210,9 @@ public class Kryos {
 	 * @author yinlei date 2013-4-7 下午9:54:00
 	 */
 	public <T> T deserialize(byte[] bytes) {
+	    if (bytes == null) {
+	        return null;
+	    }
 		Kryo kryo = new Kryo();
 		kryo.setReferences(false);
 		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
