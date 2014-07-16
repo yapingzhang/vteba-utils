@@ -20,6 +20,7 @@ public class Node implements Serializable {
 	private Boolean chkDisabled;//禁用checked
 	private Integer level;// 层级
 	private List<Node> children;//子节点
+	private String indexId;//指标Id
 
 	public Node(Long id, String name) {
 		super();
@@ -117,4 +118,13 @@ public class Node implements Serializable {
 	public void setChildren(List<Node> children) {
 		this.children = children;
 	}
+
+    public String getIndexId() {
+        return indexId;
+    }
+
+    public void setIndexId(String indexId) {
+        this.indexId = indexId;
+    }
+	
 }

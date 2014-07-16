@@ -291,5 +291,6 @@ public class JodaTimeUtils {
 		System.out.println(dateTime.getMonthOfYear());
 		System.out.println(dateTime.getDayOfMonth());
 		System.out.println((dateTime.dayOfMonth().withMaximumValue().getDayOfMonth()) ==lastDayOfMonth(new Date()).getDayOfMonth());
+		System.out.println();
 	}
 }
