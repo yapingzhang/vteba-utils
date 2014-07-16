@@ -20,8 +20,12 @@ public class Node implements Serializable {
 	private Boolean chkDisabled;//禁用checked
 	private Integer level;// 层级
 	private List<Node> children;//子节点
-	private String indexId;//指标Id
+	private String parentId;//父节点ID/指标Id
 
+	public Node() {
+        super();
+    }
+	
 	public Node(Long id, String name) {
 		super();
 		this.id = id.toString();
@@ -34,7 +38,14 @@ public class Node implements Serializable {
 		this.name = name;
 	}
 	
-	public Node(String id, String name, Integer level) {
+	public Node(String id, String name, String parentId) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.parentId = parentId;
+    }
+
+    public Node(String id, String name, Integer level) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -119,12 +130,11 @@ public class Node implements Serializable {
 		this.children = children;
 	}
 
-    public String getIndexId() {
-        return indexId;
+    public String getParentId() {
+        return parentId;
     }
 
-    public void setIndexId(String indexId) {
-        this.indexId = indexId;
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
-	
 }
