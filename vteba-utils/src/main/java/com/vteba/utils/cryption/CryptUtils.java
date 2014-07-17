@@ -153,7 +153,7 @@ public final class CryptUtils {
 	 * date 2013-4-6 下午5:15:12
 	 */
 	public static String toHexString(Object o) {
-		return sha1Hex(hexEncode(NativeSerializerUtils.fromObjectToBinary(o)));
+		return sha1Hex(hexEncode(NativeSerializerUtils.serialize(o)));
 	}
 	
 	/**

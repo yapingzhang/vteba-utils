@@ -24,7 +24,7 @@ public class NativeSerializerUtils {
 	 * @param object 要被序列化的对象
 	 * @return 对象被序列化后的字节数组
 	 */
-	public static byte[] fromObjectToBinary(Object object) {
+	public static byte[] serialize(Object object) {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream(BYTE_ARRAY_SIZE);
 			ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -46,7 +46,7 @@ public class NativeSerializerUtils {
 	 * @param binary 要被反序列化的字节数组
 	 * @return 序列化后的对象
 	 */
-	public static Object fromBinaryToObject(byte[] binary) {
+	public static Object deserialize(byte[] binary) {
 		try {
 			ByteArrayInputStream bais = new ByteArrayInputStream(binary);
 			ObjectInputStream ois = new ObjectInputStream(bais);
