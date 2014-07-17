@@ -160,7 +160,7 @@ public class Kryos {
 	 * @return 要转换的对象实例List
 	 * @author yinlei date 2013-4-6 下午2:52:11
 	 */
-	public <T> List<T> fromBytesToList(byte[] bytes, Class<T> clazz) {
+	public <T> List<T> fromBytesToList(byte[] bytes) {
 		Kryo kryo = getKryo();
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
@@ -168,8 +168,7 @@ public class Kryos {
 		return list;
 	}
 
-	public <K, V> Map<K, V> fromBytesToMap(byte[] bytes, Class<K> clazz,
-			Class<V> vclass) {
+	public <K, V> Map<K, V> fromBytesToMap(byte[] bytes) {
 		Kryo kryo = getKryo();
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
@@ -177,7 +176,7 @@ public class Kryos {
 		return map;
 	}
 
-	public <T> Set<T> fromBytesToSet(byte[] bytes, Class<T> clazz) {
+	public <T> Set<T> fromBytesToSet(byte[] bytes) {
 		Kryo kryo = getKryo();
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
