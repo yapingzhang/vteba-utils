@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vteba.utils.consts.Consts;
-import com.vteba.utils.cryption.CryptionUtils;
+import com.vteba.utils.cryption.CryptUtils;
 import com.vteba.utils.reflection.ReflectUtils;
 
 /**
@@ -186,7 +186,7 @@ public class ServletUtils {
 	 */
 	public static String encodeHttpBasic(String userName, String password) {
 		String encode = userName + ":" + password;
-		return "Basic " + CryptionUtils.base64Encode(encode.getBytes());
+		return "Basic " + CryptUtils.base64Encode(encode.getBytes());
 	}
 	
 	/**

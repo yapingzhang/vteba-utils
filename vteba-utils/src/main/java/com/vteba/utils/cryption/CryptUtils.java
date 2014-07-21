@@ -1,10 +1,5 @@
 package com.vteba.utils.cryption;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -16,16 +11,17 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import com.vteba.utils.serialize.NativeSerializerUtils;
+
 /**
  * 各种格式的编码解码码工具类。
  * 集成Commons-Codec，Commons-Lang及JDK提供的编解码方法。
  * @author yinlei
  * date 2012-9-20
  */
-public final class CryptionUtils {
+public final class CryptUtils {
 
 	private static final String DEFAULT_URL_ENCODING = "UTF-8";
-	private static final int BYTE_ARRAY_SIZE = 20 * 1024;
 	private static final char[] DIGITS = {
         '0', '1', '2', '3', '4', '5', '6', '7',
         '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -124,47 +120,6 @@ public final class CryptionUtils {
 	}
 	
 	/**
-	 * 将对象序列化
-	 * @param o 要被序列化的对象
-	 * @return 对象被序列化后的字节数组
-	 */
-	public static byte[] fromObjectToBinary(Object o) {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream(BYTE_ARRAY_SIZE);
-			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			try {
-				oos.writeObject(o);
-				return baos.toByteArray();
-			} finally {
-				oos.close();
-				baos.close();
-			}
-		} catch (IOException ex) {
-			return null;
-		}
-	}
-	
-	/**
-	 * 反序列对象化
-	 * @param binary 要被反序列化的字节数组
-	 * @return 序列化后的对象
-	 */
-	public static Object fromBinaryToObject(byte[] binary) {
-		try {
-			ByteArrayInputStream bais = new ByteArrayInputStream(binary);
-			ObjectInputStream ois = new ObjectInputStream(bais);
-			try {
-				return ois.readObject();
-			} finally {
-				ois.close();
-				bais.close();
-			}
-		} catch (Exception ex) {
-			return null;
-		}
-	}
-	
-	/**
 	 * 将数组array以分隔符separator分隔开，返回一个字符串
 	 * @param array 要被分割的数组
 	 * @param separator 分隔符
@@ -198,7 +153,7 @@ public final class CryptionUtils {
 	 * date 2013-4-6 下午5:15:12
 	 */
 	public static String toHexString(Object o) {
-		return sha1Hex(hexEncode(fromObjectToBinary(o)));
+		return sha1Hex(hexEncode(NativeSerializerUtils.serialize(o)));
 	}
 	
 	/**

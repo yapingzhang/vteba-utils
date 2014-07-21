@@ -66,7 +66,7 @@ public class DESUtils {
 			Cipher cipher = Cipher.getInstance("DES");
 			cipher.init(Cipher.ENCRYPT_MODE, key);
 			byte[] encryptStrByte = cipher.doFinal(strBytes);
-			return CryptionUtils.base64Encode(encryptStrByte);
+			return CryptUtils.base64Encode(encryptStrByte);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -80,7 +80,7 @@ public class DESUtils {
 	 */
 	public static String getDecryptString(String encryptStr) {
 		try {
-			byte[] strBytes = CryptionUtils.base64Decode(encryptStr);
+			byte[] strBytes = CryptUtils.base64Decode(encryptStr);
 			Cipher cipher = Cipher.getInstance("DES");
 			cipher.init(Cipher.DECRYPT_MODE, key);
 			byte[] decryptStrByte = cipher.doFinal(strBytes);
