@@ -11,10 +11,14 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;
 
+import org.apache.commons.io.IOUtils;
+
 public class RandomNumber {
 
 	private ByteArrayInputStream image;// 图像输出流
 	private String authCode;// 验证码
+	private byte[] byteArray;
+	
 	// 验证码序列源
 	private static final char[] randomSequence = new char[] { 'A', 'B', 'C',
 			'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
@@ -28,7 +32,7 @@ public class RandomNumber {
 	/**
 	 * 图像生成单例方法
 	 */
-	public static RandomNumber Instance() {
+	public static RandomNumber get() {
 		return new RandomNumber();
 	}
 
@@ -85,15 +89,22 @@ public class RandomNumber {
 		ByteArrayInputStream input = null;
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		try {
-			ImageOutputStream imageOut = ImageIO
-					.createImageOutputStream(output);
+			ImageOutputStream imageOut = ImageIO.createImageOutputStream(output);
 			ImageIO.write(image, "JPEG", imageOut);
 			imageOut.close();
-			input = new ByteArrayInputStream(output.toByteArray());
+			byteArray = output.toByteArray();
+			input = new ByteArrayInputStream(byteArray);
+			this.image = input;
 		} catch (Exception e) {
 			System.out.println("验证码图片产生出现错误：" + e.toString());
+		} finally {
+		    IOUtils.closeQuietly(input);
+		    IOUtils.closeQuietly(output);
 		}
-		this.image = input;
+	}
+	
+	public byte[] getImageByteArray() {
+	    return byteArray;
 	}
 	
 	/**
