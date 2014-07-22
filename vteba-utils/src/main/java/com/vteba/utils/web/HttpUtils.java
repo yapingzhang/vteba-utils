@@ -2,6 +2,9 @@ package com.vteba.utils.web;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,63 +13,70 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 // import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 // import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.client.utils.URLEncodedUtils;
 // import org.apache.http.client.utils.URIBuilder;
 // import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ContentType;
 // import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 public class HttpUtils {
 
-    @RequestMapping
+    /**
+     * 对于查询参数要使用uri，对于json、xml等数据内容要使用Entity
+     * @param args
+     * @throws Exception
+     */
     public final static void main(String[] args) throws Exception {
 
         // 初始化，此处构造函数就与3不同
         HttpClient httpclient = HttpClientBuilder.create().build();
 
-        HttpHost targetHost = new HttpHost("www.baidu.com", 80, "http");
+        HttpHost targetHost = new HttpHost("localhost", 8090, "http");
 
         // HttpGet httpget = new HttpGet("http://www.apache.org/");
-        HttpGet httpget = new HttpGet("/");
+        HttpGet httpGet = new HttpGet("/");
 
         // 查看默认request头部信息
-        System.out.println("Accept-Charset:" + httpget.getFirstHeader("Accept-Charset"));
+        System.out.println("Accept-Charset:" + httpGet.getFirstHeader("Accept-Charset"));
         // 以下这条如果不加会发现无论你设置Accept-Charset为gbk还是utf-8，他都会默认返回gb2312（本例针对google.cn来说）
-        httpget.setHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.1.2)");
+        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.1.2)");
         // 用逗号分隔显示可以同时接受多种编码
-        httpget.setHeader("Accept-Language", "zh-cn,zh;q=0.5");
-        httpget.setHeader("Accept-Charset", "GB2312,utf-8;q=0.7,*;q=0.7");
+        httpGet.setHeader("Accept-Language", "zh-cn,zh;q=0.5");
+        httpGet.setHeader("Accept-Charset", "GB2312,utf-8;q=0.7,*;q=0.7");
         // 验证头部信息设置生效
-        System.out.println("Accept-Charset:" + httpget.getFirstHeader("Accept-Charset").getValue());
+        System.out.println("Accept-Charset:" + httpGet.getFirstHeader("Accept-Charset").getValue());
 
-        HttpPost httpPost = new HttpPost("/user/save");
+         //HttpEntity postHttpEntity = new StringEntity(json, charset)
+         List<NameValuePair> list = new ArrayList<NameValuePair>();
+         URI uri = new URIBuilder()
+         .addParameter("userName", "yinlei尹雷")
+         .setPath("/test/userServlet")
+         .build();
+        
+         list = URLEncodedUtils.parse(uri, "UTF-8");
+        
+         UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(list, "UTF-8");
+        
+         HttpPost httpPost = new HttpPost(uri);
 
-        httpPost.setHeader("content-type", "text/plain;charset=utf-8");
-
-        // HttpEntity postHttpEntity = new StringEntity(json, charset)
-        // List<NameValuePair> list = new ArrayList<NameValuePair>();
-        // URI uri = new URIBuilder()
-        // .addParameter("userName", "yinlei尹雷")
-        // .setPath("/test/userServlet")
-        // .build();
-        //
-        // list = URLEncodedUtils.parse(uri, "UTF-8");
-        //
-        // UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(list, "UTF-8");
-        //
-        // httpPost.setEntity(urlEncodedFormEntity);
+         httpPost.setHeader("content-type", "text/plain;charset=utf-8");
+         
+         httpPost.setEntity(urlEncodedFormEntity);
 
         // Execute HTTP request
-        System.out.println("executing request " + httpget.getURI());
-        HttpResponse response = httpclient.execute(targetHost, httpget);
+        System.out.println("executing request " + httpGet.getURI());
+        HttpResponse response = httpclient.execute(targetHost, httpPost);
         // HttpResponse response = httpclient.execute(httpget);
 
         System.out.println("----------------------------------------");
@@ -84,8 +94,8 @@ public class HttpUtils {
             // 此处重定向处理 此处还未验证
             String newUri = response.getLastHeader("Location").getValue();
             httpclient = HttpClientBuilder.create().build();
-            httpget = new HttpGet(newUri);
-            response = httpclient.execute(httpget);
+            httpGet = new HttpGet(newUri);
+            response = httpclient.execute(httpGet);
         }
 
         // Get hold of the response entity
