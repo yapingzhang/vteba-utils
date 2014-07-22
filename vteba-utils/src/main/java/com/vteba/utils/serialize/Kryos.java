@@ -25,7 +25,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
@@ -246,4 +245,19 @@ public class Kryos {
 		T t = (T) kryo.copyShallow(object);
 		return t;
 	}
+	
+//	public static void main(String[] aa) {
+//	    Node node = new Node();
+//	    node.setName("hasdf");
+//	    List<Node> children = Lists.newArrayList();
+//	    Node node2 = new Node();
+//	    node2.setName("aa");
+//	    children.add(node2);
+//	    
+//	    node.setChildren(children);
+//	    
+//	    byte[] aaa = Kryos.get().serialize(node);
+//	    Node de = Kryos.get().deserialize(aaa);
+//	    System.out.println(de);
+//	}
 }
