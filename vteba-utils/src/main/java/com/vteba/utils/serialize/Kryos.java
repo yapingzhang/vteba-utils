@@ -23,10 +23,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.hibernate.collection.internal.PersistentBag;
+import org.hibernate.collection.internal.PersistentList;
+import org.hibernate.collection.internal.PersistentMap;
+import org.hibernate.collection.internal.PersistentSet;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.CollectionSerializer;
+import com.esotericsoftware.kryo.serializers.MapSerializer;
 
 /**
  * 基于kryo的序列化转换器。
@@ -194,6 +200,13 @@ public class Kryos {
 	        return null;
 	    }
 		Kryo kryo = new Kryo();
+		
+		// 这四个是对hibernate持久化集合的，不需要就注释掉
+		kryo.addDefaultSerializer(PersistentBag.class, CollectionSerializer.class);
+		kryo.addDefaultSerializer(PersistentSet.class, CollectionSerializer.class);
+		kryo.addDefaultSerializer(PersistentList.class, CollectionSerializer.class);
+		kryo.addDefaultSerializer(PersistentMap.class, MapSerializer.class);
+		
 		kryo.setReferences(false);
 		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 		Output out = new Output(2 * 1024, 128 * 1024);
@@ -212,6 +225,12 @@ public class Kryos {
 	        return null;
 	    }
 		Kryo kryo = new Kryo();
+		// 这四个是对hibernate持久化集合的，不需要就注释掉
+		kryo.addDefaultSerializer(PersistentBag.class, CollectionSerializer.class);
+        kryo.addDefaultSerializer(PersistentSet.class, CollectionSerializer.class);
+        kryo.addDefaultSerializer(PersistentList.class, CollectionSerializer.class);
+        kryo.addDefaultSerializer(PersistentMap.class, MapSerializer.class);
+        
 		kryo.setReferences(false);
 		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 		Input input = new Input(bytes);
