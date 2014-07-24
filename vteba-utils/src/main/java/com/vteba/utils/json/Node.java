@@ -21,6 +21,7 @@ public class Node implements Serializable {
 	private Integer level;// 层级
 	private List<Node> children;//子节点
 	private String parentId;//父节点ID/指标Id
+	private Boolean parent;//是否父节点，非叶子节点
 
 	public Node() {
         super();
@@ -45,6 +46,14 @@ public class Node implements Serializable {
         this.parentId = parentId;
     }
 
+	public Node(String id, String name, Long parentId, Boolean parent) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.parentId = parentId.toString();
+        this.parent = parent;
+    }
+	
     public Node(String id, String name, Integer level) {
 		super();
 		this.id = id;
@@ -137,4 +146,13 @@ public class Node implements Serializable {
     public void setParentId(String parentId) {
         this.parentId = parentId;
     }
+
+    public Boolean getParent() {
+        return parent;
+    }
+
+    public void setParent(Boolean parent) {
+        this.parent = parent;
+    }
+    
 }
