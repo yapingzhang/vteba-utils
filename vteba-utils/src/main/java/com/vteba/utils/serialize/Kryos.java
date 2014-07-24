@@ -126,7 +126,7 @@ public class Kryos {
             return null;
         }
 		Kryo converter = getKryo();
-		Output output = new Output(1024, 4 * 1024);
+		Output output = new Output(2048, 512 * 1024);
 		converter.writeObject(output, object);
 
 		return output.toBytes();
@@ -196,7 +196,7 @@ public class Kryos {
 		Kryo kryo = new Kryo();
 		
 		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
-		Output out = new Output(2 * 1024, 128 * 1024);
+		Output out = new Output(2 * 1024, 512 * 1024);
 		kryo.writeClassAndObject(out, object);
 		return out.toBytes();
 	}
