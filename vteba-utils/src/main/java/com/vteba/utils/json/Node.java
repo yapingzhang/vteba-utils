@@ -13,25 +13,20 @@ public class Node implements Serializable {
 	private static final long serialVersionUID = -10392254772186054L;
 	
 	private String id;//节点id
-	private String name;//显示的名字
+	private Long nodeId;// 节点Id，如果节点id是Long类型时，使用此字段
+	private String name;//显示的名字（节点名称）
 	private Boolean open;//是否打开
 	private Boolean checked;//是否选中
 	private Boolean nocheck;//不显示checked
 	private Boolean chkDisabled;//禁用checked
 	private Integer level;// 层级
 	private List<Node> children;//子节点
-	private String parentId;//父节点ID/指标Id
+	private Long parentId;//父节点ID
 	private Boolean parent;//是否父节点，非叶子节点
 
 	public Node() {
         super();
     }
-	
-	public Node(Long id, String name) {
-		super();
-		this.id = id.toString();
-		this.name = name;
-	}
 	
 	public Node(String id, String name) {
 		super();
@@ -39,25 +34,31 @@ public class Node implements Serializable {
 		this.name = name;
 	}
 	
-	public Node(String id, String name, String parentId) {
+	public Node(Long nodeId, String name) {
+        super();
+        this.nodeId = nodeId;
+        this.name = name;
+    }
+	
+	public Node(String id, String name, Long parentId) {
         super();
         this.id = id;
         this.name = name;
         this.parentId = parentId;
     }
 
-	public Node(String id, String name, Long parentId) {
+	public Node(Long nodeId, String name, Long parentId) {
         super();
-        this.id = id;
+        this.nodeId = nodeId;
         this.name = name;
-        this.parentId = parentId.toString();
+        this.parentId = parentId;
     }
 	
 	public Node(String id, String name, Long parentId, Boolean parent) {
         super();
         this.id = id;
         this.name = name;
-        this.parentId = parentId.toString();
+        this.parentId = parentId;
         this.parent = parent;
     }
 	
@@ -75,9 +76,9 @@ public class Node implements Serializable {
 		this.children = children;
 	}
 
-	public Node(Long id, String name, List<Node> children) {
+	public Node(Long nodeId, String name, List<Node> children) {
 		super();
-		this.id = id.toString();
+		this.nodeId = nodeId;
 		this.name = name;
 		this.children = children;
 	}
@@ -146,11 +147,11 @@ public class Node implements Serializable {
 		this.children = children;
 	}
 
-    public String getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
@@ -160,6 +161,14 @@ public class Node implements Serializable {
 
     public void setParent(Boolean parent) {
         this.parent = parent;
+    }
+
+    public Long getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(Long nodeId) {
+        this.nodeId = nodeId;
     }
     
 }
