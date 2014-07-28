@@ -27,4 +27,24 @@ public class DateUtils {
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateformat);
         return dateFormat.format(date);
     }
+	
+	/**
+	 * 将日期格式化，默认格式是：yyyy-MM-dd HH:mm:ss。
+	 * @param date 要格式化的日期
+	 * @return 日期字符串
+	 */
+	public static String toDateString(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(date);
+    }
+	
+	/**
+     * 将日期格式化，默认格式是：yyyy-MM-dd HH:mm:ss。
+     * @param date 要格式化的日期Unix时间戳
+     * @return 日期字符串
+     */
+	public static String toDateString(Long date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(new Date(date));
+    }
 }
