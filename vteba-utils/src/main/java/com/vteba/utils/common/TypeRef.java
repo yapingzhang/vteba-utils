@@ -6,11 +6,17 @@ import java.util.List;
 
 import com.vteba.utils.json.Node;
 
+/**
+ * 获得多层泛型类型
+ * @author 尹雷 
+ * @since 2013-7-21
+ * @param <T> 要获取的泛型类型
+ */
 public class TypeRef<T> {
 
     private final Type type;
 
-    protected TypeRef(){
+    public TypeRef(){
         Type superClass = getClass().getGenericSuperclass();
         type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
     }
