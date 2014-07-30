@@ -248,6 +248,11 @@ public class Kryos {
 	    System.out.println(System.currentTimeMillis() - d);
 	    System.out.println(bbb.length);
 	    
+	    List<Node> nodes = Lists.newArrayList();
+	    byte[] bytes = Kryos.toBytes(nodes);
+	    nodes = Kryos.fromBytesToList(bytes);
+	    System.out.println(bytes.length);
+	    
 	}
 	
 	/**
