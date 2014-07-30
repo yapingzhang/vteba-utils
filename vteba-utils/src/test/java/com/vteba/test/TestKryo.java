@@ -29,8 +29,8 @@ public class TestKryo {
         
         node.setChildren(children);
 
-        byte[] aaa = Kryos.get().serialize(node);
-        Node de = Kryos.get().deserialize(aaa);
+        byte[] aaa = Kryos.serialize(node);
+        Node de = Kryos.deserialize(aaa);
         System.out.println(de);
     }
 }
