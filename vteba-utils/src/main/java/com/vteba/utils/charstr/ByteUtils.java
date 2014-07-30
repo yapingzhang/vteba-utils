@@ -16,7 +16,7 @@ public class ByteUtils {
 		byte[][] bytes = new byte[objects.length][0];
 		int i = 0;
 		for (Object value : objects) {
-			bytes[i++] = Kryos.get().toBytes(value);
+			bytes[i++] = Kryos.toBytes(value);
 		}
 		return bytes;
 	}

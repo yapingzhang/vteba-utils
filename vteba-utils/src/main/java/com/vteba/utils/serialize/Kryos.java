@@ -27,6 +27,8 @@ import org.objenesis.strategy.StdInstantiatorStrategy;
 
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.google.common.collect.Lists;
+import com.vteba.utils.json.Node;
 
 /**
  * 基于kryo的序列化转换器。
@@ -34,16 +36,15 @@ import com.esotericsoftware.kryo.io.Output;
  * date 2013-4-6 下午2:50:09
  */
 public class Kryos {
-	private ThreadLocal<Kryo> kryoLocalThreadLocal = new ThreadLocal<Kryo>();
+	private static ThreadLocal<Kryo> threadLocal = new ThreadLocal<Kryo>();
 
-	private static Kryos instance = new Kryos();
-
-	public static Kryos get() {
-		return instance;
-	}
+//	private static Kryos instance = new Kryos();
+//
+//	public static Kryos get() {
+//		return instance;
+//	}
 
 	private Kryos() {
-
 	}
 
 	/**
@@ -53,67 +54,46 @@ public class Kryos {
 	 * date 2013-4-6 下午2:50:52
 	 */
 	public Kryo getKryo() {
-		Kryo kryo = kryoLocalThreadLocal.get();
-
+		Kryo kryo = threadLocal.get();
 		if (kryo == null) {
-			kryo = new Kryo();
+		    // throw new IllegalStateException("没有获得当前线程绑定的Kryo实例，请先注册，再调用。");
 			kryo = new Kryo();
 			kryo.setRegistrationRequired(true);
-			kryo.setReferences(false);
+			kryo.setReferences(true);
 			kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 
-			kryo.register(Class.class);
+			registDefault(kryo);
 			
-			kryo.register(byte[].class);
-			kryo.register(char[].class);
-			kryo.register(short[].class);
-			kryo.register(int[].class);
-			kryo.register(long[].class);
-			kryo.register(float[].class);
-			kryo.register(double[].class);
-			kryo.register(boolean[].class);
-			kryo.register(String[].class);
-			kryo.register(Object[].class);
-			
-			kryo.register(StringBuffer.class);
-			kryo.register(StringBuilder.class);
-			
-			kryo.register(ArrayList.class);
-			kryo.register(LinkedList.class);
-			kryo.register(CopyOnWriteArrayList.class);
-			kryo.register(Vector.class);
-			
-			kryo.register(HashMap.class);
-			kryo.register(TreeMap.class);
-			kryo.register(LinkedHashMap.class);
-			kryo.register(ConcurrentHashMap.class);
+			//*********注册自定义对象**********//
+			//kryo.register(Customer.class);
 
-			kryo.register(HashSet.class);
-			kryo.register(TreeSet.class);
-			kryo.register(LinkedHashSet.class);
-			kryo.register(CopyOnWriteArraySet.class);
-
-			kryo.register(BigInteger.class);
-			kryo.register(BigDecimal.class);
-			kryo.register(Currency.class);
-			
-			//kryo.register(Enum.class);
-			kryo.register(EnumSet.class);
-
-			kryo.register(Date.class);
-			kryo.register(java.sql.Date.class);
-			kryo.register(Calendar.class);
-			kryo.register(TimeZone.class);
-			
-			//**************注册自定义对象********************//
-//			kryo.register(Customer.class);
-//			kryo.register(Person.class);
-
-			kryoLocalThreadLocal.set(kryo);
+			threadLocal.set(kryo);
 		}
 		return kryo;
 	}
 
+	/**
+     * 获得当前线程的Kryo
+     * @return Kryo实例
+     * @author yinlei
+     * date 2013-4-6 下午2:50:52
+     */
+    private static Kryo getKryo(Class<?> clazz) {
+        Kryo kryo = threadLocal.get();
+        if (kryo == null) {
+            kryo = new Kryo();
+            kryo.setRegistrationRequired(true);
+            kryo.setReferences(true);
+            kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
+            registDefault(kryo);
+            
+            //*********注册自定义对象**********//
+            kryo.register(clazz);
+            threadLocal.set(kryo);
+        }
+        return kryo;
+    }
+	
 	/**
 	 * 将对象序列化为byte[]，对象要注册
 	 * @param object 要转换的对象
@@ -121,11 +101,11 @@ public class Kryos {
 	 * @author yinlei
 	 * date 2013-4-6 下午2:51:28
 	 */
-	public byte[] toBytes(Object object) {
+	public static byte[] toBytes(Object object) {
 	    if (object == null) {
             return null;
         }
-		Kryo converter = getKryo();
+		Kryo converter = getKryo(object.getClass());
 		Output output = new Output(2048, 2 * 1024 * 1024);
 		converter.writeObject(output, object);
 
@@ -140,11 +120,11 @@ public class Kryos {
 	 * @author yinlei
 	 * date 2013-4-6 下午2:52:11
 	 */
-	public <T> T fromBytes(byte[] bytes, Class<T> clazz) {
+	public static <T> T fromBytes(byte[] bytes, Class<T> clazz) {
 	    if (bytes == null) {
 	        return null;
 	    }
-		Kryo converter = getKryo();
+		Kryo converter = getKryo(clazz);
 		Input input = new Input(bytes);
 		return converter.readObject(input, clazz);
 	}
@@ -159,24 +139,24 @@ public class Kryos {
 	 * @return 要转换的对象实例List
 	 * @author yinlei date 2013-4-6 下午2:52:11
 	 */
-	public <T> List<T> fromBytesToList(byte[] bytes) {
-		Kryo kryo = getKryo();
+	public static <T> List<T> fromBytesToList(byte[] bytes) {
+		Kryo kryo = getKryo(ArrayList.class);
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
 		List<T> list = kryo.readObject(input, ArrayList.class);
 		return list;
 	}
 
-	public <K, V> Map<K, V> fromBytesToMap(byte[] bytes) {
-		Kryo kryo = getKryo();
+	public static <K, V> Map<K, V> fromBytesToMap(byte[] bytes) {
+		Kryo kryo = getKryo(HashMap.class);
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
 		Map<K, V> map = kryo.readObject(input, HashMap.class);
 		return map;
 	}
 
-	public <T> Set<T> fromBytesToSet(byte[] bytes) {
-		Kryo kryo = getKryo();
+	public static <T> Set<T> fromBytesToSet(byte[] bytes) {
+		Kryo kryo = getKryo(HashSet.class);
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
 		Set<T> set = kryo.readObject(input, HashSet.class);
@@ -189,12 +169,11 @@ public class Kryos {
 	 * @return 字节数组
 	 * @author yinlei date 2013-4-7 下午9:52:43
 	 */
-	public byte[] serialize(Object object) {
+	public static byte[] serialize(Object object) {
 	    if (object == null) {
 	        return null;
 	    }
 		Kryo kryo = new Kryo();
-		
 		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 		Output out = new Output(2 * 1024, 2 * 1024 * 1024);
 		kryo.writeClassAndObject(out, object);
@@ -207,12 +186,11 @@ public class Kryos {
 	 * @return 反序列化后的对象
 	 * @author yinlei date 2013-4-7 下午9:54:00
 	 */
-	public <T> T deserialize(byte[] bytes) {
+	public static <T> T deserialize(byte[] bytes) {
 	    if (bytes == null) {
 	        return null;
 	    }
 		Kryo kryo = new Kryo();
-		
 		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
@@ -226,8 +204,9 @@ public class Kryos {
 	 * @param clazz 被拷贝对象类型
 	 * @return A new Object
 	 */
-	public <T> T copy(Object object, Class<T> clazz) {
+	public static <T> T copy(Object object, Class<T> clazz) {
 		Kryo kryo = new Kryo();
+		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 		@SuppressWarnings("unchecked")
 		T t = (T) kryo.copy(object);
 		return t;
@@ -239,25 +218,82 @@ public class Kryos {
 	 * @param clazz 被拷贝对象类型
 	 * @return A new Object
 	 */
-	public <T> T copyShallow(Object object, Class<T> clazz) {
+	public static <T> T copyShallow(Object object, Class<T> clazz) {
 		Kryo kryo = new Kryo();
+		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 		@SuppressWarnings("unchecked")
 		T t = (T) kryo.copyShallow(object);
 		return t;
 	}
 	
-//	public static void main(String[] aa) {
-//	    Node node = new Node();
-//	    node.setName("hasdf");
-//	    List<Node> children = Lists.newArrayList();
-//	    Node node2 = new Node();
-//	    node2.setName("aa");
-//	    children.add(node2);
-//	    
-//	    node.setChildren(children);
-//	    
-//	    byte[] aaa = Kryos.get().serialize(node);
-//	    Node de = Kryos.get().deserialize(aaa);
-//	    System.out.println(de);
-//	}
+	public static void main(String[] aa) {
+	    Node node = new Node();
+	    node.setName("hasdf");
+	    List<Node> children = Lists.newArrayList();
+	    Node node2 = new Node();
+	    node2.setName("aa");
+	    children.add(node2);
+	    
+	    node.setChildren(children);
+	    
+	    long d = System.currentTimeMillis();
+	    byte[] aaa = Kryos.serialize(node);
+	    Kryos.deserialize(aaa);
+	    System.out.println(System.currentTimeMillis() - d);
+	    System.out.println(aaa.length);
+	    
+	    d = System.currentTimeMillis();
+	    byte[] bbb = Kryos.toBytes(node);
+	    Kryos.fromBytes(bbb, Node.class);
+	    System.out.println(System.currentTimeMillis() - d);
+	    System.out.println(bbb.length);
+	    
+	}
+	
+	/**
+     * 注册基本对象
+     * @param kryo
+     */
+    private static void registDefault(Kryo kryo) {
+        kryo.register(Class.class);
+        kryo.register(byte[].class);
+        kryo.register(char[].class);
+        kryo.register(short[].class);
+        kryo.register(int[].class);
+        kryo.register(long[].class);
+        kryo.register(float[].class);
+        kryo.register(double[].class);
+        kryo.register(boolean[].class);
+        kryo.register(String[].class);
+        kryo.register(Object[].class);
+        
+        kryo.register(StringBuffer.class);
+        kryo.register(StringBuilder.class);
+        
+        kryo.register(ArrayList.class);
+        kryo.register(LinkedList.class);
+        kryo.register(CopyOnWriteArrayList.class);
+        kryo.register(Vector.class);
+        
+        kryo.register(HashMap.class);
+        kryo.register(TreeMap.class);
+        kryo.register(LinkedHashMap.class);
+        kryo.register(ConcurrentHashMap.class);
+
+        kryo.register(HashSet.class);
+        kryo.register(TreeSet.class);
+        kryo.register(LinkedHashSet.class);
+        kryo.register(CopyOnWriteArraySet.class);
+
+        kryo.register(BigInteger.class);
+        kryo.register(BigDecimal.class);
+        kryo.register(Currency.class);
+        
+        kryo.register(EnumSet.class);
+
+        kryo.register(Date.class);
+        kryo.register(java.sql.Date.class);
+        kryo.register(Calendar.class);
+        kryo.register(TimeZone.class);
+    }
 }
