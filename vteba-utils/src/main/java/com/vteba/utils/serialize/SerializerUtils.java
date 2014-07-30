@@ -15,9 +15,9 @@ import org.slf4j.LoggerFactory;
  * @author yinlei
  * date 2012-9-18 下午9:20:37
  */
-public class NativeSerializerUtils {
+public class SerializerUtils {
 	private static final int BYTE_ARRAY_SIZE = 1024 * 1024;
-	private static final Logger logger = LoggerFactory.getLogger(NativeSerializerUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(SerializerUtils.class);
 	
 	/**
 	 * 将对象序列化

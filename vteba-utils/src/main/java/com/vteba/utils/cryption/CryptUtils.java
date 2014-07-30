@@ -11,7 +11,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import com.vteba.utils.serialize.NativeSerializerUtils;
+import com.vteba.utils.serialize.SerializerUtils;
 
 /**
  * 各种格式的编码解码码工具类。
@@ -153,7 +153,7 @@ public final class CryptUtils {
 	 * date 2013-4-6 下午5:15:12
 	 */
 	public static String toHexString(Object o) {
-		return sha1Hex(hexEncode(NativeSerializerUtils.serialize(o)));
+		return sha1Hex(hexEncode(SerializerUtils.serialize(o)));
 	}
 	
 	/**
