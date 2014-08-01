@@ -120,32 +120,6 @@ public final class CryptUtils {
 	}
 	
 	/**
-	 * 将数组array以分隔符separator分隔开，返回一个字符串
-	 * @param array 要被分割的数组
-	 * @param separator 分隔符
-	 * @return 数组和分隔符组成的字符串
-	 * @author yinlei
-	 * date 2013-4-13 下午11:10:08
-	 */
-	public static String join(Object[] array, String separator) {
-        if (array == null) {
-            return null;
-        }
-        int arraySize = array.length;
-        StringBuilder buffer = new StringBuilder();
-
-        for (int i = 0; i < arraySize; i++) {
-            if (i > 0) {
-                buffer.append(separator);
-            }
-            if (array[i] != null) {
-                buffer.append(array[i]);
-            }
-        }
-        return buffer.toString();
-    }
-
-	/**
 	 * 将对象序列化后，进行HEX编码，然后进行SHA1摘要，最后再转换为HEX字符串
 	 * @param o 要被转换的对象
 	 * @return 对象转换后的字符串

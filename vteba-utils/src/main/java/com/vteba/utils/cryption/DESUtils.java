@@ -18,25 +18,24 @@ import javax.crypto.spec.DESKeySpec;
  * @author yinlei date 2012-7-16 下午4:54:51
  */
 public class DESUtils {
-	private static Key key;
-	private static String ENCRYPTION_KEY = "sKmBWVteFlFyiNLeI";
+	private static final Key key;
+	private static final String ENCRYPT_KEY = "sKmBW78VteFl@1FyiN128LeI";
 
 	static {
 		try {
 			SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-			random.setSeed(ENCRYPTION_KEY.getBytes());
+			random.setSeed(ENCRYPT_KEY.getBytes());
 			KeyGenerator generator = KeyGenerator.getInstance("DES");
-			generator.init(random);// new SecureRandom(ENCRYPTION_KEY.getBytes()));
+			generator.init(random);
 			key = generator.generateKey();
 			generator = null;
-			//key = generateKey(ENCRYPTION_KEY);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	/**
-	 * 获得密钥
+	 * 获得密钥。这个方法产生的密钥可能跨平台性不好。
 	 * 
 	 * @param secretKey 加密盐salt
 	 * @return SecretKey密钥实例
@@ -45,22 +44,19 @@ public class DESUtils {
 	 * @throws InvalidKeySpecException
 	 */
 	protected static SecretKey generateKey(String secretKey)
-			throws NoSuchAlgorithmException, InvalidKeyException,
-			InvalidKeySpecException {
-
+			throws NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException {
 		SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
 		DESKeySpec keySpec = new DESKeySpec(secretKey.getBytes());
-		keyFactory.generateSecret(keySpec);
 		return keyFactory.generateSecret(keySpec);
 	}
 
 	/**
-	 * 对字符串进行DES加密，并返回BASE64加密的字符创
+	 * 对字符串进行DES加密，并返回BASE64加密的字符串
 	 * @param original源字符
 	 * @return 加密后的字符
 	 * @author yinlei date 2012-7-16 下午4:55:30
 	 */
-	public static String getEncryptString(String original) {
+	public static String getEncrypt(String original) {
 		try {
 			byte[] strBytes = original.getBytes();
 			Cipher cipher = Cipher.getInstance("DES");
@@ -78,7 +74,7 @@ public class DESUtils {
 	 * @return 解密后的原始字符
 	 * @author yinlei date 2012-7-16 下午4:56:45
 	 */
-	public static String getDecryptString(String encryptStr) {
+	public static String getDecrypt(String encryptStr) {
 		try {
 			byte[] strBytes = CryptUtils.base64Decode(encryptStr);
 			Cipher cipher = Cipher.getInstance("DES");
@@ -93,11 +89,11 @@ public class DESUtils {
 	public static void main(String[] args) {
 		String str = "root";
 		String pass = "3416763";
-		String enstr = getEncryptString(str);
-		String enpass = getEncryptString(pass);
+		String enstr = getEncrypt(str);
+		String enpass = getEncrypt(pass);
 		System.out.println(enstr);
 		System.out.println(enpass);
-		System.out.println(getDecryptString(enstr));
-		System.out.println(getDecryptString(enpass));
+		System.out.println(getDecrypt(enstr));
+		System.out.println(getDecrypt(enpass));
 	}
 }
