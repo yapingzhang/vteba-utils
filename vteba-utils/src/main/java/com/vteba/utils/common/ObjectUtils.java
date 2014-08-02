@@ -53,7 +53,7 @@ public class ObjectUtils {
 	 * date 2012-7-5 下午10:48:45
 	 */
 	public static String fillLeft(String source, String fillChar, int length) {
-		Assert.isNull(source, "被填充的源字符串不能为空。");
+		Assert.notNull(source, "被填充的源字符串不能为空。");
 		return StringUtils.leftPad(source, length, fillChar);
 	}
 	
@@ -66,7 +66,7 @@ public class ObjectUtils {
      * date 2012-7-5 下午10:48:45
      */
     public static String fillRight(String source, String fillChar, int length) {
-        Assert.isNull(source, "被填充的源字符串不能为空。");
+        Assert.notNull(source, "被填充的源字符串不能为空。");
         return StringUtils.rightPad(source, length, fillChar);
     }
 	
