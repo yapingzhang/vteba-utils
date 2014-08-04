@@ -67,7 +67,7 @@ public class PropertiesLoader {
 	public String getProperty(String key) {
 		String value = getValue(key);
 		if (value == null) {
-			throw new NoSuchElementException();
+			throw new NoSuchElementException(key);
 		}
 		return value;
 	}
@@ -89,7 +89,7 @@ public class PropertiesLoader {
 	public Integer getInteger(String key) {
 		String value = getValue(key);
 		if (value == null) {
-			throw new NoSuchElementException();
+			throw new NoSuchElementException(key);
 		}
 		return Integer.valueOf(value);
 	}
@@ -111,7 +111,7 @@ public class PropertiesLoader {
 	public Double getDouble(String key) {
 		String value = getValue(key);
 		if (value == null) {
-			throw new NoSuchElementException();
+			throw new NoSuchElementException(key);
 		}
 		return Double.valueOf(value);
 	}
@@ -133,7 +133,7 @@ public class PropertiesLoader {
 	public Boolean getBoolean(String key) {
 		String value = getValue(key);
 		if (value == null) {
-			throw new NoSuchElementException();
+			throw new NoSuchElementException(key);
 		}
 		return Boolean.valueOf(value);
 	}
