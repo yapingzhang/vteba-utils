@@ -73,7 +73,9 @@ public class Kryos {
 	}
 
 	/**
-     * 获得当前线程的Kryo
+     * 获得当前线程的Kryo。
+     * <p>序列化和反序列化一般是分开的，这里是不是没用？同一个线程内操作是可以的，序列化和反序列化分开的话就获取不到了。
+     * <p>当前对象要序列化多个对象怎么办？获取当前线程的Kryo后，每次都会注册。
      * @return Kryo实例
      * @author yinlei
      * date 2013-4-6 下午2:50:52
@@ -130,16 +132,14 @@ public class Kryos {
 	}
 
 	/**
-	 * 将字节数组反序列化为对象List，对象要注册
+	 * 将字节数组反序列化为对象List（ArrayList），对象要注册
 	 * 
 	 * @param bytes
 	 *            被转换的字节数组
-	 * @param clazz
-	 *            要转换的对象类型
-	 * @return 要转换的对象实例List
-	 * @author yinlei date 2013-4-6 下午2:52:11
+	 * @return 反序列化后的对象List
+	 * @author yinlei date 2013-4-6 下午2:51:11
 	 */
-	public static <T> List<T> fromBytesToList(byte[] bytes) {
+	public static <T> List<T> byteToList(byte[] bytes) {
 		Kryo kryo = getKryo(ArrayList.class);
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
@@ -147,7 +147,15 @@ public class Kryos {
 		return list;
 	}
 
-	public static <K, V> Map<K, V> fromBytesToMap(byte[] bytes) {
+	/**
+     * 将字节数组反序列化为对象Map（HashMap），对象要注册
+     * 
+     * @param bytes
+     *            被转换的字节数组
+     * @return 反序列化后的对象Map
+     * @author yinlei date 2013-4-6 下午3:51:11
+     */
+	public static <K, V> Map<K, V> byteToMap(byte[] bytes) {
 		Kryo kryo = getKryo(HashMap.class);
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
@@ -155,7 +163,15 @@ public class Kryos {
 		return map;
 	}
 
-	public static <T> Set<T> fromBytesToSet(byte[] bytes) {
+	/**
+     * 将字节数组反序列化为对象Set（HashSet），对象要注册
+     * 
+     * @param bytes
+     *            被转换的字节数组
+     * @return 反序列化后的对象Set
+     * @author yinlei date 2013-4-6 下午4:51:11
+     */
+	public static <T> Set<T> byteToSet(byte[] bytes) {
 		Kryo kryo = getKryo(HashSet.class);
 		Input input = new Input(bytes);
 		@SuppressWarnings("unchecked")
@@ -201,10 +217,10 @@ public class Kryos {
 	/**
 	 * 深拷贝对象。完全新的一个对象。
 	 * @param object 被拷贝对象
-	 * @param clazz 被拷贝对象类型
+	 * @param <T> 被拷贝对象类型
 	 * @return A new Object
 	 */
-	public static <T> T copy(Object object, Class<T> clazz) {
+	public static <T> T copy(Object object) {
 		Kryo kryo = new Kryo();
 		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 		@SuppressWarnings("unchecked")
@@ -213,12 +229,12 @@ public class Kryos {
 	}
 	
 	/**
-	 * 前拷贝对象。新对象的内容将和原对象共享。还是原来的引用。
-	 * @param object 被拷贝对象
-	 * @param clazz 被拷贝对象类型
-	 * @return A new Object
-	 */
-	public static <T> T copyShallow(Object object, Class<T> clazz) {
+     * 浅拷贝对象。新对象的内容将和原对象共享。还是原来的引用。
+     * @param object 被拷贝对象
+     * @param <T> 被拷贝对象类型
+     * @return A new Object
+     */
+	public static <T> T copyShallow(Object object) {
 		Kryo kryo = new Kryo();
 		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
 		@SuppressWarnings("unchecked")
@@ -250,7 +266,7 @@ public class Kryos {
 	    
 	    List<Node> nodes = Lists.newArrayList();
 	    byte[] bytes = Kryos.toBytes(nodes);
-	    nodes = Kryos.fromBytesToList(bytes);
+	    nodes = Kryos.byteToList(bytes);
 	    System.out.println(bytes.length);
 	    
 	}
