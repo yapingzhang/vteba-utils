@@ -65,6 +65,19 @@ public class FastJsonUtils{
     }
     
     /**
+     * 将json反序列化成java对象。Class&lt;T&gt;只能是JavaBean对象及其数组对象，不能是集合，Map。<br>
+     * 当然，JavaBean内部是可以包含集合，Map的。
+     * @param json json字节数组
+     * @param clazz 目标类型
+     * @return Class&lt;T&gt;的实例
+     * @author yinlei
+     * @date 2013年10月13日 下午2:18:22
+     */
+    public static <T> T fromJsonBytes(byte[] json, Class<T> clazz) {
+        return JSON.parseObject(json, clazz);
+    }
+    
+    /**
      * 将json反序列化成java对象List。可使用{@link#fromJson(String, TypeReference)}代替，后者更通用。
      * @param json json字符串
      * @param clazz 目标类型
@@ -97,4 +110,18 @@ public class FastJsonUtils{
     	return JSON.parseObject(json, reference.getType());
     }
     
+    /**
+     * 将json反序列化成java对象。适用于任何Java对象。TypeReference用法如：<br>
+     * new TypeReference&lt;Map&lt;String, List&lt;User&gt;&gt;&gt;(){}，new TypeReference&lt;List&lt;User&gt;&gt;(){}，<br>
+     * new TypeReference&lt;User&gt;(){}，new TypeReference&lt;User[]&gt;(){}<br>
+     * 泛型参数Map&lt;String, List&lt;User&gt;&gt;，List&lt;User&gt;，User，User[]即为你要反序列化的目标类型。
+     * @param json json字节数组
+     * @param reference 泛型类型引用
+     * @return  &lt;T&gt;的实例
+     * @author yinlei
+     * @date 2013年10月13日 下午1:46:30
+     */
+    public static <T> T fromJsonBytes(byte[] json, TypeReference<T> reference) {
+        return JSON.parseObject(json, reference.getType());
+    }
 }
