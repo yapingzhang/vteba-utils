@@ -31,6 +31,8 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.vteba.utils.common.ObjectUtils;
 
 /**
@@ -52,6 +54,7 @@ import com.vteba.utils.common.ObjectUtils;
  * @author Rob Harrop
  * @author Rick Evans
  * @author Arjen Poutsma
+ * @author Yinlei
  * @since 16 April 2001
  */
 public abstract class StringUtils {
@@ -1203,5 +1206,57 @@ public abstract class StringUtils {
 	public static String arrayToCommaDelimitedString(Object[] arr) {
 		return arrayToDelimitedString(arr, ",");
 	}
+	
+	public static String toUTF8(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c >= 0 && c <= 255) {
+                sb.append(c);
+            } else {
+                byte[] b;
+                try {
+                    b = Character.toString(c).getBytes(Char.UTF8);
+                } catch (Exception ex) {
+                    b = new byte[0];
+                }
+                for (int j = 0; j < b.length; j++) {
+                    int k = b[j];
+                    if (k < 0) {
+                        k += 256;
+                    }
+                    sb.append("%").append(Integer.toHexString(k).toUpperCase());
+                }
+            }
+        }
+        return sb.toString(); 
+    } 
+ 
+    /** 
+     * 根据不同浏览器将文件名中的汉字转为UTF8编码的串，以便下载时能正确显示另存的文件名
+     * @param request HttpServletRequest
+     * @param s 原文件名
+     * @return 重新编码后的文件名
+     */ 
+    public static String toUTF8(HttpServletRequest request, String s) { 
+        String agent = request.getHeader("User-Agent");
+        if (agent != null) {
+            agent = agent.toLowerCase();
+            boolean standard = agent.indexOf("firefox") != -1 || agent.indexOf("chrome") != -1;
+            if (standard) {
+                s = new String(s.getBytes(Char.UTF8), Char.ISO88591);
+            } else {
+                s = toUTF8(s);
+                if ((agent != null && agent.indexOf("msie") != -1)) {
+                    // see http://support.microsoft.com/default.aspx?kbid=816868
+                    if (s.length() > 150) {
+                        // 根据request的locale 得出可能的编码
+                        s = new String(s.getBytes(Char.UTF8), Char.ISO88591);
+                    }
+                }
+            }
+        }
+        return s;
+    }
 
 }
