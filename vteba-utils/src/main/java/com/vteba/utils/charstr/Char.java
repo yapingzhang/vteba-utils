@@ -6,4 +6,5 @@ public class Char {
 	public static final Charset GBK = Charset.forName("GBK");
 	public static final Charset UTF8 = Charset.forName("UTF-8");
 	public static final Charset ISO88591 = Charset.forName("ISO-8859-1");
+	public static final Charset GB2312 = Charset.forName("GB2312");
 }
