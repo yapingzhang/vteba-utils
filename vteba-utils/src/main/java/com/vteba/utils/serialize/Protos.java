@@ -130,8 +130,11 @@ public final class Protos {
 	}
 	
 	/**
-	 * Merges the {@code message} from the {@link InputStream} using the given
-	 * {@code schema}.
+	 * 根据给定的{@code schema}，使用输入流 {@link InputStream} 填充对象{@code message}
+	 * @param in 输入流（数据来源）
+	 * @param message 被merge的对象
+	 * @param schema schema
+	 * @throws IOException
 	 */
 	public static <T> void mergeFrom(InputStream in, T message, Schema<T> schema)
 			throws IOException {
@@ -139,7 +142,10 @@ public final class Protos {
 	}
 
 	/**
-	 * Merges the {@code message} from the {@link InputStream} .
+	 * 使用输入流 {@link InputStream} 填充对象{@code message}
+	 * @param in 输入流（数据来源）
+	 * @param message 被merge的对象
+	 * @throws IOException
 	 */
 	public static <T> void mergeFrom(InputStream in, T message)
 			throws IOException {
@@ -148,11 +154,15 @@ public final class Protos {
 	}
 	
 	/**
-	 * Merges the {@code message} from the {@link InputStream} using the given
-	 * {@code schema}.
+	 * 根据给定的{@code schema}，使用输入流 {@link InputStream} 填充对象{@code message}。
 	 * 
-	 * The {@code buffer}'s internal byte array will be used for reading the
-	 * message.
+	 * 将使用 {@code buffer} 内部的 byte array来读取对象message。
+	 * 
+	 * @param in 输入流（数据来源）
+	 * @param message 被merge的对象
+	 * @param schema schema
+	 * @param buffer LinkedBuffer 缓冲区
+	 * @throws IOException
 	 */
 	public static <T> void mergeFrom(InputStream in, T message,
 			Schema<T> schema, LinkedBuffer buffer) throws IOException {
@@ -160,11 +170,14 @@ public final class Protos {
 	}
 
 	/**
-	 * Merges the {@code message} from the {@link InputStream} using the given
-	 * {@code schema}.
+	 * 根据给定的{@code schema}，使用输入流 {@link InputStream} 填充对象{@code message}。
 	 * 
-	 * The {@code buffer}'s internal byte array will be used for reading the
-	 * message.
+	 * 将使用 {@code buffer} 内部的 byte array来读取对象message。
+	 * 
+	 * @param in 输入流（数据来源）
+	 * @param message 被merge的对象
+	 * @param buffer LinkedBuffer 缓冲区
+	 * @throws IOException
 	 */
 	public static <T> void mergeFrom(InputStream in, T message, LinkedBuffer buffer) throws IOException {
 		Schema<T> schema = getSchema(message);
@@ -172,8 +185,11 @@ public final class Protos {
 	}
 	
 	/**
-	 * Merges the {@code message} (delimited) from the {@link InputStream} using
-	 * the given {@code schema}.
+	 * 根据给定的{@code schema}，使用输入流 {@link InputStream} 填充带分隔符的对象{@code message} (delimited)
+	 * @param in 输入流（数据来源）
+	 * @param message 被merge的对象
+	 * @param schema schema
+	 * @throws IOException
 	 * 
 	 * @return the size of the message
 	 */
@@ -183,12 +199,18 @@ public final class Protos {
 	}
 
 	/**
-	 * Merges the {@code message} (delimited) from the {@link InputStream} using
-	 * the given {@code schema}.
+	 * 根据给定的{@code schema}，使用输入流 {@link InputStream} 填充带分隔符的对象{@code message} (delimited)。
 	 * 
-	 * The delimited message size must not be larger than the {@code buffer}'s
+	 * <p>被限制的带分隔符的message对象的size不能大于buffer的size或者容量，要不然{@link ProtobufException} "size limit exceeded"
+	 * 会被抛出。
+	 * 
+	 * <p>The delimited message size must not be larger than the {@code buffer}'s
 	 * size/capacity. {@link ProtobufException} "size limit exceeded" is thrown
 	 * otherwise.
+	 * @param in 输入流（数据来源）
+	 * @param message 被merge的对象
+	 * @param schema schema
+	 * @throws IOException
 	 * 
 	 * @return the size of the message
 	 */
@@ -252,10 +274,9 @@ public final class Protos {
 	}
 
 	/**
-	 * Writes the {@code message} into the {@link LinkedBuffer} using the given
-	 * schema.
+	 * 序列化，使用给定的schema将对象 {@code message} 写进buffer {@link LinkedBuffer}。
 	 * 
-	 * @return the size of the message
+	 * @return 对象大小（序列化后的字节数组的长度）
 	 */
 	public static <T> int writeTo(LinkedBuffer buffer, T message,
 			Schema<T> schema) {
@@ -263,9 +284,9 @@ public final class Protos {
 	}
 
 	/**
-	 * Writes the {@code message} into the {@link LinkedBuffer}.
+	 * 序列化，将对象 {@code message} 写进buffer {@link LinkedBuffer}。
 	 * 
-	 * @return the size of the message
+	 * @return 对象大小（序列化后的字节数组的长度）
 	 */
 	public static <T> int writeTo(LinkedBuffer buffer, T message) {
 		Schema<T> schema = getSchema(message);
@@ -273,10 +294,9 @@ public final class Protos {
 	}
 	
 	/**
-	 * Serializes the {@code message} into an {@link OutputStream} using the
-	 * given schema.
+	 * 序列化，使用给定的schema将对象 {@code message} 写到输出流 {@link OutputStream}。
 	 * 
-	 * @return the size of the message
+	 * @return 对象大小（序列化后的字节数组的长度）
 	 */
 	public static <T> int writeTo(final OutputStream out, final T message,
 			final Schema<T> schema, final LinkedBuffer buffer)
@@ -286,9 +306,9 @@ public final class Protos {
 	}
 
 	/**
-	 * Serializes the {@code message} into an {@link OutputStream} 。
+	 * 序列化，将对象 {@code message} 写到输出流 {@link OutputStream}。
 	 * 
-	 * @return the size of the message
+	 * @return 对象大小（序列化后的字节数组的长度）
 	 */
 	public static <T> int writeTo(final OutputStream out, final T message, final LinkedBuffer buffer)
 			throws IOException {
@@ -297,9 +317,9 @@ public final class Protos {
 	}
 	
 	/**
-	 * Serializes the {@code message} into an {@link OutputStream} 。
+	 * 序列化，将对象 {@code message} 写到输出流 {@link OutputStream}。
 	 * 
-	 * @return the size of the message
+	 * @return （序列化后的字节数组的长度）
 	 */
 	public static <T> int writeTo(final OutputStream out, final T message)
 			throws IOException {
@@ -309,7 +329,9 @@ public final class Protos {
 	}
 	
 	/**
-	 * Serializes the {@code message}, prefixed with its length, into an
+	 * 序列化以本身长度开始的{@code message}对象，到一个输出流{@link OutputStream}中。
+	 * 
+	 * <p>Serializes the {@code message}, prefixed with its length, into an
 	 * {@link OutputStream}.
 	 * 
 	 * @return the size of the message
@@ -333,10 +355,9 @@ public final class Protos {
 	}
 
 	/**
-	 * Serializes the {@code messages} (delimited) into an {@link OutputStream}
-	 * using the given schema.
+	 * 序列化，使用指定的schema，序列化带分隔符（被分割的）的对象 {@code messages} (delimited) 到一个输出流 {@link OutputStream}
 	 * 
-	 * @return the bytes written
+	 * @return the bytes written（被写入的字节数）
 	 */
 	public static <T> int writeListTo(final OutputStream out,
 			final List<T> messages, final Schema<T> schema,
@@ -346,10 +367,9 @@ public final class Protos {
 	}
 
 	/**
-	 * Serializes the {@code messages} (delimited) into an {@link OutputStream}
-	 * using the given schema.
+	 * 序列化带分隔符（被分割的）的对象 {@code messages} (delimited) 到一个输出流 {@link OutputStream}
 	 * 
-	 * @return the bytes written
+	 * @return the bytes written（被写入的字节数）
 	 */
 	public static <T> int writeListTo(final OutputStream out,
 			final List<T> messages, final LinkedBuffer buffer) throws IOException {
@@ -358,10 +378,9 @@ public final class Protos {
 	}
 	
 	/**
-	 * Serializes the {@code messages} (delimited) into an {@link OutputStream}
-	 * using the given schema.
+	 * 序列化带分隔符（被分割的）的对象 {@code messages} (delimited) 到一个输出流 {@link OutputStream}
 	 * 
-	 * @return the bytes written
+	 * @return the bytes written（被写入的字节数）
 	 */
 	public static <T> int writeListTo(final OutputStream out, final List<T> messages) throws IOException {
 		Schema<T> schema = getSchema(messages.get(0));
@@ -370,10 +389,9 @@ public final class Protos {
 	}
 	
 	/**
-	 * Parses the {@code messages} (delimited) from the {@link InputStream}
-	 * using the given {@code schema}.
+	 * 使用指定的schema，从 {@link InputStream} 中解析被分割的对象 {@code messages} (delimited) 。
 	 * 
-	 * @return the list containing the messages.
+	 * @return the list containing the messages。（messages中包含的list）
 	 */
 	public static <T> List<T> parseListFrom(final InputStream in, final Schema<T> schema) throws IOException {
 		return ProtostuffIOUtil.parseListFrom(in, schema);
