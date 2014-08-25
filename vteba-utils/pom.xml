@@ -35,12 +35,8 @@
       </profile>
   </profiles>
   
-<<<<<<< HEAD
-  <dependencies>  
-=======
   <dependencies>
   
->>>>>>> branch 'master' of https://github.com/skmbw/vteba-utils.git
 <!--   	<dependency> -->
 <!-- 		<groupId>org.apache.tika</groupId> -->
 <!-- 		<artifactId>tika-core</artifactId> -->
@@ -137,7 +133,6 @@
 <!-- 	</dependency> -->
 	
 	<dependency>
-<<<<<<< HEAD
 		<groupId>org.apache.httpcomponents</groupId>
 		<artifactId>httpclient</artifactId>
 		<version>${httpcomp-version}</version>
@@ -154,8 +149,6 @@
 	</dependency>
 	
 	<dependency>
-=======
->>>>>>> branch 'master' of https://github.com/skmbw/vteba-utils.git
 		<groupId>com.dyuproject.protostuff</groupId>
 		<artifactId>protostuff-core</artifactId>
 		<version>${protostuff}</version>
@@ -258,21 +251,18 @@
 		<groupId>com.esotericsoftware.kryo</groupId>
 		<artifactId>kryo</artifactId>
 		<version>2.24.0</version>
-<<<<<<< HEAD
 <!-- 		<exclusions> -->
 <!-- 			<exclusion> -->
 <!-- 				<groupId>com.esotericsoftware.reflectasm</groupId> -->
 <!-- 				<artifactId>reflectasm</artifactId> -->
 <!-- 			</exclusion> -->
 <!-- 		</exclusions> -->
-=======
 		<exclusions>
 			<exclusion>
 				<groupId>com.esotericsoftware.reflectasm</groupId>
 				<artifactId>reflectasm</artifactId>
 			</exclusion>
 		</exclusions>
->>>>>>> branch 'master' of https://github.com/skmbw/vteba-utils.git
 	</dependency> 
 <!--     <dependency> -->
 <!-- 		<groupId>com.esotericsoftware.reflectasm</groupId> -->
