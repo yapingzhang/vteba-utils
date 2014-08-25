@@ -10,7 +10,7 @@
   
   <properties> 
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <spring-version>4.0.2.RELEASE</spring-version>
+      <spring-version>4.0.6.RELEASE</spring-version>
       <spring-security-version>3.2.3.RELEASE</spring-security-version>
       <struts2-version>2.3.16</struts2-version>
       <tiles-version>2.2.2</tiles-version>
@@ -22,6 +22,11 @@
       <infinispan-version>5.3.0.Final</infinispan-version>
       <asm-version>4.1</asm-version>
       <hornetq-version>2.2.21.Final</hornetq-version>
+      <httpcomp-version>4.3.2</httpcomp-version>
+      <protostuff>1.0.8</protostuff>
+      <marshalling>1.4.8.Final</marshalling>
+      <netty4>4.0.23.Final</netty4>
+      <netty3>3.9.3.Final</netty3>
   </properties>
   
   <profiles>
@@ -30,13 +35,53 @@
       </profile>
   </profiles>
   
-  <dependencies>
-    
+  <dependencies>  
+<!--   	<dependency> -->
+<!-- 		<groupId>org.apache.tika</groupId> -->
+<!-- 		<artifactId>tika-core</artifactId> -->
+<!-- 		<version>1.5</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 		<groupId>org.apache.tika</groupId> -->
+<!-- 		<artifactId>tika-parsers</artifactId> -->
+<!-- 		<version>1.5</version> -->
+<!-- 	</dependency> -->
+    <dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+		<version>${httpcomp-version}</version>
+	</dependency>
+    <dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpcore</artifactId>
+		<version>${httpcomp-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpcore-nio</artifactId>
+		<version>${httpcomp-version}</version>
+	</dependency>
     <dependency>
 		<groupId>javolution</groupId>
 		<artifactId>javolution</artifactId>
 		<version>5.5.1</version>
 	</dependency>
+    
+<!--     <dependency> -->
+<!-- 		<groupId>org.apache.poi</groupId> -->
+<!-- 		<artifactId>poi-ooxml</artifactId> -->
+<!-- 		<version>3.10-FINAL</version> -->
+<!-- 	</dependency> -->
+<!--     <dependency> -->
+<!-- 		<groupId>org.apache.poi</groupId> -->
+<!-- 		<artifactId>poi-ooxml-schemas</artifactId> -->
+<!-- 		<version>3.10-FINAL</version> -->
+<!-- 	</dependency> -->
+<!--     <dependency> -->
+<!-- 		<groupId>org.apache.poi</groupId> -->
+<!-- 		<artifactId>poi-scratchpad</artifactId> -->
+<!-- 		<version>3.10-FINAL</version> -->
+<!-- 	</dependency> -->
     
 <!--     <dependency> -->
 <!-- 		<groupId>org.javolution</groupId> -->
@@ -87,6 +132,75 @@
 <!-- 	</dependency> -->
 	
 	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+		<version>${httpcomp-version}</version>
+	</dependency>
+    <dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpcore</artifactId>
+		<version>${httpcomp-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpcore-nio</artifactId>
+		<version>${httpcomp-version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>com.dyuproject.protostuff</groupId>
+		<artifactId>protostuff-core</artifactId>
+		<version>${protostuff}</version>
+	</dependency>
+    <dependency>
+		<groupId>com.dyuproject.protostuff</groupId>
+		<artifactId>protostuff-api</artifactId>
+		<version>${protostuff}</version>
+	</dependency>
+	<dependency>
+		<groupId>com.dyuproject.protostuff</groupId>
+		<artifactId>protostuff-runtime</artifactId>
+		<version>${protostuff}</version>
+	</dependency>
+<!-- 	<dependency> -->
+<!-- 		<groupId>com.dyuproject.protostuff</groupId> -->
+<!-- 		<artifactId>protostuff-xml</artifactId> -->
+<!-- 		<version>${protostuff}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 		<groupId>com.dyuproject.protostuff</groupId> -->
+<!-- 		<artifactId>protostuff-json</artifactId> -->
+<!-- 		<version>${protostuff}</version> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!-- 		<groupId>com.dyuproject.protostuff</groupId> -->
+<!-- 		<artifactId>protostuff-compiler</artifactId> -->
+<!-- 		<version>${protostuff}</version> -->
+<!-- 	</dependency> -->
+	
+	<dependency>
+		<groupId>com.google.protobuf</groupId>
+		<artifactId>protobuf-java</artifactId>
+		<version>2.5.0</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.jboss.marshalling</groupId>
+		<artifactId>jboss-marshalling</artifactId>
+		<version>${marshalling}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jboss.marshalling</groupId>
+		<artifactId>jboss-marshalling-river</artifactId>
+		<version>${marshalling}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jboss.marshalling</groupId>
+		<artifactId>jboss-marshalling-serial</artifactId>
+		<version>${marshalling}</version>
+	</dependency>
+	
+	<dependency>
 		<groupId>org.freemarker</groupId>
 		<artifactId>freemarker</artifactId>
 		<version>2.3.20</version>
@@ -135,25 +249,25 @@
     <dependency>
 		<groupId>com.esotericsoftware.kryo</groupId>
 		<artifactId>kryo</artifactId>
-		<version>2.21</version>
-		<exclusions>
-			<exclusion>
-				<groupId>com.esotericsoftware.reflectasm</groupId>
-				<artifactId>reflectasm</artifactId>
-			</exclusion>
-		</exclusions>
+		<version>2.24.0</version>
+<!-- 		<exclusions> -->
+<!-- 			<exclusion> -->
+<!-- 				<groupId>com.esotericsoftware.reflectasm</groupId> -->
+<!-- 				<artifactId>reflectasm</artifactId> -->
+<!-- 			</exclusion> -->
+<!-- 		</exclusions> -->
 	</dependency> 
-    <dependency>
-		<groupId>com.esotericsoftware.reflectasm</groupId>
-		<artifactId>reflectasm</artifactId>
-		<version>1.07</version>
-		<exclusions>
-			<exclusion>
-				<groupId>org.ow2.asm</groupId>
-				<artifactId>asm</artifactId>
-			</exclusion>
-		</exclusions>
-	</dependency>
+<!--     <dependency> -->
+<!-- 		<groupId>com.esotericsoftware.reflectasm</groupId> -->
+<!-- 		<artifactId>reflectasm</artifactId> -->
+<!-- 		<version>1.07</version> -->
+<!-- 		<exclusions> -->
+<!-- 			<exclusion> -->
+<!-- 				<groupId>org.ow2.asm</groupId> -->
+<!-- 				<artifactId>asm</artifactId> -->
+<!-- 			</exclusion> -->
+<!-- 		</exclusions> -->
+<!-- 	</dependency> -->
 
 <!-- 	<dependency> -->
 <!-- 	  <groupId>org.javassist</groupId> -->
@@ -804,7 +918,7 @@
 	<dependency>
 	  <groupId>org.apache.poi</groupId>
 	  <artifactId>poi</artifactId>
-	  <version>3.9</version>
+	  <version>3.10-FINAL</version>
 	</dependency>
 	<!-- 
 	<dependency>
@@ -1460,6 +1574,23 @@
 		  <version>2.4</version>
 		  
 	  </plugin>
+	  
+	  <plugin>
+			<artifactId>maven-source-plugin</artifactId>
+			<version>2.2.1</version>
+			<configuration>
+				<attach>true</attach>
+			</configuration>
+			<executions>
+				<execution>
+					<phase>compile</phase>
+					<goals>
+						<goal>jar</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+	  
       <plugin>
 	      <groupId>org.apache.maven.plugins</groupId>
 	      <artifactId>maven-compiler-plugin</artifactId>
