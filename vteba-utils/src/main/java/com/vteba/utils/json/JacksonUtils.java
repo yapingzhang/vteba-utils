@@ -268,28 +268,35 @@ public class JacksonUtils {
 	}
 
 	public CollectionType constructCollectionType(
-			Class<? extends Collection<?>> collectionClass,
-			Class<?> elementClass) {
-		return objectMapper.getTypeFactory().constructCollectionType(
-				collectionClass, elementClass);
+			Class<?> collectionClass, Class<?> elementClass) {
+	    @SuppressWarnings("unchecked")
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(
+				(Class<? extends Collection<?>>) collectionClass, elementClass);
+	    return collectionType;
 	}
 
 	public CollectionType constructCollectionType(
-			Class<? extends Collection<?>> collectionClass, JavaType elementType) {
-		return objectMapper.getTypeFactory().constructCollectionType(
-				collectionClass, elementType);
+			Class<?> collectionClass, JavaType elementType) {
+		@SuppressWarnings("unchecked")
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(
+				(Class<? extends Collection<?>>) collectionClass, elementType);
+		return collectionType;
 	}
 
-	public MapType constructMapType(Class<? extends Map<?, ?>> mapClass,
+	public MapType constructMapType(Class<?> mapClass,
 			JavaType keyType, JavaType valueType) {
-		return objectMapper.getTypeFactory().constructMapType(mapClass,
+		@SuppressWarnings("unchecked")
+        MapType mapType = objectMapper.getTypeFactory().constructMapType((Class<? extends Map<?, ?>>) mapClass,
 				keyType, valueType);
+		return mapType;
 	}
 
-	public MapType constructMapType(Class<? extends Map<?, ?>> mapClass,
+	public MapType constructMapType(Class<?> mapClass,
 			Class<?> keyClass, Class<?> valueClass) {
-		return objectMapper.getTypeFactory().constructMapType(mapClass,
+	    @SuppressWarnings("unchecked")
+        MapType mapType = objectMapper.getTypeFactory().constructMapType((Class<? extends Map<?, ?>>) mapClass,
 				keyClass, valueClass);
+	    return mapType;
 	}
 
 	public JavaType uncheckedSimpleType(Class<?> cls) {
