@@ -16,8 +16,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 public class DateDeserializer extends JsonDeserializer<String> {
 
     @Override
-    public String deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        
+    public String deserialize(JsonParser parser, DeserializationContext ctx) throws IOException, JsonProcessingException {
+        parser.getText();
+        parser.getLongValue();
+        // 然后做一些处理
         return null;
     }
 }
