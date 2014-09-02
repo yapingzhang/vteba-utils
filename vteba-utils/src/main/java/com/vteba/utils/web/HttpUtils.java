@@ -41,15 +41,27 @@ public class HttpUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpUtils.class);
     private static HttpHost httpHost = null;
-    private static HttpHost hqHttpHost = null;
     static {
-        String hostName = PropUtils.get("iask.host");
-        String hqHostName = PropUtils.get("iask.host.hq");
-        int port = PropUtils.getInt("iask.port");
-        String schema = PropUtils.get("iask.schema");
+        String hostName = PropUtils.get("host");
+        int port = PropUtils.getInt("port");
+        String schema = PropUtils.get("scheme");
         // 创建目标主机
         httpHost = new HttpHost(hostName, port, schema);
-        hqHttpHost = new HttpHost(hqHostName, port, schema);
+    }
+    
+    
+    /**
+     * 调用搜牛接口，返回一个JSONObject，可以做进一步的处理，取出来某一节点等。
+     * @param params 参数值
+     * @param urlPath 接口url
+     * @return JSONObject
+     */
+    public static <T> T invoke(final Map<String, String> params, final String urlPath, final Class<T> clazz) {
+        // 创建http post请求
+        HttpPost httpPost = buildHttpPost(params, urlPath);
+        // 发起调用，返回Json object
+        T obj = resolveBean(clazz, httpPost);
+        return obj;
     }
     
     /**
@@ -135,9 +147,10 @@ public class HttpUtils {
     }
     
     /**
-     * 发起http请求，返回InputStream
+     * 发起http请求，返回字节数组
      * @param httpPost HttpPost
-     * @return InputStream
+     * @param type 可以扩展
+     * @return byte[]
      */
     private static byte[] resolve(final HttpPost httpPost, int type) {
         byte[] bytes = null;
@@ -145,8 +158,6 @@ public class HttpUtils {
             HttpHost host = null;
             if (type == 1) {
                 host = httpHost;
-            } else if (type == 2) {
-                host = hqHttpHost;
             }
             // 创建客户端
             CloseableHttpClient httpClient = HttpClientBuilder.create().build();
@@ -220,6 +231,17 @@ public class HttpUtils {
         return object;
     }
 
+    /**
+     * 发起http请求，返回处理结果。
+     * @param resultClass 结果类型
+     * @param httpPost HttpClient
+     * @return 结果List
+     */
+    private static <T> T resolveBean(final Class<T> resultClass, final HttpPost httpPost) {
+        T object = FastJsonUtils.fromJson(resolve(httpPost, 1), resultClass);
+        return object;
+    }
+    
     /**
      * 处理返回JSONObject的调用。统一返回JSONObject，然后需要特殊的处理都可以从这里获取。
      * 包括获取某一节点的值，以及某一节点JSONArray等等。
