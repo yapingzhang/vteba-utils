@@ -115,4 +115,18 @@ public class DateUtils {
         }
         return null;
     }
+	
+	/**
+     * 精确到天，看是否是当天
+     * @param date 日期
+     * @return 当天返回true，否则false
+     */
+    public static boolean isToday(Date date) {
+        String current = toDateString("yyyy-MM-dd");
+        String dateString = toDateString(date, "yyyy-MM-dd");
+        if (dateString != null && current.equals(dateString)) {
+            return true;
+        }
+        return false;
+    }
 }
