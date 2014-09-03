@@ -7,7 +7,8 @@ import java.util.Map;
 import sun.misc.Unsafe;
 
 /**
- * 获取sun私有的反射操作类实例，sun.misc.Unsafe.
+ * 获取sun私有的反射操作类实例，sun.misc.Unsafe。性能上比原生反射要快8倍，
+ * 但是还是没有字节码快，是字节码的1/3。
  * @author 尹雷 
  * @since 2013-12-3
  */
@@ -39,6 +40,17 @@ public class UnsafeUtils {
      * @return 偏移量
      */
     public static final long getOffset(Field field) {
+        return unsafe.objectFieldOffset(field);
+    }
+    
+    /**
+     * 获得反射字段field的偏移量
+     * @param object 属性所在的对象
+     * @param fieldName 反射字段名
+     * @return 偏移量
+     */
+    public static final long getOffset(Object object, String fieldName) {
+        Field field = getField(object, fieldName);
         return unsafe.objectFieldOffset(field);
     }
     
@@ -480,4 +492,43 @@ public class UnsafeUtils {
     public void setBoolean(Object object, long offset, boolean value) {
         unsafe.putBoolean(object, offset, value);
     }
+    
+//    public static void main(String[] args) {
+//        TestBean testBean = new TestBean();
+//        Field nameField = getField(testBean, "name");
+//        Field ageField = getField(testBean, "age");
+//        long nameOffset = getOffset(nameField);
+//        long ageOffset = getOffset(ageField);
+//        long t = System.nanoTime();
+//        getObject(testBean, nameOffset);
+//        getObject(testBean, ageOffset);
+//        System.out.println("Unsafe的反射时间" + (System.nanoTime() -t));
+//        
+//        FieldAccess fieldAccess = AsmUtils.get().createFieldAccess(TestBean.class);
+//        t = System.nanoTime();
+//        fieldAccess.get(testBean, "age");
+//        fieldAccess.get(testBean, "name");
+//        System.out.println("ReflectAsm的field反射时间" + (System.nanoTime() -t));
+//        
+//        MethodAccess methodAccess = AsmUtils.get().createMethodAccess(TestBean.class);
+//        
+//        t = System.nanoTime();
+//        methodAccess.invoke(testBean, "getAge");
+//        methodAccess.invoke(testBean, "getName");
+//        System.out.println("ReflectAsm的method反射时间" + (System.nanoTime() -t));
+//        
+//        t = System.nanoTime();
+//        Field[] fields = testBean.getClass().getDeclaredFields();
+//        for (Field field : fields) {
+//            try {
+//                field.setAccessible(true);
+//                field.get(testBean);
+//            } catch (IllegalArgumentException e) {
+//                e.printStackTrace();
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        System.out.println("原生反射时间：" + (System.nanoTime() -t));
+//    }
 }
