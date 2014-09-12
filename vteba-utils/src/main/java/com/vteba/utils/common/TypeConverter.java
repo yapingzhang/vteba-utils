@@ -70,9 +70,13 @@ public class TypeConverter {
             } else {
 				if ((toType == Integer.class) || (toType == Integer.TYPE)) {
 					result = Integer.valueOf((int) longValue(value));
-				} else if ((toType == Double.class) || (toType == Double.TYPE)) {
-					result = new Double(doubleValue(value));
-				} else if ((toType == Boolean.class) || (toType == Boolean.TYPE)) {
+				} else if ((toType == Long.class) || (toType == Long.TYPE)) {
+                    result = Long.valueOf(longValue(value));
+                } else if (toType == String.class) {
+                    result = stringValue(value);
+                } else if ((toType == Double.class) || (toType == Double.TYPE)) {
+                    result = new Double(doubleValue(value));
+                } else if ((toType == Boolean.class) || (toType == Boolean.TYPE)) {
 					result = booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
 				} else if ((toType == Byte.class) || (toType == Byte.TYPE)) {
 					result = Byte.valueOf((byte) longValue(value));
@@ -80,16 +84,12 @@ public class TypeConverter {
 					result = new Character((char) longValue(value));
 				} else if ((toType == Short.class) || (toType == Short.TYPE)) {
 					result = Short.valueOf((short) longValue(value));
-				} else if ((toType == Long.class) || (toType == Long.TYPE)) {
-					result = Long.valueOf(longValue(value));
 				} else if ((toType == Float.class) || (toType == Float.TYPE)) {
 					result = new Float(doubleValue(value));
 				} else if (toType == BigInteger.class) {
 					result = bigIntValue(value);
 				} else if (toType == BigDecimal.class) {
 					result = bigDecValue(value);
-				} else if (toType == String.class) {
-					result = stringValue(value);
 				} else if (Enum.class.isAssignableFrom(toType)) {
 					result = enumValue((Class<Enum<?>>) toType, value);
 				}

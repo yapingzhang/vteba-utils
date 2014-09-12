@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
@@ -17,6 +18,7 @@ public abstract class MethodAccess {
 	private String[] methodNames;
 	private Class<?>[][] parameterTypes;
 	private Class<?>[] returnTypes;
+	private List<java.lang.reflect.Type> genericTypes;
 
 	abstract public Object invoke (Object object, int methodIndex, Object... args);
 
@@ -62,8 +64,12 @@ public abstract class MethodAccess {
 	public Class<?>[] getReturnTypes () {
 		return returnTypes;
 	}
+	
+    public List<java.lang.reflect.Type> getGenericTypes() {
+        return genericTypes;
+    }
 
-	static public MethodAccess get (Class<?> type) {
+    static public MethodAccess get (Class<?> type) {
 		ArrayList<Method> methods = new ArrayList<Method>();
 		boolean isInterface = type.isInterface();
 		if (!isInterface) {
@@ -80,9 +86,14 @@ public abstract class MethodAccess {
 		String[] methodNames = new String[n];
 		Class<?>[][] parameterTypes = new Class[n][];
 		Class<?>[] returnTypes = new Class[n];
+		List<java.lang.reflect.Type> genericTypes = new ArrayList<java.lang.reflect.Type>();
+        
 		for (int i = 0; i < n; i++) {
 			Method method = methods.get(i);
 			methodNames[i] = method.getName();
+			if (method.getGenericParameterTypes() != null) {
+			    genericTypes.add(i, method.getGenericParameterTypes()[0]);
+			}
 			parameterTypes[i] = method.getParameterTypes();
 			returnTypes[i] = method.getReturnType();
 		}
@@ -258,6 +269,7 @@ public abstract class MethodAccess {
 			access.methodNames = methodNames;
 			access.parameterTypes = parameterTypes;
 			access.returnTypes = returnTypes;
+			access.genericTypes = genericTypes;
 			return access;
 		} catch (Exception ex) {
 			throw new RuntimeException("Error constructing method access class: " + accessClassName, ex);
