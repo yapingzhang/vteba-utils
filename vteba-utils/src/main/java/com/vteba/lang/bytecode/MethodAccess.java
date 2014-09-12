@@ -1,12 +1,31 @@
 package com.vteba.lang.bytecode;
 
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.AALOAD;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_SUPER;
+import static org.objectweb.asm.Opcodes.ACC_VARARGS;
+import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.ASTORE;
+import static org.objectweb.asm.Opcodes.ATHROW;
+import static org.objectweb.asm.Opcodes.BIPUSH;
+import static org.objectweb.asm.Opcodes.CHECKCAST;
+import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.V1_1;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
@@ -18,7 +37,7 @@ public abstract class MethodAccess {
 	private String[] methodNames;
 	private Class<?>[][] parameterTypes;
 	private Class<?>[] returnTypes;
-	private List<java.lang.reflect.Type> genericTypes;
+	private Class<?>[] genericTypes;
 
 	abstract public Object invoke (Object object, int methodIndex, Object... args);
 
@@ -65,7 +84,7 @@ public abstract class MethodAccess {
 		return returnTypes;
 	}
 	
-    public List<java.lang.reflect.Type> getGenericTypes() {
+    public Class<?>[] getGenericTypes() {
         return genericTypes;
     }
 
@@ -86,13 +105,16 @@ public abstract class MethodAccess {
 		String[] methodNames = new String[n];
 		Class<?>[][] parameterTypes = new Class[n][];
 		Class<?>[] returnTypes = new Class[n];
-		List<java.lang.reflect.Type> genericTypes = new ArrayList<java.lang.reflect.Type>();
+		Class<?>[] genericTypes = new Class[n];
         
 		for (int i = 0; i < n; i++) {
 			Method method = methods.get(i);
 			methodNames[i] = method.getName();
-			if (method.getGenericParameterTypes() != null) {
-			    genericTypes.add(i, method.getGenericParameterTypes()[0]);
+			if (method.getGenericParameterTypes() != null && method.getGenericParameterTypes().length == 1) {
+			    java.lang.reflect.Type gentype = method.getGenericParameterTypes()[0];
+			    genericTypes[i] = (Class<?>) ((ParameterizedType)gentype).getActualTypeArguments()[0];
+			} else {
+			    genericTypes[i] = null;
 			}
 			parameterTypes[i] = method.getParameterTypes();
 			returnTypes[i] = method.getReturnType();
