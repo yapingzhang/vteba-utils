@@ -1,8 +1,12 @@
-package com.vteba.utils.serialize;
+package com.vteba.test;
 
 import java.util.Date;
 
 import com.vteba.utils.reflection.AsmUtils;
+import com.vteba.utils.serialize.Kryos;
+import com.vteba.utils.serialize.MarshaUtils;
+import com.vteba.utils.serialize.ProtoUtils;
+import com.vteba.utils.serialize.Protos;
 
 public class TestUser {
 

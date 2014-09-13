@@ -1,7 +1,5 @@
 package com.vteba.utils.serialize;
 
-import java.util.Date;
-
 import com.vteba.utils.charstr.ByteUtils;
 import com.vteba.utils.charstr.Char;
 import com.vteba.utils.reflection.ReflectUtils;
@@ -70,16 +68,4 @@ public class ProtoUtils {
         return entity;
     }
 
-    public static void main(String[] aa) {
-    	TestUser user = new TestUser();
-    	user.setAge(250);
-    	user.setUserName("haojiahuowo是牛年");
-    	user.setDate(new Date());
-    	byte[] bytes = toBytes(user);
-    	System.out.println(bytes);
-    	TestUser user2 = fromBytes(bytes);
-    	System.out.println(user2);
-    }
-    
-    
 }
