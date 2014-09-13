@@ -1,10 +1,6 @@
 package com.vteba.utils.serialize;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.ArrayUtils;
-
+import com.vteba.utils.charstr.ByteUtils;
 import com.vteba.utils.charstr.Char;
 
 /**
@@ -13,7 +9,6 @@ import com.vteba.utils.charstr.Char;
  * @since 2013-12-12 17:32
  */
 public class ProtoUtils {
-    private static Map<Integer, Class<?>> cache = new HashMap<Integer, Class<?>>();
     /**
      * 将对象序列化成字节数组
      * @param object 要被序列化的对象
@@ -24,10 +19,18 @@ public class ProtoUtils {
             return null;
         }
         byte[] bytes = Protos.toByteArray(object);
-        byte[] headers = new byte[8];
-        byte[] destBytes = new byte[bytes.length + 8];
-        object.getClass().getName().getBytes(Char.UTF8);
-        return bytes;
+        int byteLength = bytes.length;
+        String className = object.getClass().getName();
+        byte[] nameBytes = className.getBytes(Char.UTF8);
+        int length = nameBytes.length;
+        byte[] lengthBytes = ByteUtils.toBytes(length);
+        byte[] destBytes = new byte[byteLength + length + 4];
+        
+        System.arraycopy(lengthBytes, 0, destBytes, 0, 4);
+        System.arraycopy(nameBytes, 0, destBytes, 4, length);
+        System.arraycopy(bytes, 0, destBytes, length + 4, byteLength);
+        
+        return destBytes;
     }
     
     /**
@@ -39,7 +42,47 @@ public class ProtoUtils {
         if (bytes == null) {
             return null;
         }
+        int byteLength = bytes.length;
         
-        return null;
+        byte[] lengthBytes = new byte[4];
+        System.arraycopy(bytes, 0, lengthBytes, 0, 4);
+        
+        int length = ByteUtils.toInt(lengthBytes);
+        byte[] nameBytes = new byte[length];
+        System.arraycopy(bytes, 4, nameBytes, 0, length);
+        
+        String className = new String(nameBytes, Char.UTF8);
+        T entity = null;
+        try {
+			Class<?> clazz = Class.forName(className);
+			@SuppressWarnings("unchecked")
+			T temp = (T) clazz.newInstance();
+			entity = temp;
+		} catch (ClassNotFoundException e) {
+			
+		} catch (InstantiationException e) {
+			
+		} catch (IllegalAccessException e) {
+			
+		}
+        
+        int destLength = byteLength - length - 4;
+        byte[] destBytes = new byte[destLength];
+        System.arraycopy(bytes, length + 4, destBytes, 0, destLength);
+        
+        Protos.mergeFrom(destBytes, entity);
+        return entity;
     }
+    
+    public static void main(String[] aa) {
+    	User user = new User();
+    	user.setAge(250);
+    	user.setUserName("haojiahuowo是牛年");
+    	byte[] bytes = toBytes(user);
+    	System.out.println(bytes);
+    	User user2 = fromBytes(bytes);
+    	System.out.println(user2);
+    }
+    
+    
 }

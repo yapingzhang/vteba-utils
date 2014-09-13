@@ -23,7 +23,7 @@ public class ByteUtils {
 
 	/**
 	 * 将int转为byte数组，字节数组的低位是整型的低字节位
-	 * @param source
+	 * @param source 要转换的int值
 	 * @return int转换成的字节数组
 	 */
 	public static byte[] toBytes(int source) {
