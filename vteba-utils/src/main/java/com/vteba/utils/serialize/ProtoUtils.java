@@ -2,19 +2,17 @@ package com.vteba.utils.serialize;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.vteba.utils.charstr.ByteUtils;
 import com.vteba.utils.charstr.Char;
+import com.vteba.utils.reflection.ReflectUtils;
 
 /**
  * 基于Protostuff的序列化和反序列化工具。简化版，主要的改进在于，反序列化时，不需要不需要传递对象了。
+ * 性能稍差，主要的损失在于反射构造对象。
  * @author yinlei 
  * @since 2013-12-12 17:32
  */
 public class ProtoUtils {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProtoUtils.class);
 	
     /**
      * 将对象序列化成字节数组
@@ -59,22 +57,10 @@ public class ProtoUtils {
         System.arraycopy(bytes, 4, nameBytes, 0, length);
         
         String className = new String(nameBytes, Char.UTF8);
-        T entity = null;
-        try {
-			Class<?> clazz = Class.forName(className);
-			@SuppressWarnings("unchecked")
-			T temp = (T) clazz.newInstance();
-			entity = temp;
-		} catch (ClassNotFoundException e) {
-			LOGGER.warn("没有找到类异常，class=[{}]", className, e.getMessage());
-			return entity;
-		} catch (InstantiationException e) {
-			LOGGER.warn("类实例化异常，class=[{}]", className, e.getMessage());
-			return entity;
-		} catch (IllegalAccessException e) {
-			LOGGER.warn("非法访问异常，class=[{}]", className, e.getMessage());
-			return entity;
-		}
+        T entity = ReflectUtils.instantiate(className);
+        if (entity == null) {
+        	return null;
+        }
         
         int destLength = byteLength - length - 4;
         byte[] destBytes = new byte[destLength];
@@ -83,7 +69,7 @@ public class ProtoUtils {
         Protos.mergeFrom(destBytes, entity);
         return entity;
     }
-    
+
     public static void main(String[] aa) {
     	TestUser user = new TestUser();
     	user.setAge(250);

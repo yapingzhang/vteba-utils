@@ -2,6 +2,8 @@ package com.vteba.utils.serialize;
 
 import java.util.Date;
 
+import com.vteba.utils.reflection.AsmUtils;
+
 public class TestUser {
 
 	private String userName;
@@ -32,4 +34,55 @@ public class TestUser {
 		this.date = date;
 	}
 
+	public static void main(String[] aa) {
+		TestUser user = new TestUser();
+		user.setAge(34);
+		user.setDate(new Date());
+		user.setUserName("wojiao尹雷");
+		ProtoUtils.toBytes(user);
+		AsmUtils.get().createConstructorAccess(TestUser.class);
+		
+		int loop = 1000;
+		byte[] bytes = null;
+		long d = System.currentTimeMillis();
+		for (int i = 0; i < loop; i++) {
+			bytes = ProtoUtils.toBytes(user);
+			ProtoUtils.fromBytes(bytes);
+		}
+		
+		System.out.println("Protos的序列化时间是：" + (System.currentTimeMillis() - d));
+		
+		d = System.currentTimeMillis();
+		for (int i = 0; i < loop; i++) {
+			bytes = Protos.toByteArray(user);
+			TestUser message = new TestUser();
+			Protos.mergeFrom(bytes, message);
+		}
+		System.out.println("ProtoUtils的序列化时间是：" + (System.currentTimeMillis() - d));
+		
+		d = System.currentTimeMillis();
+		for (int i = 0; i < loop; i++) {
+			bytes = MarshaUtils.toBytes(user);
+			MarshaUtils.fromBytes(bytes);
+		}
+		
+		System.out.println("MarshaUtils的序列化时间是：" + (System.currentTimeMillis() - d));
+		
+		d = System.currentTimeMillis();
+		for (int i = 0; i < loop; i++) {
+			bytes = Kryos.toBytes(user);
+			Kryos.fromBytes(bytes, TestUser.class);
+		}
+		
+		System.out.println("Kryos注册的序列化时间是：" + (System.currentTimeMillis() -d));
+		
+		d = System.currentTimeMillis();
+		for (int i = 0; i < loop; i++) {
+			bytes = Kryos.serialize(user);
+			Kryos.deserialize(bytes);
+		}
+		
+		System.out.println("Kryos未注册的序列化时间是：" + (System.currentTimeMillis() -d));
+	}
 }
+

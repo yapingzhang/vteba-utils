@@ -702,4 +702,42 @@ public class ReflectUtils {
         }
         throw new IllegalStateException("Should never get here");
     }
+    
+    /**
+     * 实例化类
+     * @param className 类的全限定名
+     * @return 实例
+     */
+    public static <T> T instantiate(String className) {
+		T entity = null;
+        try {
+        	@SuppressWarnings("unchecked")
+			Class<T> clazz = (Class<T>) Class.forName(className);
+			entity = clazz.newInstance();
+		} catch (ClassNotFoundException e) {
+			logger.warn("没有找到类异常，class=[{}]", className, e.getMessage());
+		} catch (InstantiationException e) {
+			logger.warn("类实例化异常，class=[{}]", className, e.getMessage());
+		} catch (IllegalAccessException e) {
+			logger.warn("非法访问异常，class=[{}]", className, e.getMessage());
+		}
+		return entity;
+	}
+    
+    /**
+     * 实例化类
+     * @param clazz 类class
+     * @return 实例
+     */
+    public static <T> T instantiate(Class<T> clazz) {
+		T entity = null;
+        try {
+			entity = clazz.newInstance();
+		} catch (InstantiationException e) {
+			logger.warn("类实例化异常，class=[{}]", clazz.getName(), e.getMessage());
+		} catch (IllegalAccessException e) {
+			logger.warn("非法访问异常，class=[{}]", clazz.getName(), e.getMessage());
+		}
+		return entity;
+	}
 }

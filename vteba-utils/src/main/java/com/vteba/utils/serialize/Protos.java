@@ -5,9 +5,9 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Map;
 
 import com.dyuproject.protostuff.ByteArrayInput;
 import com.dyuproject.protostuff.CodedInput;
@@ -26,7 +26,7 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
  * @date 2014-8-24
  */
 public final class Protos {
-	private static final ConcurrentMap<Class<?>, Schema<?>> schemaMap = new ConcurrentHashMap<Class<?>, Schema<?>>();
+	private static final Map<Class<?>, Schema<?>> schemaMap = new HashMap<Class<?>, Schema<?>>();
 
 	private Protos() {
 	}
