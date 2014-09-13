@@ -2,7 +2,7 @@ package com.vteba.utils.serialize;
 
 import java.util.Date;
 
-public class User {
+public class TestUser {
 
 	private String userName;
 	private int age;

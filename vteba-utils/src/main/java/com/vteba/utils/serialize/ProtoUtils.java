@@ -1,5 +1,10 @@
 package com.vteba.utils.serialize;
 
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.vteba.utils.charstr.ByteUtils;
 import com.vteba.utils.charstr.Char;
 
@@ -9,6 +14,8 @@ import com.vteba.utils.charstr.Char;
  * @since 2013-12-12 17:32
  */
 public class ProtoUtils {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProtoUtils.class);
+	
     /**
      * 将对象序列化成字节数组
      * @param object 要被序列化的对象
@@ -59,11 +66,14 @@ public class ProtoUtils {
 			T temp = (T) clazz.newInstance();
 			entity = temp;
 		} catch (ClassNotFoundException e) {
-			
+			LOGGER.warn("没有找到类异常，class=[{}]", className, e.getMessage());
+			return entity;
 		} catch (InstantiationException e) {
-			
+			LOGGER.warn("类实例化异常，class=[{}]", className, e.getMessage());
+			return entity;
 		} catch (IllegalAccessException e) {
-			
+			LOGGER.warn("非法访问异常，class=[{}]", className, e.getMessage());
+			return entity;
 		}
         
         int destLength = byteLength - length - 4;
@@ -75,12 +85,13 @@ public class ProtoUtils {
     }
     
     public static void main(String[] aa) {
-    	User user = new User();
+    	TestUser user = new TestUser();
     	user.setAge(250);
     	user.setUserName("haojiahuowo是牛年");
+    	user.setDate(new Date());
     	byte[] bytes = toBytes(user);
     	System.out.println(bytes);
-    	User user2 = fromBytes(bytes);
+    	TestUser user2 = fromBytes(bytes);
     	System.out.println(user2);
     }
     
