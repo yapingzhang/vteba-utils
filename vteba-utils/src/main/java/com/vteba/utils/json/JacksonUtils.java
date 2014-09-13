@@ -16,8 +16,10 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapType;
@@ -35,6 +37,8 @@ public class JacksonUtils {
 
 	private JacksonUtils() {
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		objectMapper.setDateFormat(format);
 	}
@@ -264,28 +268,35 @@ public class JacksonUtils {
 	}
 
 	public CollectionType constructCollectionType(
-			Class<? extends Collection<?>> collectionClass,
-			Class<?> elementClass) {
-		return objectMapper.getTypeFactory().constructCollectionType(
-				collectionClass, elementClass);
+			Class<?> collectionClass, Class<?> elementClass) {
+	    @SuppressWarnings("unchecked")
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(
+				(Class<? extends Collection<?>>) collectionClass, elementClass);
+	    return collectionType;
 	}
 
 	public CollectionType constructCollectionType(
-			Class<? extends Collection<?>> collectionClass, JavaType elementType) {
-		return objectMapper.getTypeFactory().constructCollectionType(
-				collectionClass, elementType);
+			Class<?> collectionClass, JavaType elementType) {
+		@SuppressWarnings("unchecked")
+        CollectionType collectionType = objectMapper.getTypeFactory().constructCollectionType(
+				(Class<? extends Collection<?>>) collectionClass, elementType);
+		return collectionType;
 	}
 
-	public MapType constructMapType(Class<? extends Map<?, ?>> mapClass,
+	public MapType constructMapType(Class<?> mapClass,
 			JavaType keyType, JavaType valueType) {
-		return objectMapper.getTypeFactory().constructMapType(mapClass,
+		@SuppressWarnings("unchecked")
+        MapType mapType = objectMapper.getTypeFactory().constructMapType((Class<? extends Map<?, ?>>) mapClass,
 				keyType, valueType);
+		return mapType;
 	}
 
-	public MapType constructMapType(Class<? extends Map<?, ?>> mapClass,
+	public MapType constructMapType(Class<?> mapClass,
 			Class<?> keyClass, Class<?> valueClass) {
-		return objectMapper.getTypeFactory().constructMapType(mapClass,
+	    @SuppressWarnings("unchecked")
+        MapType mapType = objectMapper.getTypeFactory().constructMapType((Class<? extends Map<?, ?>>) mapClass,
 				keyClass, valueClass);
+	    return mapType;
 	}
 
 	public JavaType uncheckedSimpleType(Class<?> cls) {

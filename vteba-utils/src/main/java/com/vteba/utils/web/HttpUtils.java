@@ -3,295 +3,255 @@ package com.vteba.utils.web;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.util.ArrayList;
+import java.net.URISyntaxException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-// import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-// import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URLEncodedUtils;
-// import org.apache.http.client.utils.URIBuilder;
-// import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.entity.ContentType;
-// import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.vteba.utils.charstr.Char;
+import com.vteba.utils.common.PropUtils;
+import com.vteba.utils.json.FastJsonUtils;
+import com.vteba.utils.json.JacksonUtils;
+
+/**
+ * HttpClient工具类。提供提交JavaBean返回JavaBean数据，中间是Json格式 <br>
+ * 
+ * @author yinlei
+ * @since 2014-8-14 18:04
+ */
 public class HttpUtils {
 
-    /**
-     * 对于查询参数要使用uri，对于json、xml等数据内容要使用Entity
-     * @param args
-     * @throws Exception
-     */
-    public final static void main(String[] args) throws Exception {
-
-        // 初始化，此处构造函数就与3不同
-        HttpClient httpclient = HttpClientBuilder.create().build();
-
-        HttpHost targetHost = new HttpHost("localhost", 8090, "http");
-
-        // HttpGet httpget = new HttpGet("http://www.apache.org/");
-        HttpGet httpGet = new HttpGet("/");
-
-        // 查看默认request头部信息
-        System.out.println("Accept-Charset:" + httpGet.getFirstHeader("Accept-Charset"));
-        // 以下这条如果不加会发现无论你设置Accept-Charset为gbk还是utf-8，他都会默认返回gb2312（本例针对google.cn来说）
-        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.1.2)");
-        // 用逗号分隔显示可以同时接受多种编码
-        httpGet.setHeader("Accept-Language", "zh-cn,zh;q=0.5");
-        httpGet.setHeader("Accept-Charset", "GB2312,utf-8;q=0.7,*;q=0.7");
-        // 验证头部信息设置生效
-        System.out.println("Accept-Charset:" + httpGet.getFirstHeader("Accept-Charset").getValue());
-
-         //HttpEntity postHttpEntity = new StringEntity(json, charset)
-         List<NameValuePair> list = new ArrayList<NameValuePair>();
-         URI uri = new URIBuilder()
-         .addParameter("userName", "yinlei尹雷")
-         .setPath("/test/userServlet")
-         .build();
-        
-         list = URLEncodedUtils.parse(uri, "UTF-8");
-        
-         UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(list, "UTF-8");
-        
-         HttpPost httpPost = new HttpPost(uri);
-
-         httpPost.setHeader("content-type", "text/plain;charset=utf-8");
-         
-         httpPost.setEntity(urlEncodedFormEntity);
-
-        // Execute HTTP request
-        System.out.println("executing request " + httpGet.getURI());
-        HttpResponse response = httpclient.execute(targetHost, httpPost);
-        // HttpResponse response = httpclient.execute(httpget);
-
-        System.out.println("----------------------------------------");
-        System.out.println("Location: " + response.getLastHeader("Location"));
-        System.out.println(response.getStatusLine().getStatusCode());
-        System.out.println(response.getLastHeader("Content-Type"));
-        System.out.println(response.getLastHeader("Content-Length"));
-
-        System.out.println("----------------------------------------");
-
-        // 判断页面返回状态判断是否进行转向抓取新链接
-        int statusCode = response.getStatusLine().getStatusCode();
-        if ((statusCode == HttpStatus.SC_MOVED_PERMANENTLY) || (statusCode == HttpStatus.SC_MOVED_TEMPORARILY)
-            || (statusCode == HttpStatus.SC_SEE_OTHER) || (statusCode == HttpStatus.SC_TEMPORARY_REDIRECT)) {
-            // 此处重定向处理 此处还未验证
-            String newUri = response.getLastHeader("Location").getValue();
-            httpclient = HttpClientBuilder.create().build();
-            httpGet = new HttpGet(newUri);
-            response = httpclient.execute(httpGet);
-        }
-
-        // Get hold of the response entity
-        HttpEntity entity = response.getEntity();
-
-        // 查看所有返回头部信息
-        Header headers[] = response.getAllHeaders();
-        int ii = 0;
-        while (ii < headers.length) {
-            System.out.println(headers[ii].getName() + ": " + headers[ii].getValue());
-            ++ii;
-        }
-
-        // If the response does not enclose an entity, there is no need
-        // to bother about connection release
-        if (entity != null) {
-            // 将源码流保存在一个byte数组当中，因为可能需要两次用到该流，
-            byte[] bytes = EntityUtils.toByteArray(entity);
-            String charSet = "";
-
-            // 如果头部Content-Type中包含了编码信息，那么我们可以直接在此处获取
-            charSet = ContentType.getOrDefault(entity).getCharset().name();
-            System.out.println("In header: " + charSet);
-            // 如果头部中没有，那么我们需要 查看页面源码，这个方法虽然不能说完全正确，因为有些粗糙的网页编码者没有在页面中写头部编码信息
-            if (charSet == "") {
-                String regEx = "(?=<meta).*?(?<=charset=[\\'|\\\"]?)([[a-z]|[A-Z]|[0-9]|-]*)";
-                Pattern p = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
-                Matcher m = p.matcher(new String(bytes)); // 默认编码转成字符串，因为我们的匹配中无中文，所以串中可能的乱码对我们没有影响
-                boolean result = m.find();
-                System.out.println(result);
-                if (m.groupCount() == 1) {
-                    charSet = m.group(1);
-                } else {
-                    charSet = "";
-                }
-            }
-            System.out.println("Last get: " + charSet);
-            // 至此，我们可以将原byte数组按照正常编码专成字符串输出（如果找到了编码的话）
-            System.out.println("Encoding string is: " + new String(bytes, charSet));
-        }
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpUtils.class);
+    private static HttpHost httpHost = null;
+    static {
+        String hostName = PropUtils.get("host");
+        int port = PropUtils.getInt("port");
+        String schema = PropUtils.get("scheme");
+        // 创建目标主机
+        httpHost = new HttpHost(hostName, port, schema);
     }
-
-    private StringBuilder url;
-
-    private HttpUtils(String module) {
-        url = new StringBuilder("/").append(module);
+    
+    
+    /**
+     * 调用搜牛接口，返回一个JSONObject，可以做进一步的处理，取出来某一节点等。
+     * @param params 参数值
+     * @param urlPath 接口url
+     * @return JSONObject
+     */
+    public static <T> T invoke(final Map<String, String> params, final String urlPath, final Class<T> clazz) {
+        // 创建http post请求
+        HttpPost httpPost = buildHttpPost(params, urlPath);
+        // 发起调用，返回Json object
+        T obj = resolveBean(clazz, httpPost);
+        return obj;
+    }
+    
+    /**
+     * 调用搜牛接口，返回一个JSONObject，可以做进一步的处理，取出来某一节点等。
+     * @param params 参数值
+     * @param urlPath 接口url
+     * @return JSONObject
+     */
+    public static JSONObject invoke(final Map<String, String> params, final String urlPath) {
+        // 创建http post请求
+        HttpPost httpPost = buildHttpPost(params, urlPath);
+        // 发起调用，返回Json object
+        JSONObject jsonObject = resolveJsonObject(httpPost);
+        return jsonObject;
+    }
+    
+    /**
+     * 调用搜牛接口，返回List，参数是键值对的形式。
+     * @param params 参数Map
+     * @param urlPath 调用的接口名
+     * @param resultClass 结果对象类
+     * @return 结果List
+     */
+    public static <T> List<T> invokeList(final Map<String, String> params, final String urlPath, Class<T> resultClass) {
+        // 创建http post请求
+        HttpPost httpPost = buildHttpPost(params, urlPath);
+        // 发起调用，处理请求结果
+        List<T> result = resolveResult(resultClass, httpPost);
+        return result;
+    }
+    
+    /**
+     * 调用问财接口时使用，返回JavaBean。底层使用Jackson来实现的。可以改变属性的值，字段不一致也可以处理。
+     * @param params 参数值
+     * @param urlPath 接口url
+     * @param resultClass 结果类型
+     * @return &lt;T&gt; JavaBean实体
+     */
+    public static <T> T invokeForBean(final Map<String, String> params, final String urlPath, final Class<T> resultClass) {
+        // 创建http post请求
+        HttpPost httpPost = buildHttpPost(params, urlPath);
+        // 发起调用，处理请求结果
+        T result = resolveForBean(httpPost, resultClass);
+        return result;
+    }
+    
+    /**
+     * 调用问财接口时使用，返回List&lt;T&gt;。底层使用Jackson来实现的。可以改变属性的值，字段不一致也可以处理。
+     * @param params 参数值
+     * @param urlPath 接口url
+     * @param resultClass 结果类型
+     * @return List&lt;T&gt;
+     */
+    public static <T> List<T> invokeForList(final Map<String, String> params, final String urlPath, final Class<T> resultClass) {
+        // 创建http post请求
+        HttpPost httpPost = buildHttpPost(params, urlPath);
+        // 发起调用，处理请求结果
+        List<T> result = resolveForList(httpPost, resultClass);
+        return result;
     }
 
     /**
-     * 创建对server服务module（模组），发起http调用的实例。
-     * 
-     * @param module
-     *            对应Action上的url映射名，不需要带“/”。
-     * @return 当前对象
+     * 发起http请求，返回处理结果。
+     * @param httpPost HttpPost
+     * @param resultClass 结果类型
+     * @return 结果List
      */
-    public static HttpUtils create(String module) {
-        return new HttpUtils(module);
+    private static <T> List<T> resolveForList(final HttpPost httpPost, final Class<T> resultClass) {
+        CollectionType collectionType = JacksonUtils.get().constructCollectionType(List.class, resultClass);
+        List<T> list = JacksonUtils.get().fromJson(resolve(httpPost, 1), collectionType);
+        return list;
     }
-
-    public HttpUtils module(String module) {
-
-        return this;
-    }
-
+    
     /**
-     * 调用具体的模块。
-     * 
-     * @param serviceName
-     *            对应Action中方法上的url映射名，不需要带“/”。
-     * @return 当前对象
+     * 发起http请求，返回处理结果。
+     * @param httpPost HttpPost
+     * @param resultClass 结果类型
+     * @return 结果List
      */
-    public HttpUtils service(String serviceName) {
-        url.append("/").append(serviceName);
-        return this;
+    private static <T> T resolveForBean(final HttpPost httpPost, final Class<T> resultClass) {
+        T entity = JacksonUtils.get().fromJson(resolve(httpPost, 1), resultClass);
+        return entity;
     }
-
-    public String invoke() {
-        HttpClient httpclient = HttpClientBuilder.create().build();
-        HttpHost httpHost = new HttpHost("www.baidu.com", 80, "http");
-
-        // HttpGet httpget = new HttpGet("http://www.apache.org/");
-        //HttpGet httpget = new HttpGet("/");
-
-//        // 查看默认request头部信息
-//        System.out.println("Accept-Charset:" + httpget.getFirstHeader("Accept-Charset"));
-//        // 以下这条如果不加会发现无论你设置Accept-Charset为gbk还是utf-8，他都会默认返回gb2312（本例针对google.cn来说）
-//        httpget.setHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.1.2)");
-//        // 用逗号分隔显示可以同时接受多种编码
-//        httpget.setHeader("Accept-Language", "zh-cn,zh;q=0.5");
-//        httpget.setHeader("Accept-Charset", "GB2312,utf-8;q=0.7,*;q=0.7");
-//        // 验证头部信息设置生效
-//        System.out.println("Accept-Charset:" + httpget.getFirstHeader("Accept-Charset").getValue());
-
-        HttpPost httpPost = new HttpPost("/user/save");
-
-        httpPost.setHeader("content-type", "text/plain;charset=utf-8");
-
-        // HttpEntity postHttpEntity = new StringEntity(json, charset)
-        // List<NameValuePair> list = new ArrayList<NameValuePair>();
-        // URI uri = new URIBuilder()
-        // .addParameter("userName", "yinlei尹雷")
-        // .setPath("/test/userServlet")
-        // .build();
-        //
-        // list = URLEncodedUtils.parse(uri, "UTF-8");
-        //
-        // UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(list, "UTF-8");
-        //
-        // httpPost.setEntity(urlEncodedFormEntity);
-
-        // Execute HTTP request
-        //System.out.println("executing request " + httpget.getURI());
-        HttpResponse response = null;
+    
+    /**
+     * 发起http请求，返回字节数组
+     * @param httpPost HttpPost
+     * @param type 可以扩展
+     * @return byte[]
+     */
+    private static byte[] resolve(final HttpPost httpPost, int type) {
+        byte[] bytes = null;
         try {
-            response = httpclient.execute(httpHost, httpPost);
+            HttpHost host = null;
+            if (type == 1) {
+                host = httpHost;
+            }
+            // 创建客户端
+            CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+            // 发起调用
+            CloseableHttpResponse httpResponse = httpClient.execute(host, httpPost);
+            int status = httpResponse.getStatusLine().getStatusCode();
+            if (status == 200) {// 结果正常
+                bytes = EntityUtils.toByteArray(httpResponse.getEntity());
+                //if (LOGGER.isInfoEnabled()) {
+                    //LOGGER.info("调用接口返回200正常，url=[{}]，字节size=[{}]", httpPost.getURI().toString(), bytes.length);
+                //}
+            } else {// 结果异常
+                LOGGER.error("请求的urlPath错误[{}]，响应码是[{}]", httpPost.getURI().toString(), status);
+            }
+            httpResponse.close();
+            httpClient.close();
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            LOGGER.error("[{}]请求，客户端协议错误。", httpPost.getURI().toString(), e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("[{}]请求IO错误。", httpPost.getURI().toString(), e);
         }
-        // HttpResponse response = httpclient.execute(httpget);
-
-        System.out.println("----------------------------------------");
-        System.out.println("Location: " + response.getLastHeader("Location"));
-        System.out.println(response.getStatusLine().getStatusCode());
-        System.out.println(response.getLastHeader("Content-Type"));
-        System.out.println(response.getLastHeader("Content-Length"));
-
-        System.out.println("----------------------------------------");
-
-        // 判断页面返回状态判断是否进行转向抓取新链接
-        int statusCode = response.getStatusLine().getStatusCode();
-        if ((statusCode == HttpStatus.SC_MOVED_PERMANENTLY) || (statusCode == HttpStatus.SC_MOVED_TEMPORARILY)
-            || (statusCode == HttpStatus.SC_SEE_OTHER) || (statusCode == HttpStatus.SC_TEMPORARY_REDIRECT)) {
-//            // 此处重定向处理 此处还未验证
-//            String newUri = response.getLastHeader("Location").getValue();
-//            httpclient = HttpClientBuilder.create().build();
-//            httpget = new HttpGet(newUri);
-//            try {
-//                response = httpclient.execute(httpget);
-//            } catch (ClientProtocolException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-        }
-
-        // Get hold of the response entity
-        HttpEntity entity = response.getEntity();
-
-        // 查看所有返回头部信息
-        Header headers[] = response.getAllHeaders();
-        int ii = 0;
-        while (ii < headers.length) {
-            System.out.println(headers[ii].getName() + ": " + headers[ii].getValue());
-            ++ii;
-        }
-
-        // If the response does not enclose an entity, there is no need
-        // to bother about connection release
-        if (entity != null) {
-            // 将源码流保存在一个byte数组当中，因为可能需要两次用到该流，
-            byte[] bytes = null;
-            try {
-                bytes = EntityUtils.toByteArray(entity);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String charSet = "";
-
-            // 如果头部Content-Type中包含了编码信息，那么我们可以直接在此处获取
-            charSet = ContentType.getOrDefault(entity).getCharset().name();
-            System.out.println("In header: " + charSet);
-            // 如果头部中没有，那么我们需要 查看页面源码，这个方法虽然不能说完全正确，因为有些粗糙的网页编码者没有在页面中写头部编码信息
-            if (charSet == "") {
-                String regEx = "(?=<meta).*?(?<=charset=[\\'|\\\"]?)([[a-z]|[A-Z]|[0-9]|-]*)";
-                Pattern p = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
-                Matcher m = p.matcher(new String(bytes)); // 默认编码转成字符串，因为我们的匹配中无中文，所以串中可能的乱码对我们没有影响
-                boolean result = m.find();
-                System.out.println(result);
-                if (m.groupCount() == 1) {
-                    charSet = m.group(1);
-                } else {
-                    charSet = "";
-                }
-            }
-            System.out.println("Last get: " + charSet);
-            // 至此，我们可以将原byte数组按照正常编码专成字符串输出（如果找到了编码的话）
-            try {
-                System.out.println("Encoding string is: " + new String(bytes, charSet));
-            } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return null;
+        return bytes;
     }
+    
+    /**
+     * 根据请求参数和请求url地址，构建http post请求。
+     * @param params 请求参数
+     * @param urlPath 请求url地址
+     * @return HttpPost实例
+     */
+    private static HttpPost buildHttpPost(final Map<String, String> params, final String urlPath) {
+        // 构建请求uri
+        URI uri = null;
+        try {
+            URIBuilder uriBuilder = new URIBuilder();
+            // 设置参数
+            for (Entry<String, String> entry : params.entrySet()) {
+                uriBuilder.setParameter(entry.getKey(), entry.getValue());
+            }
+            // 设置请求的路径
+            uriBuilder.setPath(urlPath);
+            uri = uriBuilder.build();
+        } catch (URISyntaxException e1) {
+            LOGGER.error("HttpClient创建URI错误。可能传递的参数错误。", e1.getMessage());
+            return null;
+        }
+        
+        // 设置post请求
+        HttpPost httpPost = new HttpPost(uri);
+        // 设置post请求体
+        List<NameValuePair> list = URLEncodedUtils.parse(uri, "UTF-8");
+        try {
+            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(list, "UTF-8");
+            httpPost.setEntity(urlEncodedFormEntity);
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error("设置http请求体参数错误，不支持的编码。", e.getMessage());
+        }
+        RequestConfig config = RequestConfig.custom().setSocketTimeout(6000).setConnectTimeout(6000).build();
+        httpPost.setConfig(config);
+        return httpPost;
+    }
+    
+    /**
+     * 发起http请求，返回处理结果。
+     * @param resultClass 结果类型
+     * @param httpPost HttpClient
+     * @return 结果List
+     */
+    private static <T> List<T> resolveResult(final Class<T> resultClass, final HttpPost httpPost) {
+        List<T> object = FastJsonUtils.fromJsonArray(resolve(httpPost, 1), resultClass);
+        return object;
+    }
+
+    /**
+     * 发起http请求，返回处理结果。
+     * @param resultClass 结果类型
+     * @param httpPost HttpClient
+     * @return 结果List
+     */
+    private static <T> T resolveBean(final Class<T> resultClass, final HttpPost httpPost) {
+        T object = FastJsonUtils.fromJson(resolve(httpPost, 1), resultClass);
+        return object;
+    }
+    
+    /**
+     * 处理返回JSONObject的调用。统一返回JSONObject，然后需要特殊的处理都可以从这里获取。
+     * 包括获取某一节点的值，以及某一节点JSONArray等等。
+     * @param httpPost HttpPost实例
+     * @return JSONObject
+     */
+    private static JSONObject resolveJsonObject(final HttpPost httpPost) {
+        String json = new String(resolve(httpPost, 1), Char.UTF8);
+        return JSON.parseObject(json);
+    }
+    
 }
+

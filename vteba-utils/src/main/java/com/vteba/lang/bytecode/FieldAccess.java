@@ -115,7 +115,7 @@ public abstract class FieldAccess {
 				String classNameInternal = className.replace('.', '/');
 
 				ClassWriter cw = new ClassWriter(0);
-				cw.visit(V1_1, ACC_PUBLIC + ACC_SUPER, accessClassNameInternal, null, "com/esotericsoftware/reflectasm/FieldAccess",
+				cw.visit(V1_1, ACC_PUBLIC + ACC_SUPER, accessClassNameInternal, null, "com/vteba/lang/bytecode/FieldAccess",
 					null);
 				insertConstructor(cw);
 				insertGetObject(cw, classNameInternal, fields);
@@ -155,7 +155,7 @@ public abstract class FieldAccess {
 		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 		mv.visitCode();
 		mv.visitVarInsn(ALOAD, 0);
-		mv.visitMethodInsn(INVOKESPECIAL, "com/esotericsoftware/reflectasm/FieldAccess", "<init>", "()V");
+		mv.visitMethodInsn(INVOKESPECIAL, "com/vteba/lang/bytecode/FieldAccess", "<init>", "()V");
 		mv.visitInsn(RETURN);
 		mv.visitMaxs(1, 1);
 		mv.visitEnd();

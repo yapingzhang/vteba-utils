@@ -69,6 +69,22 @@
 	</dependency>
     
 <!--     <dependency> -->
+<!-- 		<groupId>org.apache.poi</groupId> -->
+<!-- 		<artifactId>poi-ooxml</artifactId> -->
+<!-- 		<version>3.10-FINAL</version> -->
+<!-- 	</dependency> -->
+<!--     <dependency> -->
+<!-- 		<groupId>org.apache.poi</groupId> -->
+<!-- 		<artifactId>poi-ooxml-schemas</artifactId> -->
+<!-- 		<version>3.10-FINAL</version> -->
+<!-- 	</dependency> -->
+<!--     <dependency> -->
+<!-- 		<groupId>org.apache.poi</groupId> -->
+<!-- 		<artifactId>poi-scratchpad</artifactId> -->
+<!-- 		<version>3.10-FINAL</version> -->
+<!-- 	</dependency> -->
+    
+<!--     <dependency> -->
 <!-- 		<groupId>org.javolution</groupId> -->
 <!-- 		<artifactId>javolution</artifactId> -->
 <!-- 		<version>6.0.0</version> -->
@@ -115,6 +131,22 @@
 <!-- 	  <artifactId>ant</artifactId> -->
 <!-- 	  <version>1.9.1</version> -->
 <!-- 	</dependency> -->
+	
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+		<version>${httpcomp-version}</version>
+	</dependency>
+    <dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpcore</artifactId>
+		<version>${httpcomp-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpcore-nio</artifactId>
+		<version>${httpcomp-version}</version>
+	</dependency>
 	
 	<dependency>
 		<groupId>com.dyuproject.protostuff</groupId>
@@ -227,9 +259,9 @@
 		</exclusions>
 	</dependency> 
     <dependency>
-		<groupId>com.esotericsoftware.reflectasm</groupId>
+		<groupId>com.esotericsoftware</groupId>
 		<artifactId>reflectasm</artifactId>
-		<version>1.07</version>
+		<version>1.10.0</version>
 		<exclusions>
 			<exclusion>
 				<groupId>org.ow2.asm</groupId>
@@ -887,7 +919,7 @@
 	<dependency>
 	  <groupId>org.apache.poi</groupId>
 	  <artifactId>poi</artifactId>
-	  <version>3.9</version>
+	  <version>3.10-FINAL</version>
 	</dependency>
 	<!-- 
 	<dependency>
@@ -1543,6 +1575,23 @@
 		  <version>2.4</version>
 		  
 	  </plugin>
+	  
+	  <plugin>
+			<artifactId>maven-source-plugin</artifactId>
+			<version>2.2.1</version>
+			<configuration>
+				<attach>true</attach>
+			</configuration>
+			<executions>
+				<execution>
+					<phase>compile</phase>
+					<goals>
+						<goal>jar</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+	  
       <plugin>
 	      <groupId>org.apache.maven.plugins</groupId>
 	      <artifactId>maven-compiler-plugin</artifactId>

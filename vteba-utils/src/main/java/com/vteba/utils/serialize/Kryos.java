@@ -189,11 +189,21 @@ public class Kryos {
 	    if (object == null) {
 	        return null;
 	    }
-		Kryo kryo = new Kryo();
-		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
-		Output out = new Output(2 * 1024, 2 * 1024 * 1024);
-		kryo.writeClassAndObject(out, object);
-		return out.toBytes();
+	    Output out = null;
+	    try {
+	        Kryo kryo = new Kryo();
+	        kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
+	        out = new Output(2 * 1024, 2 * 1024 * 1024);
+	        kryo.writeClassAndObject(out, object);
+	        return out.toBytes();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (out != null) {
+                out.close();
+                out = null;
+            }
+        }
 	}
 
 	/**
@@ -206,12 +216,22 @@ public class Kryos {
 	    if (bytes == null) {
 	        return null;
 	    }
-		Kryo kryo = new Kryo();
-		kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
-		Input input = new Input(bytes);
-		@SuppressWarnings("unchecked")
-		T obj = (T) kryo.readClassAndObject(input);
-		return obj;
+	    Input input = null;
+	    try {
+	        Kryo kryo = new Kryo();
+	        kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
+	        input = new Input(bytes);
+	        @SuppressWarnings("unchecked")
+	        T obj = (T) kryo.readClassAndObject(input);
+	        return obj;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (input != null) {
+                input.close();
+                input = null;
+            }
+        }
 	}
 	
 	/**
