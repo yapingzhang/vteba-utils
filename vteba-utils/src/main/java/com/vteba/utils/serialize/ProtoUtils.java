@@ -5,7 +5,7 @@ import com.vteba.utils.charstr.Char;
 import com.vteba.utils.reflection.ReflectUtils;
 
 /**
- * 基于Protostuff的序列化和反序列化工具。简化版，主要的改进在于，反序列化时，不需要不需要传递对象了。
+ * 基于Protostuff的序列化和反序列化工具。简化版，主要的改进在于，反序列化时，不需要传递对象了。
  * 性能稍差，主要的损失在于反射构造对象。
  * @author yinlei 
  * @since 2013-12-12 17:32
