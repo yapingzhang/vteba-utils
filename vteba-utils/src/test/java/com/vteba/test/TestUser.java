@@ -39,7 +39,10 @@ public class TestUser {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-
+	
+	//fastjson比jackson稍微快一点5%左右
+	//一次测试，protos、未注册kryo、protoUtils、marshutils、注册kryo
+	//多次循环，protos、protosutils、marshautils、注册kryo、未注册kryo
 	public static void main(String[] aa) {
 		TestUser user = new TestUser();
 		user.setAge(34);
