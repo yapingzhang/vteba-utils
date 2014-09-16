@@ -46,12 +46,15 @@ public class TestUser {
 		user.setDate(new Date());
 		user.setUserName("wojiao尹雷");
 		
+		String json = null;
 		long dd = System.currentTimeMillis();
-		FastJsonUtils.toJson(user);
+		json = FastJsonUtils.toJson(user);
+		FastJsonUtils.fromJson(json, TestUser.class);
 		System.out.println(System.currentTimeMillis() - dd);
 		
 		dd = System.currentTimeMillis();
-		JacksonUtils.get().toJson(user);
+		json = JacksonUtils.get().toJson(user);
+		JacksonUtils.get().fromJson(json, TestUser.class);
 		System.out.println(System.currentTimeMillis() - dd);
 		
 		ProtoUtils.toBytes(user);
