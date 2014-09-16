@@ -63,12 +63,12 @@ public class TestUser {
 		ProtoUtils.toBytes(user);
 		AsmUtils.get().createConstructorAccess(TestUser.class);
 		
-		int loop = 10;
+		int loop = 1000;
 		byte[] bytes = null;
 		long d = System.currentTimeMillis();
 		bytes = ProtoUtils.toBytes(user);
 		for (int i = 0; i < loop; i++) {
-			//bytes = ProtoUtils.toBytes(user);
+			bytes = ProtoUtils.toBytes(user);
 			ProtoUtils.fromBytes(bytes);
 		}
 		
@@ -77,7 +77,7 @@ public class TestUser {
 		d = System.currentTimeMillis();
 		bytes = Protos.toByteArray(user);
 		for (int i = 0; i < loop; i++) {
-			//bytes = Protos.toByteArray(user);
+			bytes = Protos.toByteArray(user);
 			TestUser message = new TestUser();
 			Protos.mergeFrom(bytes, message);
 		}
@@ -86,7 +86,7 @@ public class TestUser {
 		d = System.currentTimeMillis();
 		bytes = MarshaUtils.toBytes(user);
 		for (int i = 0; i < loop; i++) {
-			//bytes = MarshaUtils.toBytes(user);
+			bytes = MarshaUtils.toBytes(user);
 			MarshaUtils.fromBytes(bytes);
 		}
 		
@@ -95,7 +95,7 @@ public class TestUser {
 		d = System.currentTimeMillis();
 		bytes = Kryos.toBytes(user);
 		for (int i = 0; i < loop; i++) {
-			//bytes = Kryos.toBytes(user);
+			bytes = Kryos.toBytes(user);
 			Kryos.fromBytes(bytes, TestUser.class);
 		}
 		
@@ -104,7 +104,7 @@ public class TestUser {
 		d = System.currentTimeMillis();
 		bytes = Kryos.serialize(user);
 		for (int i = 0; i < loop; i++) {
-			//bytes = Kryos.serialize(user);
+			bytes = Kryos.serialize(user);
 			Kryos.deserialize(bytes);
 		}
 		
