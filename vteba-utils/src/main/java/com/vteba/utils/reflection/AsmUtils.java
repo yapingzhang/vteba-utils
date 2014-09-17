@@ -1,7 +1,7 @@
 package com.vteba.utils.reflection;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.vteba.lang.bytecode.ConstructorAccess;
 import com.vteba.lang.bytecode.FieldAccess;
@@ -14,11 +14,11 @@ import com.vteba.lang.bytecode.MethodAccess;
  */
 public class AsmUtils {
 	/** 缓存MethodAccess */
-	private static Map<Class<?>, MethodAccess> methodAccessCache = new HashMap<Class<?>, MethodAccess>();
+	private static ConcurrentMap<Class<?>, MethodAccess> methodAccessCache = new ConcurrentHashMap<Class<?>, MethodAccess>();
 	/** 缓存FieldAccess */
-	private static Map<Class<?>, FieldAccess> fieldAccessCache = new HashMap<Class<?>, FieldAccess>();
+	private static ConcurrentMap<Class<?>, FieldAccess> fieldAccessCache = new ConcurrentHashMap<Class<?>, FieldAccess>();
 	/** 缓存ConstructorAccess */
-	private static Map<Class<?>, ConstructorAccess<?>> constructorAccessCache = new HashMap<Class<?>, ConstructorAccess<?>>();
+	private static ConcurrentMap<Class<?>, ConstructorAccess<?>> constructorAccessCache = new ConcurrentHashMap<Class<?>, ConstructorAccess<?>>();
 	
 	private static AsmUtils instance = new AsmUtils();
 	

@@ -9,6 +9,7 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class ReflectUtils {
 	/**
      * Cache for {@link Class#getDeclaredMethods()}, allowing for fast resolution.
      */
-    private static final Map<Class<?>, Method[]> declaredMethodsCache = new ConcurrentReferenceHashMap<Class<?>, Method[]>(256);
+    private static final ConcurrentMap<Class<?>, Method[]> declaredMethodsCache = new ConcurrentReferenceHashMap<Class<?>, Method[]>(256);
 	
 	/**
 	 * 调用对象obj的某一属性的Getter方法

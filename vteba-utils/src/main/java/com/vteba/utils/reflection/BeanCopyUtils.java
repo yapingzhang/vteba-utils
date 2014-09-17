@@ -3,6 +3,8 @@ package com.vteba.utils.reflection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import net.sf.cglib.beans.BeanCopier;
 import net.sf.cglib.beans.BeanMap;
@@ -20,8 +22,8 @@ import com.vteba.utils.common.CaseUtils;
 public class BeanCopyUtils {
 	
 	/** 缓存BeanCopier */
-	private static Map<String, BeanCopier> copierCache = new HashMap<String, BeanCopier>();
-	private static Map<String, BeanMap> beanMapCache = new HashMap<String, BeanMap>();
+	private static ConcurrentMap<String, BeanCopier> copierCache = new ConcurrentHashMap<String, BeanCopier>();
+	private static ConcurrentMap<String, BeanMap> beanMapCache = new ConcurrentHashMap<String, BeanMap>();
 	
 	private static final BeanCopyUtils instance = new BeanCopyUtils();
 

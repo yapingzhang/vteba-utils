@@ -3,6 +3,8 @@ package com.vteba.utils.reflection;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import sun.misc.Unsafe;
 
@@ -14,7 +16,7 @@ import sun.misc.Unsafe;
  */
 @SuppressWarnings("restriction")
 public class UnsafeUtils {
-    private static final Map<Class<?>, Map<String, Field>> fieldCache = new HashMap<Class<?>, Map<String, Field>>();
+    private static final ConcurrentMap<Class<?>, Map<String, Field>> fieldCache = new ConcurrentHashMap<Class<?>, Map<String, Field>>();
     
     private static final Unsafe unsafe;
     static {
