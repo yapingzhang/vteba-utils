@@ -112,7 +112,11 @@ public abstract class MethodAccess {
 			methodNames[i] = method.getName();
 			if (method.getGenericParameterTypes() != null && method.getGenericParameterTypes().length == 1) {
 			    java.lang.reflect.Type gentype = method.getGenericParameterTypes()[0];
-			    genericTypes[i] = (Class<?>) ((ParameterizedType)gentype).getActualTypeArguments()[0];
+			    if (gentype instanceof ParameterizedType) {
+			        genericTypes[i] = (Class<?>) ((ParameterizedType)gentype).getActualTypeArguments()[0];
+			    } else {
+			        genericTypes[i] = null;
+			    }
 			} else {
 			    genericTypes[i] = null;
 			}
