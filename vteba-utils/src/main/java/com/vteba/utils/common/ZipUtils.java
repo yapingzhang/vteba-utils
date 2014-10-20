@@ -4,9 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.zip.Deflater;
+import java.util.zip.DeflaterInputStream;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -304,7 +304,7 @@ public class ZipUtils {
 	 * @param os
 	 *            输出流，压缩结果
 	 */
-	public static OutputStream zlibStream(byte[] data) {
+	public static ByteArrayOutputStream zlibStream(byte[] data) {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		DeflaterOutputStream dos = new DeflaterOutputStream(os);
 
@@ -329,7 +329,7 @@ public class ZipUtils {
 	 * @param os
 	 *            输出流，压缩结果
 	 */
-	public static OutputStream zlibStream(String data) {
+	public static ByteArrayOutputStream zlibStream(String data) {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		DeflaterOutputStream dos = new DeflaterOutputStream(os);
 		byte[] dataByte = data.getBytes(Char.UTF8);
@@ -343,6 +343,34 @@ public class ZipUtils {
 			IOUtils.closeQuietly(dos);
 		}
 		return os;
+	}
+	
+	/**
+	 * 压缩输入流，并返回压缩后的字节数组
+	 * @param inputStream 带压缩的输入流
+	 * @return 被压缩后的字节数组
+	 */
+	public byte[] zlib(InputStream inputStream) {
+		DeflaterInputStream deflaterInputStream = new DeflaterInputStream(inputStream);
+		byte[] result = copyStream(deflaterInputStream, 0);
+		return result;
+	}
+	
+	/**
+	 * 压缩输入流，并返回压缩后的字符串。是ISO-8859-1编码的。异构的系统，socket通信的字节编码就是ISO-8859-1.
+	 * @param inputStream 带压缩的输入流
+	 * @return 被压缩后的字符串
+	 */
+	public String zlibs(InputStream inputStream) {
+		DeflaterInputStream deflaterInputStream = new DeflaterInputStream(inputStream);
+		try {
+			return IOUtils.toString(deflaterInputStream, "ISO-8859-1");
+		} catch (IOException e) {
+			LOGGER.error("zlibs字节数组拷贝出错。", e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(deflaterInputStream);
+		}
+		return null;
 	}
 	
 	/**
@@ -537,6 +565,19 @@ public class ZipUtils {
 	 * @return 解压后的数据
 	 */
 	public static String unzlibs(InputStream is, int header) {
+		byte[] destBytes = copyStream(is, header);
+		// 解压缩
+		String json = unzlibs(destBytes);
+		return json;
+	}
+
+	/**
+	 * 拷贝输入流到数组。可以使用IOUtils中的方法代替
+	 * @param is 待拷贝的数据
+	 * @param header 头长度
+	 * @return 字节数组
+	 */
+	private static byte[] copyStream(InputStream is, int header) {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		byte[] buffer = new byte[4096];
 		int l = 0;
@@ -552,6 +593,7 @@ public class ZipUtils {
 		} finally {
 			IOUtils.closeQuietly(byteArrayOutputStream);
 		}
+		
 		int sourceLength = sourceBytes.length;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("返回的字节数大小=[{}]", sourceLength);
@@ -559,9 +601,7 @@ public class ZipUtils {
 		// 数组拷贝，去掉长度大小
 		byte[] destBytes = new byte[sourceLength - header];
 		System.arraycopy(sourceBytes, header, destBytes, 0, sourceLength - header);
-		// 解压缩
-		String json = unzlibs(destBytes);
-		return json;
+		return destBytes;
 	}
 	
 	public static void main(String[] args) {
