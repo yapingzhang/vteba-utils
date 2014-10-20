@@ -593,15 +593,18 @@ public class ZipUtils {
 		} finally {
 			IOUtils.closeQuietly(byteArrayOutputStream);
 		}
-		
-		int sourceLength = sourceBytes.length;
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("返回的字节数大小=[{}]", sourceLength);
+		if (header >= 1) {// 有报文头长度，才拷贝
+			int sourceLength = sourceBytes.length;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("返回的字节数大小=[{}]", sourceLength);
+			}
+			// 数组拷贝，去掉长度大小
+			byte[] destBytes = new byte[sourceLength - header];
+			System.arraycopy(sourceBytes, header, destBytes, 0, sourceLength - header);
+			return destBytes;
+		} else {
+			return sourceBytes;
 		}
-		// 数组拷贝，去掉长度大小
-		byte[] destBytes = new byte[sourceLength - header];
-		System.arraycopy(sourceBytes, header, destBytes, 0, sourceLength - header);
-		return destBytes;
 	}
 	
 	public static void main(String[] args) {
