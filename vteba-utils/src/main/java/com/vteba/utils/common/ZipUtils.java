@@ -530,6 +530,40 @@ public class ZipUtils {
 		return output;
 	}
 	
+	/**
+	 * 解压输入流，去掉相应的头长度
+	 * @param is 带解压的数据
+	 * @param header 头长度
+	 * @return 解压后的数据
+	 */
+	public static String unzlibs(InputStream is, int header) {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		byte[] buffer = new byte[4096];
+		int l = 0;
+		byte[] sourceBytes = null;
+		try {
+			for (;(l = is.read(buffer)) > -1;) {
+				byteArrayOutputStream.write(buffer, 0, l);
+			}
+			sourceBytes = byteArrayOutputStream.toByteArray();
+		} catch (IOException e) {
+			LOGGER.error("读取输入流错误。", e.getMessage());
+			return null;
+		} finally {
+			IOUtils.closeQuietly(byteArrayOutputStream);
+		}
+		int sourceLength = sourceBytes.length;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("返回的字节数大小=[{}]", sourceLength);
+		}
+		// 数组拷贝，去掉长度大小
+		byte[] destBytes = new byte[sourceLength - header];
+		System.arraycopy(sourceBytes, header, destBytes, 0, sourceLength - header);
+		// 解压缩
+		String json = unzlibs(destBytes);
+		return json;
+	}
+	
 	public static void main(String[] args) {
 		// string--> byte--> string
 		String data = "yinlei尹雷";
