@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
@@ -227,22 +228,21 @@ public class ZipUtils {
 	 *            待压缩数据
 	 * @return byte[] 压缩后的数据
 	 */
-	public static String zlibString(byte[] data) {
+	public static String zlibs(byte[] data) {
 		String output = null;
-
 		Deflater compresser = new Deflater();
-
+		byte[] dataByte = data;
 		compresser.reset();
-		compresser.setInput(data);
+		compresser.setInput(dataByte);
 		compresser.finish();
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(data.length);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(dataByte.length);
 		try {
 			byte[] buf = new byte[1024];
 			while (!compresser.finished()) {
 				int i = compresser.deflate(buf);
 				bos.write(buf, 0, i);
 			}
-			output = bos.toString("UTF-8");
+			output = bos.toString("ISO-8859-1");
 		} catch (Exception e) {
 			LOGGER.error("zlib压缩数据异常。", e.getMessage());
 		} finally {
@@ -259,36 +259,11 @@ public class ZipUtils {
 	 *            待压缩数据
 	 * @return byte[] 压缩后的数据
 	 */
-	public static byte[] zlibByte(String data) {
+	public static byte[] zlib(String data) {
 		byte[] dataByte = data.getBytes(Char.UTF8);
 		return zlib(dataByte);
 	}
 	
-	/**
-	 * zlib压缩数据
-	 * 
-	 * @param data
-	 *            待压缩数据
-	 * 
-	 * @param os
-	 *            输出流
-	 */
-	public static OutputStream zlibs(byte[] data) {
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		DeflaterOutputStream dos = new DeflaterOutputStream(os);
-
-		try {
-			dos.write(data, 0, data.length);
-			dos.finish();
-			dos.flush();
-		} catch (IOException e) {
-			LOGGER.error("zlib压缩数据异常。", e.getMessage());
-		} finally {
-			IOUtils.closeQuietly(dos);
-		}
-		return os;
-	}
-
 	/**
 	 * zlib压缩数据
 	 * 
@@ -310,7 +285,7 @@ public class ZipUtils {
 				int i = compresser.deflate(buf);
 				bos.write(buf, 0, i);
 			}
-			output = bos.toString("UTF-8");
+			output = bos.toString("ISO-8859-1");
 		} catch (Exception e) {
 			LOGGER.error("zlib压缩数据异常。", e.getMessage());
 		} finally {
@@ -318,6 +293,56 @@ public class ZipUtils {
 		}
 		compresser.end();
 		return output;
+	}
+	
+	/**
+	 * zlib压缩数据
+	 * 
+	 * @param data
+	 *            待压缩数据
+	 * 
+	 * @param os
+	 *            输出流，压缩结果
+	 */
+	public static OutputStream zlibStream(byte[] data) {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		DeflaterOutputStream dos = new DeflaterOutputStream(os);
+
+		try {
+			dos.write(data, 0, data.length);
+			dos.finish();
+			dos.flush();
+		} catch (IOException e) {
+			LOGGER.error("zlib压缩数据异常。", e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(dos);
+		}
+		return os;
+	}
+
+	/**
+	 * zlib压缩数据
+	 * 
+	 * @param data
+	 *            待压缩数据
+	 * 
+	 * @param os
+	 *            输出流，压缩结果
+	 */
+	public static OutputStream zlibStream(String data) {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		DeflaterOutputStream dos = new DeflaterOutputStream(os);
+		byte[] dataByte = data.getBytes(Char.UTF8);
+		try {
+			dos.write(dataByte, 0, dataByte.length);
+			dos.finish();
+			dos.flush();
+		} catch (IOException e) {
+			LOGGER.error("zlib压缩数据异常。", e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(dos);
+		}
+		return os;
 	}
 	
 	/**
@@ -353,6 +378,101 @@ public class ZipUtils {
 	}
 
 	/**
+	 * zlib解压缩字节数组
+	 * 
+	 * @param data
+	 *            待解压缩的数据
+	 * @return string 解压缩后的数据
+	 */
+	public static String unzlibs(byte[] data) {
+		String output = null;
+
+		Inflater decompresser = new Inflater();
+		decompresser.reset();
+		decompresser.setInput(data);
+
+		ByteArrayOutputStream o = new ByteArrayOutputStream(data.length);
+		try {
+			byte[] buf = new byte[1024];
+			while (!decompresser.finished()) {
+				int i = decompresser.inflate(buf);
+				o.write(buf, 0, i);
+			}
+			output = o.toString("UTF-8");
+		} catch (Exception e) {
+			LOGGER.error("zlib解压数据异常。", e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(o);
+		}
+		decompresser.end();
+		return output;
+	}
+	
+	/**
+	 * zlib解压缩字节数组
+	 * 
+	 * @param data
+	 *            待解压缩的数据
+	 * @return byte[] 解压缩后的数据
+	 */
+	public static byte[] unzlib(String data) {
+		byte[] output = new byte[0];
+
+		byte[] dataByte = data.getBytes(Char.ISO88591);// 被压缩后的编码是ISO-8859-1的
+		Inflater decompresser = new Inflater();
+		decompresser.reset();
+		decompresser.setInput(dataByte);
+
+		ByteArrayOutputStream o = new ByteArrayOutputStream(dataByte.length);
+		try {
+			byte[] buf = new byte[1024];
+			while (!decompresser.finished()) {
+				int i = decompresser.inflate(buf);
+				o.write(buf, 0, i);
+			}
+			output = o.toByteArray();
+		} catch (Exception e) {
+			LOGGER.error("zlib解压数据异常。", e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(o);
+		}
+		decompresser.end();
+		return output;
+	}
+	
+	/**
+	 * zlib解压缩字节数组
+	 * 
+	 * @param data
+	 *            待解压缩的数据
+	 * @return String 解压缩后的数据
+	 */
+	public static String unzlibs(String data) {
+		String output = null;
+
+		byte[] dataByte = data.getBytes(Char.ISO88591);// 被压缩后的编码是ISO-8859-1的
+		Inflater decompresser = new Inflater();	
+		decompresser.reset();
+		decompresser.setInput(dataByte);
+
+		ByteArrayOutputStream o = new ByteArrayOutputStream(dataByte.length);
+		try {
+			byte[] buf = new byte[1024];
+			while (!decompresser.finished()) {
+				int i = decompresser.inflate(buf);
+				o.write(buf, 0, i);
+			}
+			output = o.toString("UTF-8");
+		} catch (Exception e) {
+			LOGGER.error("zlib解压数据异常。", e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(o);
+		}
+		decompresser.end();
+		return output;
+	}
+	
+	/**
 	 * zlib解压数据流
 	 * 
 	 * @param is
@@ -379,5 +499,71 @@ public class ZipUtils {
 			IOUtils.closeQuietly(iis);
 		}
 		return output;
+	}
+	
+	/**
+	 * zlib解压数据流
+	 * 
+	 * @param is
+	 *            输入流，待解压的数据
+	 * @return string 解压缩后的数据
+	 */
+	public static String unzlibs(InputStream is) {
+		String output = null;
+		InflaterInputStream iis = new InflaterInputStream(is);
+		ByteArrayOutputStream o = new ByteArrayOutputStream(1024);
+		try {
+			int i = 0;
+			byte[] buf = new byte[1024];
+
+			while ((i = iis.read(buf, 0, i)) > 0) {
+				o.write(buf, 0, i);
+			}
+			output = o.toString("UTF-8");
+			o.flush();
+		} catch (IOException e) {
+			LOGGER.error("zlib解压数据异常。", e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(o);
+			IOUtils.closeQuietly(iis);
+		}
+		return output;
+	}
+	
+	public static void main(String[] args) {
+		// string--> byte--> string
+		String data = "yinlei尹雷";
+		byte[] bytes = zlib(data);
+		System.out.println(Arrays.toString(bytes));
+		data = unzlibs(bytes);
+		System.out.println("string--> byte--> string " + data);
+		
+		// byte --> byte -->string
+		byte[] dataByte = data.getBytes(Char.UTF8);
+		data = unzlibs(zlib(dataByte));
+		System.out.println("byte --> byte --> string " + data);
+		
+		// byte --> byte -->byte
+		byte[] unByte = unzlib(zlib(dataByte));
+		System.out.println("byte --> byte --> byte " + new String(unByte, Char.UTF8));
+		
+		// string --> string --> string
+		data = zlibs(data);
+		System.out.println(Arrays.toString(data.getBytes(Char.ISO88591)));
+		data = unzlibs(data);
+		System.out.println("string --> string --> string " + data);
+		
+		// string --> string --> byte
+		data = zlibs(data);
+		System.out.println(Arrays.toString(data.getBytes(Char.ISO88591)));
+		byte[] datas = unzlib(data);
+		System.out.println("string --> string --> byte " + new String(datas, Char.UTF8));
+		
+		// byte --> string --> byte
+		data = "yinlei尹雷";
+		String data2 = zlibs(data.getBytes(Char.UTF8));
+		System.out.println(Arrays.toString(data2.getBytes(Char.ISO88591)));
+		byte[] datas2 = unzlib(data2);
+		System.out.println("byte --> string --> byte " + new String(datas2, Char.UTF8));
 	}
 }
