@@ -128,12 +128,4 @@ public class CaseUtils {
         return StringUtils.capitalize(s);
     }
 
-    public static void main(String[] aa) {
-    	long dd2 = System.currentTimeMillis();
-    	for (int i = 0; i < 1000000; i++) {
-    		underCase("articleIdDesc");
-    	}
-    	System.out.println("别人：" + underCase("articleIDdDesc") + (System.currentTimeMillis() - dd2));
-    }
-    
 }
