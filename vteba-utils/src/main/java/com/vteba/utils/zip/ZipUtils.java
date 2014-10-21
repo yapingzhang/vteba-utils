@@ -1,4 +1,4 @@
-package com.vteba.utils.common;
+package com.vteba.utils.zip;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
