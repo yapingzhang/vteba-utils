@@ -20,6 +20,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vteba.utils.charstr.ByteUtils;
 import com.vteba.utils.charstr.Char;
 
 /**
@@ -582,9 +583,30 @@ public class ZipUtils {
 		byte[] buffer = new byte[4096];
 		int l = 0;
 		byte[] sourceBytes = null;
+		int total = 0;// 总的字节长度
+		int length = 0;// 已经接收的字节长度
 		try {
 			for (;(l = is.read(buffer)) > -1;) {
-				byteArrayOutputStream.write(buffer, 0, l);
+				length += l;
+				if (total == 0) {// 处理头
+					byte[] len = new byte[header];
+					System.arraycopy(buffer, 0, len, 0, header);
+					total = ByteUtils.toInt(len);
+					// 第一次就把头去掉了，避免后面的大字节拷贝
+					byteArrayOutputStream.write(buffer, header, l - header);
+				} else {
+					if (length <= total) {// 中间
+						byteArrayOutputStream.write(buffer, 0, l);
+					} else {// 尾部
+						int remain = total - (length - l) + header;
+						if (remain > 0) {
+							byte[] tail = new byte[remain];
+							System.arraycopy(buffer, 0, tail, 0, remain);
+							byteArrayOutputStream.write(tail, 0, remain);
+						}
+						break;
+					}
+				}
 			}
 			sourceBytes = byteArrayOutputStream.toByteArray();
 		} catch (IOException e) {
@@ -593,18 +615,19 @@ public class ZipUtils {
 		} finally {
 			IOUtils.closeQuietly(byteArrayOutputStream);
 		}
-		if (header >= 1) {// 有报文头长度，才拷贝
-			int sourceLength = sourceBytes.length;
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("返回的字节数大小=[{}]", sourceLength);
-			}
-			// 数组拷贝，去掉长度大小
-			byte[] destBytes = new byte[sourceLength - header];
-			System.arraycopy(sourceBytes, header, destBytes, 0, sourceLength - header);
-			return destBytes;
-		} else {
-			return sourceBytes;
-		}
+//		if (header >= 1) {// 有报文头长度，才拷贝
+//			int sourceLength = sourceBytes.length;
+//			if (LOGGER.isDebugEnabled()) {
+//				LOGGER.debug("返回的字节数大小=[{}]", sourceLength);
+//			}
+//			// 数组拷贝，去掉长度大小
+//			byte[] destBytes = new byte[sourceLength - header];
+//			System.arraycopy(sourceBytes, header, destBytes, 0, sourceLength - header);
+//			return destBytes;
+//		} else {
+//			return sourceBytes;
+//		}
+		return sourceBytes;
 	}
 	
 	public static void main(String[] args) {
