@@ -161,7 +161,7 @@ public final class CryptUtils {
     }
 
     /**
-     * 将字节数组转换为Hex String
+     * 将字节数组转换为Hex String。这个是自行实现的，不易被外部所知。其实可以使用Hex中的方法替换。
      * @param bytes 要转换的字节数组
      * @return 转换后的String
      * @author yinlei
