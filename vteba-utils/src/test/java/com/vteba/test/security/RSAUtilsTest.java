@@ -62,6 +62,7 @@ public class RSAUtilsTest {
 		String encrypts = RSAUtils.encrypts(data, publicKey);
 		System.err.println("加密s:" + encrypts);
 
+		byte[] encryptByte = RSAUtils.encrypt(data, publicKey.getEncoded());
 		
 		// 解密
 		PrivateKey privateKey = (PrivateKey) map.get(RSAUtils.PRIVATE_KEY);
@@ -71,5 +72,8 @@ public class RSAUtilsTest {
 
 		String decrypts = RSAUtils.decrypts(encrypts, privateKey);
 		System.out.println("解密s：" + decrypts);
+		
+		String result = RSAUtils.decrypts(encryptByte, privateKey.getEncoded());
+		System.out.println("解密byte：" + result);
 	}
 }
