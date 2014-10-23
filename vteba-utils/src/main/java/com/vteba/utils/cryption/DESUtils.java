@@ -201,29 +201,4 @@ public class DESUtils {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public static void main(String[] args) {
-		String str = "root";
-		String pass = "3416763";
-		String enstr = getEncrypt(str);
-		String enpass = getEncrypt(pass);
-		System.out.println(enstr);
-		System.out.println(enpass);
-		System.out.println(getDecrypt(enstr));
-		System.out.println(getDecrypt(enpass));
-		
-		enstr = aesEncrypt(str.getBytes());
-		enpass = aesEncrypt(pass.getBytes());
-		System.out.println(enstr);
-		System.out.println(enpass);
-		System.out.println(aesDecrypt(enstr));
-		System.out.println(aesDecrypt(enpass));
-		
-		enstr = desedeEncrypt(str.getBytes());
-		enpass = desedeEncrypt(pass.getBytes());
-		System.out.println(enstr);
-		System.out.println(enpass);
-		System.out.println(desedeDecrypt(enstr));
-		System.out.println(desedeDecrypt(enpass));
-	}
 }
