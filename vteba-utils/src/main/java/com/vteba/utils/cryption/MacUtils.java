@@ -50,7 +50,7 @@ public class MacUtils {
 	 * @return byte[] 密钥
 	 * 
 	 * */
-	public static byte[] initHmacSHAKey() throws Exception {
+	public static byte[] initHmacSHA1Key() throws Exception {
 		// 初始化KeyGenerator
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA1");
 		// 产生密钥
@@ -68,7 +68,7 @@ public class MacUtils {
 	 *            密钥
 	 * @return byte[] 消息摘要
 	 * */
-	public static byte[] encodeHmacSHA(byte[] data, byte[] key)
+	public static byte[] encodeHmacSHA1(byte[] data, byte[] key)
 			throws Exception {
 		// 还原密钥，因为密钥是以byte形式为消息传递算法所拥有
 		SecretKey secretKey = new SecretKeySpec(key, "HmacSHA1");
@@ -392,9 +392,9 @@ public class MacUtils {
 		System.out.println();
 
 		// 初始化密钥
-		byte[] key3 = MacUtils.initHmacSHAKey();
+		byte[] key3 = MacUtils.initHmacSHA1Key();
 		// 获取摘要信息
-		byte[] data3 = MacUtils.encodeHmacSHA(str.getBytes(), key3);
+		byte[] data3 = MacUtils.encodeHmacSHA1(str.getBytes(), key3);
 		System.out.println("HmacSHA1的密钥:" + key3.toString());
 		System.out.println("HmacSHA1算法摘要：" + data3.toString());
 		System.out.println();
