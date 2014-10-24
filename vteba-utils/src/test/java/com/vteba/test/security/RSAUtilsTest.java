@@ -76,4 +76,18 @@ public class RSAUtilsTest {
 		String result = RSAUtils.decrypts(encryptByte, privateKey.getEncoded());
 		System.out.println("解密byte：" + result);
 	}
+	
+	@Test
+	public void test4() {
+		String inputStr = "abc";
+		byte[] data = inputStr.getBytes();
+
+		// 构建密钥
+		Map<String, Key> keyMap = RSAUtils.initKey();
+		PrivateKey privateKey = (PrivateKey) keyMap.get("RSAPrivateKey");
+		byte[] encoded = RSAUtils.encode(data, privateKey.getEncoded());
+		PublicKey publicKey = (PublicKey) keyMap.get("RSAPublicKey");
+		byte[] result = RSAUtils.decode(encoded, publicKey.getEncoded());
+		System.out.println("私钥加密公钥解密：" + new String(result));
+	}
 }

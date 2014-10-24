@@ -15,6 +15,8 @@ import java.util.Map;
 
 import javax.crypto.Cipher;
 
+import com.vteba.utils.charstr.Char;
+
 /**
  * 公钥加密算法，非对称加密。可用于数据加密和解密，也可用于数据签名。安全性和DSA大体相当。
  * RSA的安全性是基于极其困难的大整数的分解（两个素数的乘积）。
@@ -320,40 +322,19 @@ public class RSAUtils {
 	/**
 	 * 使用公钥对数据进行RSA加密
 	 * @param data 待加密的数据
-	 * @param publicKey base64编码的公钥
+	 * @param publicKey 公钥
 	 * @return 加密后的数据
 	 */
-	public static byte[] encrypt(byte[] data, String publicKey) {
+	public static byte[] encrypt(byte[] data, byte[] publicKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
 			Cipher cipher = Cipher.getInstance(RSA);
-			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(CryptUtils.base64Decode(publicKey));// 支持公钥，pkcs8支持私钥
+			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);// x509支持公钥，pkcs8支持私钥
 			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			PublicKey pubKey = keyFactory.generatePublic(keySpec);
 			cipher.init(Cipher.ENCRYPT_MODE, pubKey, secureRandom);
 			byte[] encrypt = cipher.doFinal(data);
 			return encrypt;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	/**
-	 * 使用公钥对数据进行RSA加密，返回base64编码的字符
-	 * @param data 待加密的数据
-	 * @param publicKey base64编码的公钥
-	 * @return 加密后的数据，base64编码
-	 */
-	public static String encrypts(byte[] data, String publicKey) {
-		try {
-			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(RSA);
-			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(CryptUtils.base64Decode(publicKey));// 支持公钥，pkcs8支持私钥
-			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
-			PublicKey pubKey = keyFactory.generatePublic(keySpec);
-			cipher.init(Cipher.ENCRYPT_MODE, pubKey, secureRandom);
-			byte[] encrypt = cipher.doFinal(data);
-			return CryptUtils.base64Encode(encrypt);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -378,42 +359,14 @@ public class RSAUtils {
 	}
 	
 	/**
-	 * 使用公钥对数据进行RSA加密，返回base64编码的字符
-	 * @param data 待加密的数据
-	 * @param publicKey 公钥
-	 * @return 加密后的数据，base64编码
-	 */
-	public static String encrypts(byte[] data, PublicKey publicKey) {
-		try {
-			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(RSA);
-			cipher.init(Cipher.ENCRYPT_MODE, publicKey, secureRandom);
-			byte[] encrypt = cipher.doFinal(data);
-			return CryptUtils.base64Encode(encrypt);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	/**
 	 * 使用公钥对数据进行RSA加密
 	 * @param data 待加密的数据
-	 * @param publicKey 公钥
-	 * @return 加密后的数据
+	 * @param publicKey base64编码的公钥
+	 * @return 加密后的数据，base64编码
 	 */
-	public static byte[] encrypt(byte[] data, byte[] publicKey) {
-		try {
-			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(RSA);
-			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);// x509支持公钥
-			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
-			PublicKey pubKey = keyFactory.generatePublic(keySpec);
-			cipher.init(Cipher.ENCRYPT_MODE, pubKey, secureRandom);
-			byte[] encrypt = cipher.doFinal(data);
-			return encrypt;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	public static byte[] encrypt(byte[] data, String publicKey) {
+		byte[] pubKey = CryptUtils.base64Decode(publicKey);
+		return encrypt(data, pubKey);
 	}
 	
 	/**
@@ -438,77 +391,32 @@ public class RSAUtils {
 	}
 	
 	/**
-	 * 使用私钥对数据进行RSA解密
-	 * @param data 待解密的数据
-	 * @param privateKey 私钥
-	 * @return 解密后的数据
+	 * 使用公钥对数据进行RSA加密，返回base64编码的字符
+	 * @param data 待加密的数据
+	 * @param publicKey 公钥
+	 * @return 加密后的数据，base64编码
 	 */
-	public static byte[] decrypt(byte[] data, PrivateKey privateKey) {
+	public static String encrypts(byte[] data, PublicKey publicKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
 			Cipher cipher = Cipher.getInstance(RSA);
-			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
-			byte[] decrypt = cipher.doFinal(data);
-			return decrypt;
+			cipher.init(Cipher.ENCRYPT_MODE, publicKey, secureRandom);
+			byte[] encrypt = cipher.doFinal(data);
+			return CryptUtils.base64Encode(encrypt);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
 	/**
-	 * 使用私钥对数据进行RSA解密
-	 * @param data 待解密的数据
-	 * @param privateKey 私钥
-	 * @return 解密后的数据，UTF-8编码
+	 * 使用公钥对数据进行RSA加密，返回base64编码的字符
+	 * @param data 待加密的数据
+	 * @param publicKey base64编码的公钥
+	 * @return 加密后的数据，base64编码
 	 */
-	public static String decrypts(byte[] data, PrivateKey privateKey) {
-		try {
-			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(RSA);
-			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
-			byte[] decrypt = cipher.doFinal(data);
-			return new String(decrypt, "UTF-8");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	/**
-	 * 使用私钥对数据进行RSA解密
-	 * @param data 待解密的数据，base64编码的字符串
-	 * @param privateKey 私钥
-	 * @return 解密后的数据
-	 */
-	public static byte[] decrypt(String data, PrivateKey privateKey) {
-		try {
-			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(RSA);
-			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
-			byte[] encrypt = CryptUtils.base64Decode(data);
-			byte[] decrypt = cipher.doFinal(encrypt);
-			return decrypt;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	/**
-	 * 使用私钥对数据进行RSA解密
-	 * @param data 待解密的数据，base64加密的字符串
-	 * @param privateKey 私钥
-	 * @return 解密后的数据，UTF-8编码
-	 */
-	public static String decrypts(String data, PrivateKey privateKey) {
-		try {
-			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(RSA);
-			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
-			byte[] encrypt = CryptUtils.base64Decode(data);
-			byte[] decrypt = cipher.doFinal(encrypt);
-			return new String(decrypt, "UTF-8");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	public static String encrypts(byte[] data, String publicKey) {
+		byte[] pubKey = CryptUtils.base64Decode(publicKey);
+		return encrypts(data, pubKey);
 	}
 	
 	/**
@@ -536,6 +444,35 @@ public class RSAUtils {
 	 * 使用私钥对数据进行RSA解密
 	 * @param data 待解密的数据
 	 * @param privateKey 私钥
+	 * @return 解密后的数据
+	 */
+	public static byte[] decrypt(byte[] data, PrivateKey privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(data);
+			return decrypt;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据
+	 * @param privateKey 私钥，base64编码
+	 * @return 解密后的数据
+	 */
+	public static byte[] decrypt(byte[] data, String privateKey) {
+		byte[] priKey = CryptUtils.base64Decode(privateKey);
+		return decrypt(data, priKey);
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据
+	 * @param privateKey 私钥
 	 * @return 解密后的数据，UTF-8编码
 	 */
 	public static String decrypts(byte[] data, byte[] privateKey) {
@@ -551,5 +488,517 @@ public class RSAUtils {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据
+	 * @param privateKey 私钥
+	 * @return 解密后的数据，UTF-8编码
+	 */
+	public static String decrypts(byte[] data, PrivateKey privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(data);
+			return new String(decrypt, "UTF-8");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据
+	 * @param privateKey 私钥，base64编码
+	 * @return 解密后的数据，UTF-8编码
+	 */
+	public static String decrypts(byte[] data, String privateKey) {
+		byte[] priKey = CryptUtils.base64Decode(privateKey);
+		return decrypts(data, priKey);
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据，base64编码
+	 * @param privateKey 私钥
+	 * @return 解密后的数据
+	 */
+	public static byte[] decrypt(String data, byte[] privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey);// pkcs8支持私钥
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			PrivateKey priKey = keyFactory.generatePrivate(keySpec);
+			cipher.init(Cipher.DECRYPT_MODE, priKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(CryptUtils.base64Decode(data));
+			return decrypt;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据，base64编码
+	 * @param privateKey 私钥
+	 * @return 解密后的数据
+	 */
+	public static byte[] decrypt(String data, PrivateKey privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
+			byte[] encrypt = CryptUtils.base64Decode(data);
+			byte[] decrypt = cipher.doFinal(encrypt);
+			return decrypt;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据，base64编码
+	 * @param privateKey 私钥，base64编码
+	 * @return 解密后的数据
+	 */
+	public static byte[] decrypt(String data, String privateKey) {
+		byte[] priKey = CryptUtils.base64Decode(privateKey);
+		return decrypt(data, priKey);
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据，base64编码
+	 * @param privateKey 私钥
+	 * @return 解密后的数据，UTF-8编码
+	 */
+	public static String decrypts(String data, byte[] privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey);// pkcs8支持私钥
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			PrivateKey priKey = keyFactory.generatePrivate(keySpec);
+			cipher.init(Cipher.DECRYPT_MODE, priKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(CryptUtils.base64Decode(data));
+			return new String(decrypt, "UTF-8");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据，base64编码
+	 * @param privateKey 私钥
+	 * @return 解密后的数据，UTF-8编码
+	 */
+	public static String decrypts(String data, PrivateKey privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
+			byte[] encrypt = CryptUtils.base64Decode(data);
+			byte[] decrypt = cipher.doFinal(encrypt);
+			return new String(decrypt, "UTF-8");
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行RSA解密
+	 * @param data 待解密的数据，base64编码
+	 * @param privateKey 私钥，base64编码
+	 * @return 解密后的数据，UTF-8编码
+	 */
+	public static String decrypts(String data, String privateKey) {
+		byte[] priKey = CryptUtils.base64Decode(privateKey);
+		return decrypts(data, priKey);
+	}
+	
+	/**
+	 * 使用私钥对数据进行rsa加密
+	 * @param data 待加密的数据
+	 * @param privateKey 私钥
+	 * @return 加密后的数据
+	 */
+	public static byte[] encode(byte[] data, byte[] privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			PrivateKey priKey = keyFactory.generatePrivate(keySpec);
+			cipher.init(Cipher.ENCRYPT_MODE, priKey, secureRandom);
+			byte[] encrypt = cipher.doFinal(data);
+			return encrypt;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行rsa加密
+	 * @param data 待加密的数据
+	 * @param privateKey 私钥
+	 * @return 加密后的数据
+	 */
+	public static byte[] encode(byte[] data, PrivateKey privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.ENCRYPT_MODE, privateKey, secureRandom);
+			byte[] encrypt = cipher.doFinal(data);
+			return encrypt;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行rsa加密
+	 * @param data 待加密的数据
+	 * @param privateKey 私钥，base64编码的字符串
+	 * @return 加密后的数据
+	 */
+	public static byte[] encode(byte[] data, String privateKey) {
+		byte[] priKey = CryptUtils.base64Decode(privateKey);
+		return encode(data, priKey);
+	}
+	
+//	/**
+//	 * 使用私钥对数据进行rsa加密
+//	 * @param data 待加密的数据
+//	 * @param privateKey 私钥
+//	 * @return 加密后的数据
+//	 */
+//	public static byte[] encode(String data, byte[] privateKey) {
+//		try {
+//			SecureRandom secureRandom = new SecureRandom();
+//			Cipher cipher = Cipher.getInstance(RSA);
+//			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey);
+//			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+//			PrivateKey priKey = keyFactory.generatePrivate(keySpec);
+//			cipher.init(Cipher.ENCRYPT_MODE, priKey, secureRandom);
+//			byte[] encrypt = cipher.doFinal(data.getBytes());
+//			return encrypt;
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
+//	
+//	/**
+//	 * 使用私钥对数据进行rsa加密
+//	 * @param data 待加密的数据
+//	 * @param privateKey 私钥
+//	 * @return 加密后的数据
+//	 */
+//	public static byte[] encode(String data, PrivateKey privateKey) {
+//		try {
+//			SecureRandom secureRandom = new SecureRandom();
+//			Cipher cipher = Cipher.getInstance(RSA);
+//			cipher.init(Cipher.ENCRYPT_MODE, privateKey, secureRandom);
+//			byte[] encrypt = cipher.doFinal(data.getBytes());
+//			return encrypt;
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
+//	
+//	/**
+//	 * 使用私钥对数据进行rsa加密
+//	 * @param data 待加密的数据
+//	 * @param privateKey 私钥，base64编码的字符串
+//	 * @return 加密后的数据
+//	 */
+//	public static byte[] encode(String data, String privateKey) {
+//		byte[] priKey = CryptUtils.base64Decode(privateKey);
+//		return encode(data, priKey);
+//	}
+//	
+//	/**
+//	 * 使用私钥对数据进行rsa加密
+//	 * @param data 待加密的数据
+//	 * @param privateKey 私钥
+//	 * @return 加密后的数据，base64编码
+//	 */
+//	public static String encodes(String data, byte[] privateKey) {
+//		try {
+//			SecureRandom secureRandom = new SecureRandom();
+//			Cipher cipher = Cipher.getInstance(RSA);
+//			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey);
+//			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+//			PrivateKey priKey = keyFactory.generatePrivate(keySpec);
+//			cipher.init(Cipher.ENCRYPT_MODE, priKey, secureRandom);
+//			byte[] encrypt = cipher.doFinal(data.getBytes());
+//			return CryptUtils.base64Encode(encrypt);
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
+//	
+//	/**
+//	 * 使用私钥对数据进行rsa加密
+//	 * @param data 待加密的数据
+//	 * @param privateKey 私钥
+//	 * @return 加密后的数据，base64编码
+//	 */
+//	public static String encodes(String data, PrivateKey privateKey) {
+//		try {
+//			SecureRandom secureRandom = new SecureRandom();
+//			Cipher cipher = Cipher.getInstance(RSA);
+//			cipher.init(Cipher.ENCRYPT_MODE, privateKey, secureRandom);
+//			byte[] encrypt = cipher.doFinal(data.getBytes());
+//			return CryptUtils.base64Encode(encrypt);
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
+//	
+//	/**
+//	 * 使用私钥对数据进行rsa加密
+//	 * @param data 待加密的数据
+//	 * @param privateKey 私钥，base64编码的
+//	 * @return 加密后的数据，base64编码
+//	 */
+//	public static String encodes(String data, String privateKey) {
+//		byte[] priKey = CryptUtils.base64Decode(privateKey);
+//		return encodes(data, priKey);
+//	}
+	
+	/**
+	 * 使用私钥对数据进行rsa加密
+	 * @param data 待加密的数据
+	 * @param privateKey 私钥
+	 * @return 加密后的数据，base64编码
+	 */
+	public static String encodes(byte[] data, byte[] privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			PrivateKey priKey = keyFactory.generatePrivate(keySpec);
+			cipher.init(Cipher.ENCRYPT_MODE, priKey, secureRandom);
+			byte[] encrypt = cipher.doFinal(data);
+			return CryptUtils.base64Encode(encrypt);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行rsa加密
+	 * @param data 待加密的数据
+	 * @param privateKey 私钥
+	 * @return 加密后的数据，base64编码
+	 */
+	public static String encodes(byte[] data, PrivateKey privateKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.ENCRYPT_MODE, privateKey, secureRandom);
+			byte[] encrypt = cipher.doFinal(data);
+			return CryptUtils.base64Encode(encrypt);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用私钥对数据进行rsa加密
+	 * @param data 待加密的数据
+	 * @param privateKey 私钥，base64编码的
+	 * @return 加密后的数据，base64编码
+	 */
+	public static String encodes(byte[] data, String privateKey) {
+		byte[] priKey = CryptUtils.base64Decode(privateKey);
+		return encodes(data, priKey);
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据
+	 * @param publicKey 公钥
+	 * @return 解密后的数据
+	 */
+	public static byte[] decode(byte[] data, byte[] publicKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			PublicKey pubKey = keyFactory.generatePublic(keySpec);
+			cipher.init(Cipher.DECRYPT_MODE, pubKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(data);
+			return decrypt;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据
+	 * @param publicKey 公钥
+	 * @return 解密后的数据
+	 */
+	public static byte[] decode(byte[] data, PublicKey publicKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.DECRYPT_MODE, publicKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(data);
+			return decrypt;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据
+	 * @param publicKey 公钥，base64编码的
+	 * @return 解密后的数据
+	 */
+	public static byte[] decode(byte[] data, String publicKey) {
+		byte[] pubKey = CryptUtils.base64Decode(publicKey);
+		return decode(data, pubKey);
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据
+	 * @param publicKey 公钥
+	 * @return 解密后的数据，base64编码
+	 */
+	public static String decodes(byte[] data, byte[] publicKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			PublicKey pubKey = keyFactory.generatePublic(keySpec);
+			cipher.init(Cipher.DECRYPT_MODE, pubKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(data);
+			return CryptUtils.base64Encode(decrypt);// base64还是UTF-8，以后再确定吧
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据
+	 * @param publicKey 公钥
+	 * @return 解密后的数据，base64编码
+	 */
+	public static String decodes(byte[] data, PublicKey publicKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.DECRYPT_MODE, publicKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(data);
+			return CryptUtils.base64Encode(decrypt);// base64还是UTF-8，以后再确定吧
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据
+	 * @param publicKey 公钥，base64编码的
+	 * @return 解密后的数据，base64编码
+	 */
+	public static String decodes(byte[] data, String publicKey) {
+		byte[] pubKey = CryptUtils.base64Decode(publicKey);
+		return decodes(data, pubKey);// base64还是UTF-8，以后再确定吧
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据，base64编码的
+	 * @param publicKey 公钥
+	 * @return 解密后的数据
+	 */
+	public static byte[] decode(String data, byte[] publicKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			PublicKey pubKey = keyFactory.generatePublic(keySpec);
+			cipher.init(Cipher.DECRYPT_MODE, pubKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(CryptUtils.base64Decode(data));
+			return decrypt;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据，base64编码的
+	 * @param publicKey 公钥
+	 * @return 解密后的数据
+	 */
+	public static byte[] decode(String data, PublicKey publicKey) {
+		try {
+			SecureRandom secureRandom = new SecureRandom();
+			Cipher cipher = Cipher.getInstance(RSA);
+			cipher.init(Cipher.DECRYPT_MODE, publicKey, secureRandom);
+			byte[] decrypt = cipher.doFinal(CryptUtils.base64Decode(data));
+			return decrypt;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据，base64编码的
+	 * @param publicKey 公钥，base64编码的
+	 * @return 解密后的数据
+	 */
+	public static byte[] decode(String data, String publicKey) {
+		byte[] pubKey = CryptUtils.base64Decode(publicKey);
+		return decode(data, pubKey);
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据，base64编码的
+	 * @param publicKey 公钥
+	 * @return 解密后的数据，UTF-8编码
+	 */
+	public static String decodes(String data, byte[] publicKey) {
+		return new String(decode(data, publicKey), Char.UTF8);
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据，base64编码的
+	 * @param publicKey 公钥
+	 * @return 解密后的数据，UTF-8编码
+	 */
+	public static String decodes(String data, PublicKey publicKey) {
+		return new String(decode(data, publicKey), Char.UTF8);
+	}
+	
+	/**
+	 * 使用公钥对数据进行rsa解密
+	 * @param data 待解密的数据，base64编码的
+	 * @param publicKey 公钥，base64编码的
+	 * @return 解密后的数据，UTF-8编码
+	 */
+	public static String decodes(String data, String publicKey) {
+		byte[] pubKey = CryptUtils.base64Decode(publicKey);
+		return decodes(data, pubKey);
 	}
 }
