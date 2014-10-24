@@ -17,13 +17,11 @@ import javax.crypto.spec.SecretKeySpec;
  * @date 2012-12-2
  */
 public class MACUtils {
-	// /////////////////////////HmacMD5///////////////////////////////
 	/**
 	 * 初始化HmacMD5的密钥
 	 * 
 	 * @return byte[] 密钥
-	 * 
-	 * */
+	 */
 	public static byte[] initHmacMD5Key() throws Exception {
 		// 初始化KeyGenerator
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacMD5");
@@ -41,7 +39,7 @@ public class MACUtils {
 	 * @param key
 	 *            密钥
 	 * @return byte[] 消息摘要
-	 * */
+	 */
 	public static byte[] encodeHmacMD5(byte[] data, byte[] key)
 			throws Exception {
 		// 还原密钥，因为密钥是以byte形式为消息传递算法所拥有
@@ -54,13 +52,11 @@ public class MACUtils {
 		return mac.doFinal(data);
 	}
 
-	// /////////////////////////////HmacSHA1//////////////////////////////////
 	/**
 	 * 初始化HmacSHA1的密钥
 	 * 
 	 * @return byte[] 密钥
-	 * 
-	 * */
+	 */
 	public static byte[] initHmacSHA1Key() throws Exception {
 		// 初始化KeyGenerator
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA1");
@@ -78,7 +74,7 @@ public class MACUtils {
 	 * @param key
 	 *            密钥
 	 * @return byte[] 消息摘要
-	 * */
+	 */
 	public static byte[] encodeHmacSHA1(byte[] data, byte[] key)
 			throws Exception {
 		// 还原密钥，因为密钥是以byte形式为消息传递算法所拥有
@@ -91,13 +87,11 @@ public class MACUtils {
 		return mac.doFinal(data);
 	}
 
-	// /////////////////////////////HmacSHA256//////////////////////////////////
 	/**
 	 * 初始化HmacSHA256的密钥
 	 * 
 	 * @return byte[] 密钥
-	 * 
-	 * */
+	 */
 	public static byte[] initHmacSHA256Key() throws Exception {
 		// 初始化KeyGenerator
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
@@ -115,7 +109,7 @@ public class MACUtils {
 	 * @param key
 	 *            密钥
 	 * @return byte[] 消息摘要
-	 * */
+	 */
 	public static byte[] encodeHmacSHA256(byte[] data, byte[] key)
 			throws Exception {
 		// 还原密钥，因为密钥是以byte形式为消息传递算法所拥有
@@ -128,13 +122,11 @@ public class MACUtils {
 		return mac.doFinal(data);
 	}
 
-	// /////////////////////////////HmacSHA384//////////////////////////////////
 	/**
 	 * 初始化HmacSHA384的密钥
 	 * 
 	 * @return byte[] 密钥
-	 * 
-	 * */
+	 */
 	public static byte[] initHmacSHA384Key() throws Exception {
 		// 初始化KeyGenerator
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA384");
@@ -152,7 +144,7 @@ public class MACUtils {
 	 * @param key
 	 *            密钥
 	 * @return byte[] 消息摘要
-	 * */
+	 */
 	public static byte[] encodeHmacSHA384(byte[] data, byte[] key)
 			throws Exception {
 		// 还原密钥，因为密钥是以byte形式为消息传递算法所拥有
@@ -165,13 +157,11 @@ public class MACUtils {
 		return mac.doFinal(data);
 	}
 
-	// /////////////////////////////HmacSHA512//////////////////////////////////
 	/**
 	 * 初始化HmacSHA512的密钥
 	 * 
 	 * @return byte[] 密钥
-	 * 
-	 * */
+	 */
 	public static byte[] initHmacSHA512Key() throws Exception {
 		// 初始化KeyGenerator
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA512");
@@ -189,7 +179,7 @@ public class MACUtils {
 	 * @param key
 	 *            密钥
 	 * @return byte[] 消息摘要
-	 * */
+	 */
 	public static byte[] encodeHmacSHA512(byte[] data, byte[] key)
 			throws Exception {
 		// 还原密钥，因为密钥是以byte形式为消息传递算法所拥有
