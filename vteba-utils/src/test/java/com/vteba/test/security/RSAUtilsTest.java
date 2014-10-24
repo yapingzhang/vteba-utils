@@ -79,7 +79,7 @@ public class RSAUtilsTest {
 	
 	@Test
 	public void test4() {
-		String inputStr = "abc";
+		String inputStr = "abcaaaaaaadddddddddddddddddddddddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 		byte[] data = inputStr.getBytes();
 
 		// 构建密钥
