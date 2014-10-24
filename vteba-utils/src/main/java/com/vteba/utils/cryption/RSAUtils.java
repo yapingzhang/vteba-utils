@@ -29,9 +29,7 @@ public class RSAUtils {
 	/** 签名算法使用SHA512withRSA方式 */
 	public static final String SIGN_ALGORITHM = "SHA512withRSA";
 
-	/**
-	 * 默认种子
-	 */
+	/**默认种子*/
 	private static final String DEFAULT_SEED = "0f22507a10bbddd07asd45542@##@#@d8a3082122966e3";
 
 	public static final String PUBLIC_KEY = "RSAPublicKey";
@@ -630,7 +628,8 @@ public class RSAUtils {
 	public static byte[] encode(byte[] data, byte[] privateKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(RSA);
+			//算法名/工作模式/填充模式
+			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey);
 			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			PrivateKey priKey = keyFactory.generatePrivate(keySpec);
@@ -830,7 +829,7 @@ public class RSAUtils {
 	public static byte[] decode(byte[] data, byte[] publicKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(RSA);
+			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
 			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			PublicKey pubKey = keyFactory.generatePublic(keySpec);

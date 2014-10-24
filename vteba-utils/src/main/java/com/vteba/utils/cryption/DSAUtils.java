@@ -19,8 +19,8 @@ import java.util.Map;
  * DSA是Schnorr和ElGamal签名算法的变种，被美国NIST作为DSS(Digital Signature Standard)。
  * DSA是基于整数有限域离散对数难题的，其安全性与RSA相比差不多。
  * 在DSA数字签名和认证中，发送者使用自己的私钥对文件或消息进行签名，接受者收到消息后使用发送者的公钥
- * 来验证签名的真实性。DSA只是一种算法，和RSA不同之处在于它不能用作加密和解密，也不能进行密钥交换，
- * 只用于签名，它比RSA要快很多
+ * 来验证签名的真实性。DSA和RSA不同之处在于它不能用作加密和解密，也不能进行密钥交换，
+ * 只用于签名，它比RSA要快很多。
  * @author yinlei
  * @date 2012-12
  */
