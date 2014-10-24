@@ -23,7 +23,7 @@ import javax.crypto.Cipher;
  */
 public class RSAUtils {
 	/** key算法使用RSA方式 */
-	public static final String DSA = "DSA";
+	public static final String RSA = "RSA";
 	/** 签名算法使用SHA512withRSA方式 */
 	public static final String SIGN_ALGORITHM = "SHA512withRSA";
 
@@ -32,37 +32,38 @@ public class RSAUtils {
 	 */
 	private static final String DEFAULT_SEED = "0f22507a10bbddd07asd45542@##@#@d8a3082122966e3";
 
-	public static final String PUBLIC_KEY = "DSAPublicKey";
-	public static final String PRIVATE_KEY = "DSAPrivateKey";
+	public static final String PUBLIC_KEY = "RSAPublicKey";
+	public static final String PRIVATE_KEY = "RSAPrivateKey";
 	
-	private static final Map<String, Key> keyMap = new HashMap<String, Key>();
-
 	/**
-	 * 用私钥对信息生成数字签名
+	 * 用私钥对信息，生成数字签名
 	 * 
-	 * @param data
-	 *            加密数据，要签名的数据
-	 * @param privateKey
-	 *            私钥
-	 * @return 数字签名
+	 * @param data 要签名的数据
+	 * @param privateKey 私钥，base64编码的
+	 * @return 数字签名，base64编码的
 	 */
-	public static String sign(byte[] data, String privateKey) {
+	public static String signs(byte[] data, String privateKey) {
 		// 解密由base64编码的私钥
 		byte[] keyBytes = CryptUtils.base64Decode(privateKey);
+		return signs(data, keyBytes);
+	}
+	
+	/**
+	 * 用私钥对信息，生成数字签名
+	 * 
+	 * @param data 要签名的数据
+	 * @param privateKey 私钥
+	 * @return 数字签名，base64编码的
+	 */
+	public static String signs(byte[] data, byte[] privateKey) {
 		// 构造PKCS8EncodedKeySpec对象
-		PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(keyBytes);// 支持私钥
-
+		PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(privateKey);//支持私钥，而X509EncodedKeySpec支持公钥
 		try {
-			// KEY_ALGORITHM 指定的加密算法
-			KeyFactory keyFactory = KeyFactory.getInstance(DSA);
-			// 取私钥匙对象
+			// 获得加密算法key工厂
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			// 获取私钥匙对象，从提供的私钥字符串中
 			PrivateKey priKey = keyFactory.generatePrivate(pkcs8KeySpec);
-
-			// 用私钥对信息生成数字签名
-			Signature signature = Signature.getInstance(SIGN_ALGORITHM);
-			signature.initSign(priKey);
-			signature.update(data);
-			return CryptUtils.base64Encode(signature.sign());
+			return signs(data, priKey);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -71,13 +72,11 @@ public class RSAUtils {
 	/**
 	 * 用私钥对信息生成数字签名
 	 * 
-	 * @param data
-	 *            加密数据，要签名的数据
-	 * @param privateKey
-	 *            私钥
-	 * @return 数字签名
+	 * @param data 要签名的数据
+	 * @param privateKey 私钥
+	 * @return 数字签名，base64编码的字符串
 	 */
-	public static String sign(byte[] data, PrivateKey privateKey) {
+	public static String signs(byte[] data, PrivateKey privateKey) {
 		try {
 			// 用私钥对信息生成数字签名
 			Signature signature = Signature.getInstance(SIGN_ALGORITHM);
@@ -90,115 +89,170 @@ public class RSAUtils {
 	}
 	
 	/**
+	 * 用私钥对信息，生成数字签名
+	 * 
+	 * @param data 要签名的数据
+	 * @param privateKey 私钥，base64编码的
+	 * @return 数字签名，字节数组
+	 */
+	public static byte[] sign(byte[] data, String privateKey) {
+		// 解密由base64编码的私钥
+		byte[] keyBytes = CryptUtils.base64Decode(privateKey);
+		return sign(data, keyBytes);
+	}
+	
+	/**
+	 * 用私钥对信息，生成数字签名
+	 * 
+	 * @param data 要签名的数据
+	 * @param privateKey 私钥
+	 * @return 数字签名，字节数组
+	 */
+	public static byte[] sign(byte[] data, byte[] privateKey) {
+		// 构造PKCS8EncodedKeySpec对象
+		PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(privateKey);//支持私钥，而X509EncodedKeySpec支持公钥
+		try {
+			// 获得加密算法key工厂
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			// 获取私钥匙对象，从提供的私钥字符串中
+			PrivateKey priKey = keyFactory.generatePrivate(pkcs8KeySpec);
+
+			return sign(data, priKey);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
 	 * 用私钥对信息生成数字签名
 	 * 
-	 * @param data
-	 *            加密数据，要签名的数据
-	 * @param privateKey
-	 *            私钥
-	 * @return 数字签名
+	 * @param data 要签名的数据
+	 * @param privateKey 私钥
+	 * @return 数字签名，字节数组
 	 */
-	public static String sign(byte[] data) {
+	public static byte[] sign(byte[] data, PrivateKey privateKey) {
 		try {
-			// 取私钥匙对象
-			PrivateKey priKey = (PrivateKey) keyMap.get(PRIVATE_KEY);
-
 			// 用私钥对信息生成数字签名
 			Signature signature = Signature.getInstance(SIGN_ALGORITHM);
-			signature.initSign(priKey);
+			signature.initSign(privateKey);
 			signature.update(data);
-			return CryptUtils.base64Encode(signature.sign());
+			return signature.sign();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
 	/**
-	 * 根据公钥和数字签名校验加密数据
+	 * 根据公钥和数字签名校验加密数据是否被篡改
 	 * 
-	 * @param data
-	 *            加密数据
-	 * @param publicKey
-	 *            公钥
-	 * @param sign
-	 *            数字签名
-	 * 
+	 * @param data 被签名地数据（明文，原始数据）
+	 * @param publicKey 公钥，base64编码的字符串
+	 * @param sign 数字签名，base64编码的字符串
 	 * @return 校验成功返回true 失败返回false
-	 * 
 	 */
 	public static boolean verify(byte[] data, String publicKey, String sign) {
 		// 解密由base64编码的公钥
 		byte[] keyBytes = CryptUtils.base64Decode(publicKey);
 		// 构造X509EncodedKeySpec对象
-		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);// 这种方式可以将密钥以字符串的形式放在文件中，支持公钥
-
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);// 这种方式可以将密钥以字符串的形式放在文件中，//支持公钥，而PKCS8EncodedKeySpec支持私钥
 		try {
 			// KEY_ALGORITHM 指定的加密算法
-			KeyFactory keyFactory = KeyFactory.getInstance(DSA);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			// 取公钥匙对象
 			PublicKey pubKey = keyFactory.generatePublic(keySpec);
-			
-			Signature signature = Signature.getInstance(SIGN_ALGORITHM);
-			signature.initVerify(pubKey);
-			signature.update(data);
-			
-			// 验证签名是否正常
-			return signature.verify(CryptUtils.base64Decode(sign));
+			return verify(data, pubKey, sign);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
 	/**
-	 * 根据公钥和数字签名校验加密数据
+	 * 根据公钥和数字签名校验加密数据是否被篡改
 	 * 
-	 * @param data
-	 *            加密数据
-	 * @param publicKey
-	 *            公钥
-	 * @param sign
-	 *            数字签名
-	 * 
+	 * @param data 被签名地数据（明文，原始数据）
+	 * @param publicKey 公钥
+	 * @param sign 数字签名，base64编码的字符串
 	 * @return 校验成功返回true 失败返回false
+	 */
+	public static boolean verify(byte[] data, byte[] publicKey, String sign) {
+		byte[] signBytes = CryptUtils.base64Decode(sign);
+		return verify(data, publicKey, signBytes);
+	}
+	
+	/**
+	 * 根据公钥和数字签名校验加密数据是否是被篡改
 	 * 
+	 * @param data 被签名的数据（明文，原始数据）
+	 * @param publicKey DSA公钥
+	 * @param sign 数字签名，base64编码的字符串
+	 * @return 校验成功返回true 失败返回false
 	 */
 	public static boolean verify(byte[] data, PublicKey publicKey, String sign) {
+		byte[] signBytes = CryptUtils.base64Decode(sign);
+		return verify(data, publicKey, signBytes);
+	}
+	
+	/**
+	 * 根据公钥和数字签名校验加密数据是否被篡改
+	 * 
+	 * @param data 被签名地数据（明文，原始数据）
+	 * @param publicKey 公钥，base64编码的字符串
+	 * @param sign 数字签名，base64编码的字符串
+	 * @return 校验成功返回true 失败返回false
+	 */
+	public static boolean verify(byte[] data, String publicKey, byte[] sign) {
+		// 解密由base64编码的公钥
+		byte[] keyBytes = CryptUtils.base64Decode(publicKey);
+		// 构造X509EncodedKeySpec对象
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);//支持公钥，而PKCS8EncodedKeySpec支持私钥
+		try {
+			// KEY_ALGORITHM 指定的加密算法
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			// 取公钥匙对象
+			PublicKey pubKey = keyFactory.generatePublic(keySpec);
+			return verify(data, pubKey, sign);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 根据公钥和数字签名校验加密数据是否是被篡改
+	 * 
+	 * @param data 被签名的数据（明文，原始数据）
+	 * @param publicKey DSA公钥
+	 * @param sign 数字签名
+	 * @return 校验成功返回true 失败返回false
+	 */
+	public static boolean verify(byte[] data, PublicKey publicKey, byte[] sign) {
 		try {
 			Signature signature = Signature.getInstance(SIGN_ALGORITHM);
 			signature.initVerify(publicKey);
 			signature.update(data);
-			
 			// 验证签名是否正常
-			return signature.verify(CryptUtils.base64Decode(sign));
+			return signature.verify(sign);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
 	/**
-	 * 根据公钥和数字签名校验加密数据
+	 * 根据公钥和数字签名校验加密数据是否被篡改
 	 * 
-	 * @param data
-	 *            加密数据
-	 * @param publicKey
-	 *            公钥
-	 * @param sign
-	 *            数字签名
-	 * 
+	 * @param data 被签名地数据（明文，原始数据）
+	 * @param publicKey 公钥
+	 * @param sign 数字签名
 	 * @return 校验成功返回true 失败返回false
-	 * 
 	 */
-	public static boolean verify(byte[] data, String sign) {
+	public static boolean verify(byte[] data, byte[] publicKey, byte[] sign) {
+		// 构造X509EncodedKeySpec对象
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);//支持公钥，而PKCS8EncodedKeySpec支持私钥
 		try {
+			// KEY_ALGORITHM 指定的加密算法
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			// 取公钥匙对象
-			PublicKey pubKey = (PublicKey) keyMap.get(PUBLIC_KEY);
-			
-			Signature signature = Signature.getInstance(SIGN_ALGORITHM);
-			signature.initVerify(pubKey);
-			signature.update(data);
-			
-			// 验证签名是否正常
-			return signature.verify(CryptUtils.base64Decode(sign));
+			PublicKey pubKey = keyFactory.generatePublic(keySpec);
+			return verify(data, pubKey, sign);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -212,7 +266,7 @@ public class RSAUtils {
 	 */
 	public static Map<String, Key> initKey(String seed) {
 		try {
-			KeyPairGenerator keygen = KeyPairGenerator.getInstance(DSA);
+			KeyPairGenerator keygen = KeyPairGenerator.getInstance(RSA);
 			// 初始化随机产生器
 			SecureRandom secureRandom = new SecureRandom();
 			secureRandom.setSeed(seed.getBytes());
@@ -226,8 +280,6 @@ public class RSAUtils {
 			Map<String, Key> map = new HashMap<String, Key>(2);
 			map.put(PUBLIC_KEY, publicKey);
 			map.put(PRIVATE_KEY, privateKey);
-			keyMap.put(PUBLIC_KEY, publicKey);
-			keyMap.put(PRIVATE_KEY, privateKey);
 			return map;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -274,9 +326,9 @@ public class RSAUtils {
 	public static byte[] encrypt(byte[] data, String publicKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(CryptUtils.base64Decode(publicKey));// 支持公钥，pkcs8支持私钥
-			KeyFactory keyFactory = KeyFactory.getInstance(DSA);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			PublicKey pubKey = keyFactory.generatePublic(keySpec);
 			cipher.init(Cipher.ENCRYPT_MODE, pubKey, secureRandom);
 			byte[] encrypt = cipher.doFinal(data);
@@ -295,9 +347,9 @@ public class RSAUtils {
 	public static String encrypts(byte[] data, String publicKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(CryptUtils.base64Decode(publicKey));// 支持公钥，pkcs8支持私钥
-			KeyFactory keyFactory = KeyFactory.getInstance(DSA);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			PublicKey pubKey = keyFactory.generatePublic(keySpec);
 			cipher.init(Cipher.ENCRYPT_MODE, pubKey, secureRandom);
 			byte[] encrypt = cipher.doFinal(data);
@@ -316,7 +368,7 @@ public class RSAUtils {
 	public static byte[] encrypt(byte[] data, PublicKey publicKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			cipher.init(Cipher.ENCRYPT_MODE, publicKey, secureRandom);
 			byte[] encrypt = cipher.doFinal(data);
 			return encrypt;
@@ -334,7 +386,7 @@ public class RSAUtils {
 	public static String encrypts(byte[] data, PublicKey publicKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			cipher.init(Cipher.ENCRYPT_MODE, publicKey, secureRandom);
 			byte[] encrypt = cipher.doFinal(data);
 			return CryptUtils.base64Encode(encrypt);
@@ -352,9 +404,9 @@ public class RSAUtils {
 	public static byte[] encrypt(byte[] data, byte[] publicKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);// x509支持公钥
-			KeyFactory keyFactory = KeyFactory.getInstance(DSA);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			PublicKey pubKey = keyFactory.generatePublic(keySpec);
 			cipher.init(Cipher.ENCRYPT_MODE, pubKey, secureRandom);
 			byte[] encrypt = cipher.doFinal(data);
@@ -373,9 +425,9 @@ public class RSAUtils {
 	public static String encrypts(byte[] data, byte[] publicKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
-			KeyFactory keyFactory = KeyFactory.getInstance(DSA);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			PublicKey pubKey = keyFactory.generatePublic(keySpec);
 			cipher.init(Cipher.ENCRYPT_MODE, pubKey, secureRandom);
 			byte[] encrypt = cipher.doFinal(data);
@@ -394,7 +446,7 @@ public class RSAUtils {
 	public static byte[] decrypt(byte[] data, PrivateKey privateKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
 			byte[] decrypt = cipher.doFinal(data);
 			return decrypt;
@@ -412,7 +464,7 @@ public class RSAUtils {
 	public static String decrypts(byte[] data, PrivateKey privateKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
 			byte[] decrypt = cipher.doFinal(data);
 			return new String(decrypt, "UTF-8");
@@ -430,7 +482,7 @@ public class RSAUtils {
 	public static byte[] decrypt(String data, PrivateKey privateKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
 			byte[] encrypt = CryptUtils.base64Decode(data);
 			byte[] decrypt = cipher.doFinal(encrypt);
@@ -449,7 +501,7 @@ public class RSAUtils {
 	public static String decrypts(String data, PrivateKey privateKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey, secureRandom);
 			byte[] encrypt = CryptUtils.base64Decode(data);
 			byte[] decrypt = cipher.doFinal(encrypt);
@@ -468,9 +520,9 @@ public class RSAUtils {
 	public static byte[] decrypt(byte[] data, byte[] privateKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey);// pkcs8支持私钥
-			KeyFactory keyFactory = KeyFactory.getInstance(DSA);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			PrivateKey priKey = keyFactory.generatePrivate(keySpec);
 			cipher.init(Cipher.DECRYPT_MODE, priKey, secureRandom);
 			byte[] decrypt = cipher.doFinal(data);
@@ -489,9 +541,9 @@ public class RSAUtils {
 	public static String decrypts(byte[] data, byte[] privateKey) {
 		try {
 			SecureRandom secureRandom = new SecureRandom();
-			Cipher cipher = Cipher.getInstance(DSA);
+			Cipher cipher = Cipher.getInstance(RSA);
 			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKey);// pkcs8支持私钥
-			KeyFactory keyFactory = KeyFactory.getInstance(DSA);
+			KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 			PrivateKey priKey = keyFactory.generatePrivate(keySpec);
 			cipher.init(Cipher.DECRYPT_MODE, priKey, secureRandom);
 			byte[] decrypt = cipher.doFinal(data);

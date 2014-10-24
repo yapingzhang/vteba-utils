@@ -27,7 +27,7 @@ public class RSAUtilsTest {
 		System.err.println("私钥:\r" + privateKey);
 
 		// 产生签名
-		String sign = RSAUtils.sign(data, privateKey);
+		String sign = RSAUtils.signs(data, privateKey);
 		System.err.println("签名:\r" + sign);
 
 		// 验证签名
@@ -46,11 +46,11 @@ public class RSAUtilsTest {
 		Map<String, Key> map = RSAUtils.initKey();
 
 		// 产生签名
-		String sign = RSAUtils.sign(data);
+		String sign = RSAUtils.signs(data, (PrivateKey)map.get("RSAPrivateKey"));
 		System.err.println("签名2:\r" + sign);
 
 		// 验证签名
-		boolean status = RSAUtils.verify(data, sign);
+		boolean status = RSAUtils.verify(data, (PublicKey)map.get("RSAPublicKey"), sign);
 		System.err.println("状态2:\r" + status);
 		Assert.assertTrue(status);
 		

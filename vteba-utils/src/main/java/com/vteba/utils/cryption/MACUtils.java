@@ -5,7 +5,7 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-public class MacUtils {
+public class MACUtils {
 	// /////////////////////////HmacMD5///////////////////////////////
 	/**
 	 * 初始化HmacMD5的密钥
@@ -373,9 +373,9 @@ public class MacUtils {
 	public static void main(String[] args) throws Exception {
 		String str = "HmacMD5消息摘要";
 		// 初始化密钥
-		byte[] key1 = MacUtils.initHmacMD5Key();
+		byte[] key1 = MACUtils.initHmacMD5Key();
 		// 获取摘要信息
-		byte[] data1 = MacUtils.encodeHmacMD5(str.getBytes(), key1);
+		byte[] data1 = MACUtils.encodeHmacMD5(str.getBytes(), key1);
 
 		System.out.println("原文：" + str);
 		System.out.println();
@@ -384,33 +384,33 @@ public class MacUtils {
 		System.out.println();
 
 		// 初始化密钥
-		byte[] key2 = MacUtils.initHmacSHA256Key();
+		byte[] key2 = MACUtils.initHmacSHA256Key();
 		// 获取摘要信息
-		byte[] data2 = MacUtils.encodeHmacSHA256(str.getBytes(), key2);
+		byte[] data2 = MACUtils.encodeHmacSHA256(str.getBytes(), key2);
 		System.out.println("HmacSHA256的密钥:" + key2.toString());
 		System.out.println("HmacSHA256算法摘要：" + data2.toString());
 		System.out.println();
 
 		// 初始化密钥
-		byte[] key3 = MacUtils.initHmacSHA1Key();
+		byte[] key3 = MACUtils.initHmacSHA1Key();
 		// 获取摘要信息
-		byte[] data3 = MacUtils.encodeHmacSHA1(str.getBytes(), key3);
+		byte[] data3 = MACUtils.encodeHmacSHA1(str.getBytes(), key3);
 		System.out.println("HmacSHA1的密钥:" + key3.toString());
 		System.out.println("HmacSHA1算法摘要：" + data3.toString());
 		System.out.println();
 
 		// 初始化密钥
-		byte[] key4 = MacUtils.initHmacSHA384Key();
+		byte[] key4 = MACUtils.initHmacSHA384Key();
 		// 获取摘要信息
-		byte[] data4 = MacUtils.encodeHmacSHA384(str.getBytes(), key4);
+		byte[] data4 = MACUtils.encodeHmacSHA384(str.getBytes(), key4);
 		System.out.println("HmacSHA384的密钥:" + key4.toString());
 		System.out.println("HmacSHA384算法摘要：" + data4.toString());
 		System.out.println();
 
 		// 初始化密钥
-		byte[] key5 = MacUtils.initHmacSHA512Key();
+		byte[] key5 = MACUtils.initHmacSHA512Key();
 		// 获取摘要信息
-		byte[] data5 = MacUtils.encodeHmacSHA512(str.getBytes(), key5);
+		byte[] data5 = MACUtils.encodeHmacSHA512(str.getBytes(), key5);
 		System.out.println("HmacSHA512的密钥:" + key5.toString());
 		System.out.println("HmacSHA512算法摘要：" + data5.toString());
 		System.out.println();
