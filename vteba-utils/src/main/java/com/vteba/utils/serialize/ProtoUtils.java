@@ -61,10 +61,11 @@ public class ProtoUtils {
         }
         
         int destLength = byteLength - length - 4;
-        byte[] destBytes = new byte[destLength];
-        System.arraycopy(bytes, length + 4, destBytes, 0, destLength);
-        
-        Protos.mergeFrom(destBytes, entity);
+//        byte[] destBytes = new byte[destLength];
+//        System.arraycopy(bytes, length + 4, destBytes, 0, destLength);
+//        
+//        Protos.mergeFrom(destBytes, entity);
+        Protos.mergeFrom(bytes, length + 4, destLength, entity);
         return entity;
     }
 

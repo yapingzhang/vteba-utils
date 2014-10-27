@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.vteba.utils.json.Node;
 import com.vteba.utils.serialize.ProtoUtils;
+import com.vteba.utils.serialize.Protos;
 
 public class FileTest {
 
@@ -41,7 +42,7 @@ public class FileTest {
 		File file = new File("c:\\aa.txt");
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		
-		byte[] nodeBytes = ProtoUtils.toBytes(node);
+		byte[] nodeBytes = Protos.toByteArray(node);//ProtoUtils.toBytes(node);
 		fileOutputStream.write(nodeBytes);
 		fileOutputStream.flush();
 		fileOutputStream.close();
@@ -49,7 +50,8 @@ public class FileTest {
 		
 		d = System.currentTimeMillis();
 		FileInputStream fileInputStream = new FileInputStream(file);
-		node = ProtoUtils.fromBytes(IOUtils.toByteArray(fileInputStream));
+		//node = ProtoUtils.fromBytes(IOUtils.toByteArray(fileInputStream));
+		Protos.mergeFrom(fileInputStream, node);
 		System.out.println(System.currentTimeMillis() - d);
 	}
 
