@@ -3,8 +3,11 @@ package com.vteba.utils.cryption;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
@@ -60,5 +63,25 @@ public class CertUtils {
 			return false;
 		}
 		return true;
+	}
+	
+	public static void sign() {
+		Certificate certificate = null;
+		try {
+			KeyStore keyStore = KeyStore.getInstance("JKS");
+			certificate = keyStore.getCertificate("alias");
+			try {
+				certificate.getEncoded();// 证书的二进制形式
+			} catch (CertificateEncodingException e) {
+				
+			}
+			certificate.getPublicKey();//证书中包含的公钥
+			certificate.getType();// 证书类型，jks等
+			certificate.toString();// 证书的string形式，重载了Object的方法
+		} catch (KeyStoreException e) {
+			
+		}
+		
+		
 	}
 }

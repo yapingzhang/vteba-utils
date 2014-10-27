@@ -1,11 +1,20 @@
 package com.vteba.test.security;
 
-import java.io.*;
-import java.security.*;
-import java.security.cert.*;
-import java.util.*;
-import java.math.*;
-import sun.security.x509.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.cert.CertificateFactory;
+import java.util.Date;
+
+import sun.security.x509.AlgorithmId;
+import sun.security.x509.CertificateAlgorithmId;
+import sun.security.x509.CertificateIssuerName;
+import sun.security.x509.CertificateSerialNumber;
+import sun.security.x509.CertificateValidity;
+import sun.security.x509.X500Name;
+import sun.security.x509.X509CertImpl;
+import sun.security.x509.X509CertInfo;
 
 public class CertSign {
 	public static void main(String args[]) throws Exception {
@@ -34,7 +43,7 @@ public class CertSign {
 				+ X509CertImpl.INFO);
 		X500Name issuer = (X500Name) cinfol.get(X509CertInfo.SUBJECT + "."
 				+ CertificateIssuerName.DN_NAME);
-
+		
 		// 获取待签发的证书
 		CertificateFactory of = CertificateFactory.getInstance("X.509");
 		FileInputStream in2 = new FileInputStream(args[0]);
