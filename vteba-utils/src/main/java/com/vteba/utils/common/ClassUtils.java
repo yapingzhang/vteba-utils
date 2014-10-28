@@ -196,6 +196,21 @@ public abstract class ClassUtils {
 		}
 	}
 
+	public static Class<?> forName(String name) {
+		Assert.notNull(name, "Name must not be null");
+
+		Class<?> clazz = null;
+		try {
+			clazz = Class.forName(name);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+		if (clazz == null) {
+			throw new RuntimeException("Not found class=[" + name + "]");
+		}
+		return clazz;
+	}
+	
 	/**
 	 * Replacement for {@code Class.forName()} that also returns Class instances
 	 * for primitives (e.g. "int") and array class names (e.g. "String[]").

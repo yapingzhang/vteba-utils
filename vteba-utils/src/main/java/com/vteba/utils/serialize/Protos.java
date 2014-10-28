@@ -18,6 +18,7 @@ import com.dyuproject.protostuff.ProtobufException;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
+import com.vteba.utils.common.ClassUtils;
 
 /**
  * 基于Protostuff（基于Google Protobuf）的序列化工具
@@ -461,6 +462,17 @@ public final class Protos {
 	 * @param clazz 设置该类的schema
 	 */
 	public static void setSchema(Class<?> clazz) {
+		Schema<?> schema = RuntimeSchema.getSchema(clazz);
+		schemaMap.put(clazz, schema);
+	}
+	
+	/**
+	 * Schema第一次获取时，会有一些时间消耗，为提高性能，可以实现将需要的
+	 * schema全部加载好，放入缓存中。
+	 * @param clazz 设置该类的schema
+	 */
+	public static void setSchema(String className) {
+		Class<?> clazz = ClassUtils.forName(className);
 		Schema<?> schema = RuntimeSchema.getSchema(clazz);
 		schemaMap.put(clazz, schema);
 	}
