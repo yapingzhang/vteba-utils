@@ -72,7 +72,7 @@ public class TestUser {
 			ProtoUtils.fromBytes(bytes);
 		}
 		
-		System.out.println("Protos的序列化时间是：" + (System.currentTimeMillis() - d));
+		System.out.println("ProtoUtils的序列化时间是：" + (System.currentTimeMillis() - d));
 		
 		d = System.currentTimeMillis();
 		bytes = Protos.toByteArray(user);
@@ -81,7 +81,7 @@ public class TestUser {
 			TestUser message = new TestUser();
 			Protos.mergeFrom(bytes, message);
 		}
-		System.out.println("ProtoUtils的序列化时间是：" + (System.currentTimeMillis() - d));
+		System.out.println("Protos的序列化时间是：" + (System.currentTimeMillis() - d));
 		
 		d = System.currentTimeMillis();
 		bytes = MarshaUtils.toBytes(user);
