@@ -66,14 +66,7 @@ public class TestUser {
 		int loop = 1000;
 		byte[] bytes = null;
 		long d = System.currentTimeMillis();
-		bytes = ProtoUtils.toBytes(user);
-		for (int i = 0; i < loop; i++) {
-			bytes = ProtoUtils.toBytes(user);
-			ProtoUtils.fromBytes(bytes);
-		}
-		
-		System.out.println("ProtoUtils的序列化时间是：" + (System.currentTimeMillis() - d));
-		
+
 		d = System.currentTimeMillis();
 		bytes = Protos.toByteArray(user);
 		for (int i = 0; i < loop; i++) {
@@ -109,6 +102,24 @@ public class TestUser {
 		}
 		
 		System.out.println("Kryos未注册的序列化时间是：" + (System.currentTimeMillis() -d));
+		
+		d = System.currentTimeMillis();
+		bytes = ProtoBufUtils.toBytes(user);
+		for (int i = 0; i < loop; i++) {
+			bytes = ProtoBufUtils.toBytes(user);
+			ProtoBufUtils.fromBytes(bytes);
+		}
+		
+		System.out.println("简化的ProtoBufUtils的序列化时间是：" + (System.currentTimeMillis() -d));
+		
+		d = System.currentTimeMillis();
+		bytes = ProtoUtils.toBytes(user);
+		for (int i = 0; i < loop; i++) {
+			bytes = ProtoUtils.toBytes(user);
+			ProtoUtils.fromBytes(bytes);
+		}
+		
+		System.out.println("ProtoUtils的序列化时间是：" + (System.currentTimeMillis() - d));
 	}
 }
 
