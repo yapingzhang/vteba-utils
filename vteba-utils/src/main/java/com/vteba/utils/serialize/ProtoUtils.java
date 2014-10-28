@@ -59,16 +59,10 @@ public class ProtoUtils {
         Class<T> clazz = ClassUtils.forName(className);
         // 这个比直接反射性能高
         T entity = AsmUtils.get().invokeConstructor(clazz);//ReflectUtils.instantiate(className);
-//        if (entity == null) {
-//        	return null;
-//        }
         
-        int destLength = byteLength - length - 4;
-//        byte[] destBytes = new byte[destLength];
-//        System.arraycopy(bytes, length + 4, destBytes, 0, destLength);
-//        
-//        Protos.mergeFrom(destBytes, entity);
-        Protos.mergeFrom(bytes, length + 4, destLength, entity);
+        int offset = length + 4;
+        int destLength = byteLength - offset;
+        Protos.mergeFrom(bytes, offset, destLength, entity);
         return entity;
     }
 
