@@ -1,16 +1,18 @@
 package com.vteba.utils.json;
 
 /**
- * JsonRpc 2.0协议，参数格式封装
+ * JsonRpc 2.0协议，参数格式封装，不确定的泛型参数使用Object。
+ * <p>序列化成json是没有问题的，但是从json反序列化回来，就需要使用TypeReference指定泛型参数。
+ * <p>还有一种方式就是将P,R都使用具体的POJO类型重新定义个Json Bean来进行封装。
  * @author yinlei
  * @date 2013-10-28
  */
-public class JsonRpc {
+public class JsonRpc<P, R> {
 	private Integer id;
 	private String jsonrpc = "2.0";// 默认2.0
 	private String method;
-	private Object params;
-	private Object result;
+	private P params;
+	private R result;
 	private Error error;
 	
 	public JsonRpc() {
@@ -23,7 +25,7 @@ public class JsonRpc {
 	 * @param method 调用的方法名
 	 * @param params 调用方法的参数
 	 */
-	public JsonRpc(Integer id, String method, Object params) {
+	public JsonRpc(Integer id, String method, P params) {
 		super();
 		this.id = id;
 		this.method = method;
@@ -35,7 +37,7 @@ public class JsonRpc {
 	 * @param id id
 	 * @param result 调用方法返回的结果
 	 */
-	public JsonRpc(Integer id, Object result) {
+	public JsonRpc(Integer id, R result) {
 		super();
 		this.id = id;
 		this.result = result;
@@ -74,19 +76,29 @@ public class JsonRpc {
 		this.method = method;
 	}
 
-	public Object getParams() {
+	public P getParams() {
 		return params;
 	}
 
-	public void setParams(Object params) {
+	/**
+	 * 设置请求参数，//一般使用POJO，基本类型，可能无法保存类型信息，例如日期会变成字符串//
+	 * <p>序列化成json是没有问题的，但是从json反序列化回来，就需要使用TypeReference指定泛型参数。
+	 * @param params 参数pojo
+	 */
+	public void setParams(P params) {
 		this.params = params;
 	}
 
-	public Object getResult() {
+	public R getResult() {
 		return result;
 	}
 
-	public void setResult(Object result) {
+	/**
+	 * 设置返回结果，//一般使用POJO封装。基本类型，可能无法保存类型信息，例如日期会变成字符串//
+	 * <p>序列化成json是没有问题的，但是从json反序列化回来，就需要使用TypeReference指定泛型参数。
+	 * @param result 调用结果，pojo
+	 */
+	public void setResult(R result) {
 		if (error != null) {
 			throw new RuntimeException("已经设置了error，jsonrpc-2.0中，result和error不能同时出现。");
 		}
