@@ -53,12 +53,12 @@ public class TestUser {
 		long dd = System.currentTimeMillis();
 		json = FastJsonUtils.toJson(user);
 		FastJsonUtils.fromJson(json, TestUser.class);
-		System.out.println(System.currentTimeMillis() - dd);
+		System.out.println("fastjson:" + (System.currentTimeMillis() - dd));
 		
 		dd = System.currentTimeMillis();
 		json = JacksonUtils.get().toJson(user);
 		JacksonUtils.get().fromJson(json, TestUser.class);
-		System.out.println(System.currentTimeMillis() - dd);
+		System.out.println("jackson:" + (System.currentTimeMillis() - dd));
 		
 		ProtoUtils.toBytes(user);
 		AsmUtils.get().createConstructorAccess(TestUser.class);
