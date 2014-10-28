@@ -196,12 +196,13 @@ public abstract class ClassUtils {
 		}
 	}
 
-	public static Class<?> forName(String name) {
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> forName(String name) {
 		Assert.notNull(name, "Name must not be null");
 
-		Class<?> clazz = null;
+		Class<T> clazz = null;
 		try {
-			clazz = Class.forName(name);
+			clazz = (Class<T>) Class.forName(name);
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}

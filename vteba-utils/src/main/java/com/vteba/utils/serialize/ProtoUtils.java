@@ -2,7 +2,8 @@ package com.vteba.utils.serialize;
 
 import com.vteba.utils.charstr.ByteUtils;
 import com.vteba.utils.charstr.Char;
-import com.vteba.utils.reflection.ReflectUtils;
+import com.vteba.utils.common.ClassUtils;
+import com.vteba.utils.reflection.AsmUtils;
 
 /**
  * 基于Protostuff的序列化和反序列化工具。简化版，主要的改进在于，反序列化时，不需要传递对象了。
@@ -55,10 +56,12 @@ public class ProtoUtils {
         System.arraycopy(bytes, 4, nameBytes, 0, length);
         
         String className = new String(nameBytes, Char.UTF8);
-        T entity = ReflectUtils.instantiate(className);
-        if (entity == null) {
-        	return null;
-        }
+        Class<T> clazz = ClassUtils.forName(className);
+        // 这个比直接反射性能高
+        T entity = AsmUtils.get().invokeConstructor(clazz);//ReflectUtils.instantiate(className);
+//        if (entity == null) {
+//        	return null;
+//        }
         
         int destLength = byteLength - length - 4;
 //        byte[] destBytes = new byte[destLength];
