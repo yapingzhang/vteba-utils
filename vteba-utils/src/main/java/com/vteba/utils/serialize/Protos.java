@@ -454,4 +454,14 @@ public final class Protos {
 		}
 		return (Schema<T>) schema;
 	}
+	
+	/**
+	 * Schema第一次获取时，会有一些时间消耗，为提高性能，可以实现将需要的
+	 * schema全部加载好，放入缓存中。
+	 * @param clazz 设置该类的schema
+	 */
+	public static void setSchema(Class<?> clazz) {
+		Schema<?> schema = RuntimeSchema.getSchema(clazz);
+		schemaMap.put(clazz, schema);
+	}
 }
