@@ -6,7 +6,7 @@ import com.vteba.utils.cryption.DESUtils;
 
 public class DESUtilsTest {
 	@Test
-	public static void test() {
+	public void test() {
 		String str = "root";
 		String pass = "3416763";
 		String enstr = DESUtils.getEncrypt(str);
