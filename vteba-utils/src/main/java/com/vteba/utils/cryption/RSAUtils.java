@@ -259,10 +259,9 @@ public class RSAUtils {
 	}
 
 	/**
-	 * 生成密钥
-	 * 
-	 * @param seed 种子
-	 * @return 密钥对象
+	 * 初始化密钥，包括公钥和私钥。使用默认的安全随机数算法SHA1PRNG，key1024长度。
+	 * @param seed 安全随机数种子
+	 * @return 密钥对象Map
 	 */
 	public static Map<String, Key> initKey(String seed) {
 		try {
@@ -273,7 +272,6 @@ public class RSAUtils {
 			keygen.initialize(1024, secureRandom);
 			
 			KeyPair keys = keygen.genKeyPair();
-			
 			PublicKey publicKey = keys.getPublic();
 			PrivateKey privateKey = keys.getPrivate();
 			
@@ -287,8 +285,41 @@ public class RSAUtils {
 	}
 
 	/**
-	 * 默认生成密钥
-	 * 
+	 * 初始化密钥，包括公钥和私钥。key长度1024
+	 * @param secureRandom 安全随机数
+	 * @return 密钥对象Map
+	 */
+	public static Map<String, Key> initKey(SecureRandom secureRandom) {
+		return initKey(secureRandom, 1024);
+	}
+	
+	/**
+	 * 初始化密钥，包括公钥和私钥。
+	 * @param secureRandom 安全随机数
+	 * @param keysize key长度，建议1024
+	 * @return 密钥对象Map
+	 */
+	public static Map<String, Key> initKey(SecureRandom secureRandom, int keysize) {
+		try {
+			KeyPairGenerator keygen = KeyPairGenerator.getInstance(RSA);
+			// 初始化随机产生器
+			keygen.initialize(keysize, secureRandom);
+			
+			KeyPair keys = keygen.genKeyPair();
+			PublicKey publicKey = keys.getPublic();
+			PrivateKey privateKey = keys.getPrivate();
+			
+			Map<String, Key> map = new HashMap<String, Key>(2);
+			map.put(PUBLIC_KEY, publicKey);
+			map.put(PRIVATE_KEY, privateKey);
+			return map;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * 默认生成密钥。key长度1024。使用默认盐值的安全随机数算法SHA1PRNG。
 	 * @return 密钥对象
 	 */
 	public static Map<String, Key> initKey() {
@@ -301,6 +332,7 @@ public class RSAUtils {
 	 * @param keyMap 保存密钥的map
 	 * @return 私钥字符串
 	 */
+	@Deprecated
 	public static String getPrivateKey(Map<String, Key> keyMap) {
 		Key key = keyMap.get(PRIVATE_KEY);
 		return CryptUtils.base64Encode(key.getEncoded());
@@ -312,6 +344,7 @@ public class RSAUtils {
 	 * @param keyMap 保存密钥的map
 	 * @return 公钥字符串
 	 */
+	@Deprecated
 	public static String getPublicKey(Map<String, Key> keyMap) {
 		Key key = keyMap.get(PUBLIC_KEY);
 		return CryptUtils.base64Encode(key.getEncoded());
