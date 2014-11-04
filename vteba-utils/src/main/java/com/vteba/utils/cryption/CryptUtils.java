@@ -11,6 +11,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import com.vteba.utils.charstr.Char;
 import com.vteba.utils.serialize.SerializerUtils;
 
 /**
@@ -47,13 +48,21 @@ public final class CryptUtils {
 	}
 
 	/**
-	 * Base64编码，将字节数组编码为base64的字符串
+	 * Base64编码，将字节数组编码为base64的字符串，UTF-8编码
 	 * @param input 字节数组
 	 */
 	public static String base64Encode(byte[] input) {
-		return new String(Base64.encodeBase64(input));
+		return new String(Base64.encodeBase64(input), Char.UTF8);
 	}
 
+	/**
+	 * Base64编码，将字符串编码为base64的字符串
+	 * @param input 字节数组
+	 */
+	public static String base64Encode(String input) {
+		return new String(Base64.encodeBase64(input.getBytes(Char.UTF8)), Char.UTF8);
+	}
+	
 	/**
 	 * Base64编码, URL安全(将Base64中的URL非法字符如+,/=转为其他字符, 见RFC3548)
 	 */
@@ -62,13 +71,37 @@ public final class CryptUtils {
 	}
 
 	/**
-	 * Base64解码，将base64编码的字符创解码为字节数组
+	 * Base64解码，将base64编码的字符串解码为字节数组
 	 * @param input 要解码的base64字符串
 	 */
 	public static byte[] base64Decode(String input) {
 		return Base64.decodeBase64(input);
 	}
 
+	/**
+	 * Base64解码，将base64编码的字符串解码为字符串，UTF-8编码
+	 * @param input 要解码的base64字符串
+	 */
+	public static String base64Decodes(String input) {
+		return new String(Base64.decodeBase64(input), Char.UTF8);
+	}
+	
+	/**
+	 * Base64解码，将base64编码的字符串解码为字节数组
+	 * @param input 要解码的base64字节数组
+	 */
+	public static byte[] base64Decode(byte[] inputs) {
+		return Base64.decodeBase64(inputs);
+	}
+
+	/**
+	 * Base64解码，将base64编码的字符串解码为字符串，UTF-8编码
+	 * @param input 要解码的base64字节数组
+	 */
+	public static String base64Decodes(byte[] inputs) {
+		return new String(Base64.decodeBase64(inputs), Char.UTF8);
+	}
+	
 	/**
 	 * URL 编码, Encode默认为UTF-8
 	 */
