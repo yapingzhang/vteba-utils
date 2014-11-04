@@ -101,7 +101,9 @@ public final class CryptUtils {
 	 * @param length 要解码的数组长度
 	 */
 	public static byte[] base64Decode(byte[] inputs, int offset, int length) {
-		return Base64.decodeBase64(new String(inputs, offset, length, Char.UTF8));
+		byte[] dest = new byte[length];
+		System.arraycopy(inputs, offset, dest, 0, length);// 是native方法，性能比通过String转换要快10倍以上
+		return Base64.decodeBase64(dest);
 	}
 	
 	/**
@@ -119,7 +121,9 @@ public final class CryptUtils {
 	 * @param length 要解码的数组长度
 	 */
 	public static String base64Decodes(byte[] inputs, int offset, int length) {
-		return new String(Base64.decodeBase64(new String(inputs, offset, length, Char.UTF8)), Char.UTF8);
+		byte[] dest = new byte[length];
+		System.arraycopy(inputs, offset, dest, 0, length);
+		return new String(Base64.decodeBase64(dest), Char.UTF8);
 	}
 	
 	/**
