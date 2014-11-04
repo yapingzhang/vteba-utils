@@ -47,29 +47,38 @@ public class DESUtils {
 	}
 
 	/**
-	 * 获得密钥。这个方法产生的密钥可能跨平台性不好。
-	 * 
-	 * @param secretKey 加密盐salt
+	 * 还原密钥key。
+	 * @param secretKey 密钥key的字符串表示
 	 * @return SecretKey密钥实例
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeyException
-	 * @throws InvalidKeySpecException
 	 */
-	protected static SecretKey generateKey(String secretKey)
-			throws NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException {
-		SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-		DESKeySpec keySpec = new DESKeySpec(secretKey.getBytes());
-		return keyFactory.generateSecret(keySpec);
+	protected static SecretKey generateKey(String secretKey) {
+		SecretKeyFactory keyFactory = null;
+		try {
+			keyFactory = SecretKeyFactory.getInstance("DES");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("没有找到DES算法提供者。", e);
+		}
+		DESKeySpec keySpec = null;
+		try {
+			keySpec = new DESKeySpec(secretKey.getBytes());
+		} catch (InvalidKeyException e) {
+			throw new RuntimeException("非法的字节Key。", e);
+		}
+		SecretKey key = null;
+		try {
+			key = keyFactory.generateSecret(keySpec);
+		} catch (InvalidKeySpecException e) {
+			throw new RuntimeException("非法的key规范。", e);
+		}
+		return key;
 	}
 	
 	/**
-	 * 创建密匙
-	 * 
-	 * @param algorithm
-	 *            加密算法，可用 DES，DESede，AES，Blowfish
+	 * 创建密匙。随机数使用SHA1PRNG。盐值默认。
+	 * @param algorithm 加密算法，可用 DES，DESede，AES，Blowfish
 	 * @return SecretKey 秘密（对称）密钥
 	 */
-	public static SecretKey createSecretKey(String algorithm) {
+	public static SecretKey genKey(String algorithm) {
 		// 声明KeyGenerator对象
 		KeyGenerator keygen = null;
 		// 声明 密钥对象
@@ -80,6 +89,59 @@ public class DESUtils {
 			// 返回生成指定算法的秘密密钥的 KeyGenerator 对象
 			keygen = KeyGenerator.getInstance(algorithm);
 			keygen.init(random);
+			// 生成一个密钥
+			deskey = keygen.generateKey();
+			keygen = null;
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+		// 返回密匙
+		return deskey;
+	}
+	
+	/**
+	 * 根据指定的安全随机数，创建密匙
+	 * @param algorithm 加密算法，可用 DES，DESede，AES，Blowfish
+	 * @param secureRandom 安全随机数
+	 * @return SecretKey 秘密（对称）密钥
+	 */
+	public static SecretKey genKey(String algorithm, SecureRandom secureRandom) {
+		// 声明KeyGenerator对象
+		KeyGenerator keygen = null;
+		// 声明 密钥对象
+		SecretKey deskey = null;
+		try {
+			// 返回生成指定算法的秘密密钥的 KeyGenerator 对象
+			keygen = KeyGenerator.getInstance(algorithm);
+			keygen.init(secureRandom);
+			// 生成一个密钥
+			deskey = keygen.generateKey();
+			keygen = null;
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+		// 返回密匙
+		return deskey;
+	}
+	
+	/**
+	 * 根据指定的安全随机数，创建密匙
+	 * 
+	 * @param algorithm 加密算法，可用 DES，DESede，AES，Blowfish
+	 * @param secureRandom 安全随机数
+	 * @param seeds 安全随机数种子值
+	 * @return SecretKey 秘密（对称）密钥
+	 */
+	public static SecretKey genKey(String algorithm, SecureRandom secureRandom, byte[] seeds) {
+		// 声明KeyGenerator对象
+		KeyGenerator keygen = null;
+		// 声明 密钥对象
+		SecretKey deskey = null;
+		try {
+			secureRandom.setSeed(seeds);
+			// 返回生成指定算法的秘密密钥的 KeyGenerator 对象
+			keygen = KeyGenerator.getInstance(algorithm);
+			keygen.init(secureRandom);
 			// 生成一个密钥
 			deskey = keygen.generateKey();
 			keygen = null;
