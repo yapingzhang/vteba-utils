@@ -95,11 +95,31 @@ public final class CryptUtils {
 	}
 
 	/**
+	 * Base64解码，将base64编码的字符串解码为字节数组
+	 * @param inputs 要解码的base64字节数组
+	 * @param offset 数组偏移量
+	 * @param length 要解码的数组长度
+	 */
+	public static byte[] base64Decode(byte[] inputs, int offset, int length) {
+		return Base64.decodeBase64(new String(inputs, offset, length, Char.UTF8));
+	}
+	
+	/**
 	 * Base64解码，将base64编码的字符串解码为字符串，UTF-8编码
 	 * @param input 要解码的base64字节数组
 	 */
 	public static String base64Decodes(byte[] inputs) {
 		return new String(Base64.decodeBase64(inputs), Char.UTF8);
+	}
+	
+	/**
+	 * Base64解码，将base64编码的字符串解码为字符串，UTF-8编码
+	 * @param input 要解码的base64字节数组
+	 * @param offset 数组偏移量
+	 * @param length 要解码的数组长度
+	 */
+	public static String base64Decodes(byte[] inputs, int offset, int length) {
+		return new String(Base64.decodeBase64(new String(inputs, offset, length, Char.UTF8)), Char.UTF8);
 	}
 	
 	/**
